@@ -40,3 +40,48 @@ a {
     color-scheme: dark;
   }
 }
+
+
+  
+h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+small {
+  color: #666;
+}
+
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.postCard {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.postCard:hover {
+  background: #f9f9f9;
+}
+        
+
+
