@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from 'react';
-import { fetchCommentsByPostId, createComment } from '../utils/api';
+import { useState, useEffect } from "react";
+import { fetchCommentsByPostId, createComment } from "../utils/api";
 
 type Comment = {
   id: number;
@@ -12,8 +12,8 @@ type Comment = {
 
 const CommentSection = ({ postId }: { postId: number }) => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState('');
-  const [email, setEmail] = useState('');
+  const [newComment, setNewComment] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     const loadComments = async () => {
@@ -23,42 +23,52 @@ const CommentSection = ({ postId }: { postId: number }) => {
     loadComments();
   }, [postId]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       await createComment(postId, newComment, email);
-      setNewComment('');
-      setEmail('');
+      setNewComment("");
+      setEmail("");
       const updatedComments = await fetchCommentsByPostId(postId);
       setComments(updatedComments);
     } catch (error) {
-      console.error('Error creating comment:', error);
+      console.error("Error creating comment:", error);
     }
   };
 
   return (
-    <div>
-      <h3>Comments</h3>
-      {comments.map((comment) => (
-        <div key={comment.id}>
-          <p>{comment.content}</p>
-          <small>
-            {comment.email} - {new Date(comment.createdAt).toLocaleDateString()}
-          </small>
+    <section className="commentsWrapper">
+      <div className="commentCreatorWrapper">
+        <h3>Deja un comentario</h3>
+        <form action="" onSubmit={handleSubmit}>
+          <input type="email" placeholder="Tu email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <textarea
+            placeholder="Añade un comentario"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            id="comment"
+          />
+          <input type="submit" value="Enviar" />
+        </form>
+      </div>
+      <div className="commentContainer">
+        <h3>Comentarios ({comments.length})</h3>
+        <div className="comments">
+          {comments.map((comment) => (
+            <div key={comment.id} className="comment">
+              <div className="commentInfo">
+                <span>
+                  {comment.email} - {new Date(comment.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="commentContent">
+                <p>{comment.content}</p>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-      <textarea
-        placeholder="Add a comment"
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Your email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button onClick={handleSubmit}>Submit</button>
-    </div>
+      </div>
+    </section>
   );
 };
 
