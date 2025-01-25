@@ -15,6 +15,9 @@
   --color-border: #4d5258;
   --color-font-primary: #e5e7e6;
   --color-primary: #955eb4;
+  --color-primary-darker: #4b2d5c;
+  --color-background: #282429;
+  --color-background-lighter: rgb(51, 47, 53);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,11 +72,108 @@ small {
   color: #666;
 }
 
+.btn {
+    padding: 0.75rem 1rem;
+
+    appearance: none;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-darker));
+    cursor: pointer;
+    background-size: 1px 100px;
+    transition: 0.2s ease;
+
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-font-primary)
+}
+
+.btn:hover {
+    text-decoration: none;
+    background-position: 100px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
+
+/* --- header --- */
+header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 9999;
+
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headerContainer {
+  width: 60%;
+  padding: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+
+  margin: 0;
+  list-style-type: none;
+}
+
+li {
+  padding: .25rem;
+  font-size: 1.2rem;
+}
+
+/*mobile menu*/
+.menu {
+  display: none;
+  font-size: 2rem;
+}
+
+.mobile {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  padding: 0;
+  gap: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  background-color: var(--color-background-lighter);
+}
+
+.mobile li {
+  width: 100%;
+  padding: 1rem;
+  text-align: center; 
+} 
+
+@media screen and (max-width: 1320px) {
+  .headerContainer {
+      width: 100%;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .menu {
+      display: block;
+  }
+  .desktop {
+      display: none;
+  }
+}
+
 
 .posts {
   display: flex;
@@ -211,6 +311,27 @@ small {
       width: 100%;
   }
 } */
+
+
+/* --- loader --- */
+.loader {
+  animation: spin 1s infinite linear;
+  font-size: 5rem;
+  color: var(--color-primary);
+}
+
+.loaderContainer p {
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+}
 
 /* --- footer --- */
 
