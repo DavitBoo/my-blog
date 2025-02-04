@@ -93,14 +93,14 @@ small {
     background-position: 100px;
 }
 
-.container {
+/* .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-}
+} */
 
 /* --- header --- */
-header {
+.main-header  {
   position: sticky;
   top: 0;
   display: flex;
@@ -174,6 +174,24 @@ li {
   }
 }
 
+
+/* ---- single post - articulo ---*/
+.article-page {
+  max-width: 70ch;
+  margin: auto;
+  padding-top: 1rem;
+}
+
+.article-page .container {
+  padding: 1em 1.5em;
+  background-color: var(--card_background);
+  color: var(--text_2);
+  border-radius: 4px;
+}
+
+.article-header {
+  text-align: right;
+}
 
 .posts {
   display: flex;
