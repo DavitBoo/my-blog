@@ -57,7 +57,7 @@ const PostPage = async ({ params }: PostProps) => {
             </li>
           ))}
         </ul>
-        <h1>{post.title}</h1>
+        <h1 className="article-title">{post.title}</h1>
         <div className="reading-time">
           <FaGlasses /> {readingTime()} min
         </div>
