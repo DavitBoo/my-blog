@@ -37,3 +37,16 @@ export const createComment = async (postId: number, content: string, email: stri
 
   return response.json();
 };
+
+
+export const fetchLabels = async () => {
+  const response = await fetch(`${API_URL}/labels/`, {
+    method: 'GET',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch labels');
+  }
+
+  return response.json();
+};

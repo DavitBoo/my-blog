@@ -14,10 +14,14 @@
 
   --color-border: #4d5258;
   --color-font-primary: #e5e7e6;
+  --color-font-secondary: #b3bfb8;
+  --color-font-tertiary: #7d867f;
   --color-primary: #955eb4;
   --color-primary-darker: #4b2d5c;
   --color-background: #282429;
   --color-background-lighter: rgb(51, 47, 53);
+
+  --color-tag-background: #5c955e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -193,6 +197,42 @@ li {
   text-align: right;
 }
 
+.label-list {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.label-list-item {
+  border-radius: 2px;
+  font-size: 0.6em;
+  background-color: var(--color-tag-background);
+  color: var(--color-font-primary);
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.reading-time {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.8em;
+  color: var(--color-font-tertiary);
+  text-align: right;
+  margin: 1em 0;
+}
+
+.article-content p{
+  font-size: 0.9rem;
+}
+
+
 .posts {
   display: flex;
   flex-direction: column;
@@ -331,6 +371,46 @@ li {
 } */
 
 
+
+/* --- footer --- */
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+footer span {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ---- components ---- */
+/* back button */
+.back-btn {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.8em;
+  color: var(--color-font-secondary);
+  cursor: pointer;
+  margin-top: 1em;
+}
+
+.back-btn:hover {
+  background: none;
+  color: var(--cta);
+}
+
+.back-btn:focus {
+  outline: none;
+}
+
+
+
 /* --- loader --- */
 .loader {
   animation: spin 1s infinite linear;
@@ -349,19 +429,4 @@ li {
   100% {
       transform: rotate(360deg);
   }
-}
-
-/* --- footer --- */
-
-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
-}
-
-footer span {
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
 }
