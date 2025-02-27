@@ -3,7 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 export const fetchPosts = async () => {
   const response = await fetch(`${API_URL}/posts`);
   if (!response.ok) {
-    throw new Error('Failed to fetch posts');
+    return null;
   }
   return response.json();
 };
@@ -11,7 +11,7 @@ export const fetchPosts = async () => {
 export const fetchPostById = async (id: number) => {
   const response = await fetch(`${API_URL}/posts/${id}`);
   if (!response.ok) {
-    throw new Error('Failed to fetch post');
+    return null;
   }
   return response.json();
 };

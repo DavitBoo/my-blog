@@ -27,7 +27,9 @@ const PostPage = async ({ params }: PostProps) => {
   const post = await fetchPostById(postId);
 
   if (!post) {
-    return <div>Post not found</div>;
+    return <div className="no-article" aria-live="assertive">
+    No se ha encontrado este artículo
+  </div>;
   }
 
   const decodedString = decode(post?.content);
