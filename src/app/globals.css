@@ -9,26 +9,33 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --background: #ffffff;
+  --foreground: #171717; */
 
-  --color-border: #4d5258;
-  --color-font-primary: #e5e7e6;
-  --color-font-secondary: #b3bfb8;
-  --color-font-tertiary: #7d867f;
-  --color-primary: #955eb4;
-  --color-primary-darker: #4b2d5c;
-  --color-background: #282429;
-  --color-background-lighter: rgb(51, 47, 53);
+  --color-border: #03658C; /* Azul profundo para bordes definidos */
+  --color-font-primary: #02303F; /* Azul oscuro para un buen contraste con blanco */
+  --color-font-secondary: #03658C; /* Azul medio para textos secundarios */
+  --color-font-tertiary: #0388A6; /* Un tono más claro de azul para detalles sutiles */
+  
+  --color-primary: #04ADBF; /* Azul cian vibrante como color principal */
+  --color-primary-darker: #03658C; /* Un azul más oscuro para profundidad */
+  
+  --color-background: #ffffff; /* Fondo blanco */
+  --color-background-lighter: #F2FBFC; /* Azul muy claro para diferenciar secciones */
+  
+  --color-tag-background: #04BFBF; /* Cian brillante para etiquetas */
+  --color-card-background: #E6F7FA; /* Azul muy suave para tarjetas con un toque de color */
 
-  --color-tag-background: #5c955e;
-  --color-card-background: #323034;
+  --color-accent: #D9CB04; /* Amarillo vibrante para resaltar elementos */
+  --color-hover: #0388A6; /* Azul más fuerte para efectos hover */
+
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* --background: #0a0a0a;
+    --foreground: #ededed; */
   }
 }
 
@@ -39,8 +46,10 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  /* color: var(--foreground);
+  background: var(--background); */
+  background-color: var(--color-background);
+  color: var(--color-font-primary);
   font-family: Raleway;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -445,6 +454,7 @@ footer span {
   text-align: center;
 }
 
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -452,4 +462,39 @@ footer span {
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+
+/* --- 404 --- */
+.error-404.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.error-404 .error-code {
+  font-size: 6rem;
+  margin: 1.5rem 0;
+}
+
+.error-404 .error-message {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.error-404 .search-bar {
+  padding: 1rem;
+  width: 100%;
+  max-width: 25rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+}
+
+.error-404 .button-group {
+  display: flex;
+  gap: .75rem;
 }
