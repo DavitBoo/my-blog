@@ -1,4 +1,7 @@
+import HomeHero from './components/HomeHero';
+import Post from './components/Post';
 import { fetchPosts } from './utils/api';
+
 
 type Post = {
   id: number;
@@ -12,20 +15,19 @@ const Home = async () => {
   const posts: Post[] = await fetchPosts();
 
   return (
-    <div className="archive">
-      <div className="container">
-        <h1>My Blog</h1>
-        <div className="posts">
-          {posts.map((post) => (
-            <a key={post.id} href={`/post/${post.id}`} className="postCard">
-              <h2>{post.title}</h2>
-              <p>{post.content.substring(0, 100)}...</p>
-              <small>{new Date(post.createdAt).toLocaleDateString()}</small>
-            </a>
-          ))}
-        </div>
+    <div className="archive">      
+       <HomeHero />
+        <div className="posts container">
+          <div className="last-posts">
+            <h2 className='mb-1'>Mis últimos posts</h2>
+            <div className="grid">
+              {posts.map((post) => (
+                <Post id={post.id} title={post.title} content={post.content} createdAt={post.createdAt} />                
+              ))}
+            </div>
+          </div>
       </div>
-    </div>
+    </div>  
   );
 };
 

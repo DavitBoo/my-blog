@@ -2,6 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchPosts = async () => {
   const response = await fetch(`${API_URL}/posts`);
+  console.log(response);
   if (!response.ok) {
     return null;
   }

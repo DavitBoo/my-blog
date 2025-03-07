@@ -82,7 +82,10 @@ small {
   color: var(--color-font-secondary);
 }
 
+/*  custom buttons */
 .btn {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,21 +94,107 @@ small {
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  background-color: var(--color-font-primary);
+  color: var(--color-background);
+}
+
+.btn span{
+  position: relative;
+  z-index: 1;
+}
+/* .btn:hover {
   background-color: var(--color-primary);
-  color: var(--color-font-primary);
-}
-.btn:hover {
-  background-color: var(--color-primary-darker);
   border-color: var(--color-primary-darker);
+} */
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 130%;
+  height: 100%;
+  background-color: var(--color-primary);
+  transform: translate(-110%, 0) skew(-33deg);
+  transition: 0.5s;
+  opacity: 0.3;
 }
+
+.btn:hover::before {
+  transform: translate(-5%, 0) skew(-15deg);
+}
+
 .btn:focus,
 .btn:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+.container {
+  width: 100%;
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+
+
+/* custom width*/
+.mw-48 {
+  max-width: 48rem;
+}
+
+/* custom margins*/
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+/*  custom flexbox */
+.d-flex {
+  display: flex;
+}
+
+.gap-1 {
+  gap: 1rem;
 }
 
 
@@ -122,8 +211,6 @@ small {
 }
 
 .headerContainer {
-  width: 60%;
-  padding: 0.875rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -184,37 +271,22 @@ li {
   }
 }
 
+/* === home === */
+/* home hero */
+.home-hero {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: var(--color-card-background);
+}
+
 /* ---- single post - articulo / edit page ---*/
-.archive .container,
-.article-page,
-.edit-article-page {
-  width: 60%;
-  padding: 0.875rem;
-  margin: auto;
-  padding-top: 1rem;
-}
-
-@media screen and (max-width: 1200px) {
-  .article-page,
-.edit-article-page  {
-    width: 80%;
-  }
-}
-
-@media screen and (max-width: 978px) {
-  .article-page,
-.edit-article-page  {
-    width: 100%;
-  }
-}
-
-
 .article-page .container,
 .edit-article-container {
   padding: 1em 1.5em;
   background-color: var(--card_background);
   color: var(--text_2);
   border-radius: 4px;
+  max-width: 48rem;
 }
 
 .article-header {
@@ -249,7 +321,7 @@ li {
   border-radius: 2px;
   font-size: 0.6em;
   background-color: var(--color-tag-background);
-  color: var(--color-font-primary);
+  color: var(--color-background-lighter);
   padding: 0 1rem;
   display: flex;
   justify-content: center;
@@ -286,19 +358,41 @@ li {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+.last-posts .grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
 }
 
+@media (max-width: 991px) {
+  .last-posts .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 578px) {
+  .last-posts .grid {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+
 .postCard {
-  border: 1px solid var(--color-border);
   padding: 15px;
   text-decoration: none;
   color: inherit;
   border-radius: 8px;
   transition: background 0.3s;
+  background: var(--color-background-lighter);
+  border: 1px solid var(--color-primary);
 }
 
 .postCard:hover {
-  background: var(--color-background-lighter);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
 }
 
 /* --- comments --- */
@@ -454,6 +548,10 @@ footer span {
 
 .back-btn:focus {
   outline: none;
+}
+
+.btn-primary {
+  max-width: 15rem;
 }
 
 /* --- loader --- */
