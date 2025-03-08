@@ -9,25 +9,22 @@
 }
 
 :root {
+  --color-border: #03658c;
+  --color-font-primary: #02303f;
+  --color-font-secondary: #03658c;
+  --color-font-tertiary: #0388a6;
 
-  --color-border: #03658C;
-  --color-font-primary: #02303F;
-  --color-font-secondary: #03658C;
-  --color-font-tertiary: #0388A6;
-  
-  --color-primary: #04ADBF;
-  --color-primary-darker: #03658C;
-  
+  --color-primary: #04adbf;
+  --color-primary-darker: #03658c;
+
   --color-background: #ffffff;
-  --color-background-lighter: #F2FBFC;
-  
-  --color-tag-background: #04BFBF;
-  --color-card-background: #E6F7FA;
+  --color-background-lighter: #f2fbfc;
 
-  --color-accent: #D9CB04;
-  --color-hover: #0388A6;
+  --color-tag-background: #04bfbf;
+  --color-card-background: #e6f7fa;
 
-
+  --color-accent: #d9cb04;
+  --color-hover: #0388a6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -103,7 +100,7 @@ small {
   color: var(--color-background);
 }
 
-.btn span{
+.btn span {
   position: relative;
   z-index: 1;
 }
@@ -134,7 +131,6 @@ small {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-
 .container {
   width: 100%;
   padding-right: 0.75rem;
@@ -142,7 +138,6 @@ small {
   margin-right: auto;
   margin-left: auto;
 }
-
 
 @media (min-width: 576px) {
   .container {
@@ -174,7 +169,6 @@ small {
   }
 }
 
-
 /* custom width*/
 .mw-48 {
   max-width: 48rem;
@@ -196,7 +190,6 @@ small {
 .gap-1 {
   gap: 1rem;
 }
-
 
 /* --- header --- */
 .main-header {
@@ -369,30 +362,58 @@ li {
 
 @media (max-width: 991px) {
   .last-posts .grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 578px) {
   .last-posts .grid {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 }
 
-
 .postCard {
-  padding: 15px;
   text-decoration: none;
   color: inherit;
   border-radius: 8px;
   transition: background 0.3s;
   background: var(--color-background-lighter);
   border: 1px solid var(--color-primary);
+  overflow: hidden;
+  position: relative;
 }
 
 .postCard:hover {
   background: var(--color-background);
   border: 1px solid var(--color-border);
+}
+
+.postCard .postImage {
+  width: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: 0.3s ease-in;
+}
+
+.postCard:hover .postImage {
+  transform: scale(1.05);
+  opacity: 1;
+
+}
+
+.postCard .card-body {
+  padding: 1rem;
+}
+.postCard .card-body h3,
+.postCard .card-body p {
+  z-index: 1;
+}
+
+.postCard .card-body a:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 /* --- comments --- */
@@ -565,7 +586,6 @@ footer span {
   text-align: center;
 }
 
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -574,8 +594,6 @@ footer span {
     transform: rotate(360deg);
   }
 }
-
-
 
 /* --- 404 --- */
 .error-404.not-found-container {
@@ -607,5 +625,5 @@ footer span {
 
 .error-404 .button-group {
   display: flex;
-  gap: .75rem;
+  gap: 0.75rem;
 }
