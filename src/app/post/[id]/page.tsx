@@ -11,13 +11,6 @@ import { ILabel } from "../../../interfaces/Label";
 
 import { FaGlasses } from 'react-icons/fa';
 
-type Post = {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-};
-
 type PostProps = {
   params: { id: string };
 };
