@@ -19,7 +19,7 @@ interface Post {
   labels: Label[];
 }
 
-const POSTS_PER_PAGE = 9;
+const POSTS_PER_PAGE = 3;
 
 const Blog: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -31,7 +31,6 @@ const Blog: React.FC = () => {
     const loadPosts = async () => {
       const fetchedPosts: Post[] = await fetchPosts();
       setPosts(fetchedPosts);
-      // Obtener etiquetas únicas
       const uniqueLabels = Array.from(new Set(fetchedPosts.flatMap((post) => post.labels.map((label) => label.name))));
       setLabels(uniqueLabels);
     };
@@ -81,24 +80,27 @@ const Blog: React.FC = () => {
             ))}
           </div>
         </div>
-        {/* Paginación */}
+
+        {/* Paginación con botones numerados */}
         {totalPages > 1 && (
-          <div className="pagination">
-            <button disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
-              Anterior
+          <div className="pagination d-flex">
+            <button className="btn btn-tab prev" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+              <span>Anterior</span>
             </button>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
-              Siguiente
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`btn btn-tab ${currentPage === index + 1 ? "active" : ""}`}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                <span>{index + 1}</span>
+              </button>
+            ))}
+            <button className="btn btn-tab next" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+              <span>Siguiente</span>
             </button>
           </div>
         )}
-
-        <a href="" className="btn btn-primary">
-          <span>Ver todos los artículos</span>
-        </a>
       </div>
     </div>
   );
