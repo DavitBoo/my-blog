@@ -66,7 +66,7 @@ a {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
@@ -77,6 +77,10 @@ p {
 
 small {
   color: var(--color-font-secondary);
+}
+
+.highlight {
+  color: var(--color-font-tertiary);
 }
 
 /*  custom buttons */
@@ -176,9 +180,28 @@ small {
 
 /* custom margins*/
 .mb-1 {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 .mb-2 {
+  margin-bottom: 1.5rem;
+}
+.mb-3 {
+  margin-bottom: 1.75rem;
+}
+.mb-4 {
+  margin-bottom: 1rem;
+}
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
+.mb-8 {
   margin-bottom: 2rem;
 }
 
@@ -187,8 +210,36 @@ small {
   display: flex;
 }
 
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
 .gap-1 {
+  gap: .25rem;
+}
+.gap-2 {
+  gap: .5rem;
+}
+.gap-3 {
+  gap: .75rem;
+}
+.gap-4 {
   gap: 1rem;
+}
+.gap-5 {
+  gap: 1.25rem;
+}
+.gap-6 {
+  gap: 1.5rem;
+}
+
+/* other custom */
+.text-center {
+  text-align: center;
 }
 
 /* --- header --- */
@@ -282,6 +333,28 @@ li {
   max-width: 48rem;
 }
 
+.article-page .featured-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: 100%;
+  object-fit: cover;
+  margin-bottom: 2rem;
+}
+
+.article-page hr {
+  margin-bottom: 1rem;
+}
+
+.article-page h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.article-page ol,
+.article-page ul {
+  padding-left: 1.5rem;
+}
+
 .article-header {
   text-align: right;
 }
@@ -308,14 +381,18 @@ li {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
 }
 
 .label-list-item {
-  border-radius: 2px;
-  font-size: 0.6em;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
   background-color: var(--color-tag-background);
   color: var(--color-background-lighter);
-  padding: 0 1rem;
+  padding: 0.25rem .75rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -327,10 +404,14 @@ li {
   justify-content: flex-end;
   align-items: center;
   gap: 0.8rem;
-  font-size: 0.8em;
+  /* font-size: 0.8em; */
   color: var(--color-font-tertiary);
   text-align: right;
   margin: 1em 0;
+}
+
+.article-content {
+  margin-bottom: 3rem;
 }
 
 .article-content p {
@@ -373,7 +454,7 @@ li {
   }
 }
 
-.postCard {
+.customCard {
   text-decoration: none;
   color: inherit;
   border-radius: 8px;
@@ -384,12 +465,12 @@ li {
   position: relative;
 }
 
-.postCard:hover {
+.customCard:hover {
   background: var(--color-background);
   border: 1px solid var(--color-border);
 }
 
-.postCard .labels {
+.customCard .labels {
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -399,7 +480,7 @@ li {
   gap: 0.5rem;
 }
 
-.postCard .labels .label {
+.customCard .labels .label {
   border-radius: 100px;
   font-size: 0.75em;
   font-weight: 600;
@@ -408,27 +489,27 @@ li {
   padding: 0 0.75rem;
 }
 
-.postCard .postImage {
+.customCard .postImage {
   width: 100%;
   object-fit: cover;
   opacity: 0.8;
   transition: 0.3s ease-in;
 }
 
-.postCard:hover .postImage {
+.customCard:hover .postImage {
   transform: scale(1.05);
   opacity: 1;
 }
 
-.postCard .card-body {
+.customCard .card-body {
   padding: 1rem;
 }
-.postCard .card-body h3,
-.postCard .card-body p {
+.customCard .card-body h3,
+.customCard .card-body p {
   z-index: 1;
 }
 
-.postCard .card-body a:before {
+.customCard .card-body a:before {
   content: "";
   position: absolute;
   inset: 0;
