@@ -20,7 +20,7 @@ interface PostProps {
 
 const Post = ({ id, title, content, createdAt, labels }: PostProps) => {
   return (
-    <div key={id} className="postCard">
+    <div key={id} className="customCard">
       <Image src="/placeholder.jpg" alt="Placeholder" width={200} height={150} className="postImage" />
       <div className="labels">
         {labels.map((label) => (
@@ -30,7 +30,7 @@ const Post = ({ id, title, content, createdAt, labels }: PostProps) => {
         ))}
       </div>
       <div className="card-body">
-        <h3 className="mb-1">
+        <h3 className="mb-4">
           <a href={`/post/${id}`}>{title}</a>
         </h3>
         <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
