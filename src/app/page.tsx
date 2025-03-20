@@ -27,7 +27,7 @@ const Home = async () => {
       <HomeHero />
       <div className="posts container">
         <div className="last-posts">
-          <h2 className="mb-1">Mis últimos posts</h2>
+          <h2 className="mb-4">Mis últimos posts</h2>
           <div className="grid">
             {posts.map((post) => (
               <Post
