@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './PostCard.module.css';
+import styles from './customCard.module.css';
 
 type Post = {
   id: number;
@@ -8,7 +8,7 @@ type Post = {
   createdAt: string;
 };
 
-const PostCard = ({ post }: { post: Post }) => {
+const customCard = ({ post }: { post: Post }) => {
   return (
     <div className={styles.card}>
       <Link href={`/post/${post.id}`} className={styles.link}>
@@ -22,4 +22,4 @@ const PostCard = ({ post }: { post: Post }) => {
   );
 };
 
-export default PostCard;
+export default customCard;
