@@ -14,6 +14,7 @@ const Header = () => {
   const menuItems = [
     { href: "/", label: "Inicio" },
     { href: "/blog", label: "Blog" },
+    { href: "/now", label: "Ahora" },
     { href: "/sobre-mi", label: "Sobre mi" },
   ];
 
@@ -22,7 +23,7 @@ const Header = () => {
       <div className="container headerContainer">
         <div className="logoContainer">
           <h1>
-            davit's<span className="highlight">blog</span>
+            davi<span className="highlight">db</span>oo
           </h1>
         </div>
         <nav>
