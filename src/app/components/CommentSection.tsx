@@ -48,7 +48,7 @@ const CommentSection = ({ postId }: { postId: number }) => {
             onChange={(e) => setNewComment(e.target.value)}
             id="comment"
           />
-          <input type="submit" value="Enviar" />
+          <input className="btn" type="submit" value="Enviar" />
         </form>
       </div>
       <div className="commentContainer">
