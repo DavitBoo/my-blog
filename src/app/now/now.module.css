@@ -1,0 +1,72 @@
+.hero {
+    background-color: var(--color-card-background);
+
+}
+
+.hero > div {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.container {
+    max-width: 60rem;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+.whatIsNow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+.whatIsNow > div {
+    border-radius: 8px;
+    padding: 2.5rem;
+    background-color: var(--color-card-background);
+
+    max-width: 60rem;
+}
+
+.whatIsNow p {
+    color: var(--color-font-secondary);
+}
+
+.whatIsNow a {
+    color: var(--color-font-primary)
+}
+.whatIsNow a:hover{
+    text-decoration: underline;
+}
+
+
+.projectCard {
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+.projectCard progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .projectCard progress::-webkit-progress-bar {
+    background-color: var(--color-card-background);
+    border-radius: 5px;
+  }
+  
+  .projectCard progress::-webkit-progress-value {
+    background-color: var(--color-font-primary);
+    border-radius: 5px;
+  }
