@@ -65,8 +65,8 @@ const Blog: React.FC = () => {
           ))}
         </div>
 
-        <div className="last-posts mb-2">
-          <h2 className="mb-1">Mis últimos posts</h2>
+        <div className="last-posts mb-8">
+          <h2 className="mb-4">Mis últimos posts</h2>
           <div className="grid">
             {paginatedPosts.map((post) => (
               <Post
