@@ -84,7 +84,11 @@ const Blog: React.FC = () => {
         {/* Paginación con botones numerados */}
         {totalPages > 1 && (
           <div className="pagination d-flex">
-            <button className="btn btn-tab prev" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>
+            <button
+              className="btn btn-tab prev"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
               <span>Anterior</span>
             </button>
             {Array.from({ length: totalPages }, (_, index) => (
@@ -96,7 +100,11 @@ const Blog: React.FC = () => {
                 <span>{index + 1}</span>
               </button>
             ))}
-            <button className="btn btn-tab next" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>
+            <button
+              className="btn btn-tab next"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
               <span>Siguiente</span>
             </button>
           </div>
