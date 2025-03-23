@@ -1,6 +1,7 @@
 import { fetchPostById, fetchLabels } from "../../utils/api";
 import CommentSection from "../../components/CommentSection";
 import BackButton from "../../components/BackButton";
+import { slugify } from "../../utils/slugify"; //
 
 import { format } from "date-fns";
 import { decode } from "html-entities";
@@ -11,6 +12,7 @@ import { ILabel } from "../../../interfaces/Label";
 import { FaGlasses } from "react-icons/fa";
 
 import Image from "next/image";
+import Link from "next/link";
 
 type PostProps = {
   params: { id: string };
@@ -45,7 +47,7 @@ const PostPage = async ({ params }: PostProps) => {
         <ul className="label-list">
           {post?.labels?.map((label: ILabel) => (
             <li key={label.id.toString()} className="label-list-item">
-              {label.name}
+              <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
             </li>
           ))}
         </ul>
@@ -72,7 +74,7 @@ const PostPage = async ({ params }: PostProps) => {
           <ul className="label-list">
             {labels?.map((label: ILabel) => (
               <li key={label.id.toString()} className="label-list-item">
-          {label.name}
+                <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
               </li>
             ))}
           </ul>
