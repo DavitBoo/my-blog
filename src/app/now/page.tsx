@@ -53,6 +53,7 @@ const now = () => {
             <p>Estoy trabajando en esta web, aplicando lo que voy aprendiendo de node, express, react y next. Además estoy probando cosillas con Python.</p>
             <p>La calistenia forma parte de mi vida como desde hace unos largos años ya, tengo pendiente el muscle up en anillas y un pino solido para este año. Además estoy yendo al monte todo lo que puedo.</p>
             <p>Estoy leyendo libros de desarollo personal, salud y psicología para seguir entendiendome y aprendiendo cosas de mi y de mi entorno, para ayudarme y ayudar a los demás.</p>
+            <p>En la agencia donde estoy, sigo desarrollando temas de WordPress personalizados con un equipo de diseño detrás que para mi en lo que hacemos ahora mismo es indispendable y desarrollando un par de aplicaciones internas con NextJs y componentes de React + MySQL y Prisma y algo de backend en PHP. Y bueno mucho Git.</p>
           </div>
         </section>
         <section className="projects mb-8">
