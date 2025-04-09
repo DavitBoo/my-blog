@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Post from "../components/Post";
 import { fetchPosts } from "../utils/api";
+import SearchInput from "../components/SearchInput";
 
 interface Label {
   id: number;
@@ -26,6 +27,7 @@ const Blog: React.FC = () => {
   const [labels, setLabels] = useState<string[]>([]);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -37,9 +39,11 @@ const Blog: React.FC = () => {
     loadPosts();
   }, []);
 
-  const filteredPosts = selectedLabel
-    ? posts.filter((post) => post.labels.some((label) => label.name === selectedLabel))
-    : posts;
+  const filteredPosts = posts.filter((post) => {
+    const matchesLabel = selectedLabel ? post.labels.some((label) => label.name === selectedLabel) : true;
+    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesLabel && matchesSearch;
+  });
 
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
@@ -66,7 +70,8 @@ const Blog: React.FC = () => {
         </div>
 
         <div className="last-posts mb-8">
-          <h2 className="mb-4">Mis últimos posts</h2>
+          <h2 className="mb-4">Todos mis artículos</h2>
+          <SearchInput value={searchTerm} onChange={setSearchTerm} />
           <div className="grid">
             {paginatedPosts.map((post) => (
               <Post

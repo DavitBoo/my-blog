@@ -27,6 +27,26 @@
   --color-hover: #0388a6;
 }
 
+:root.dark {
+  --color-border: #72c6dd;
+  --color-font-primary: #e2f5fa;
+  --color-font-secondary: #a4ddf4;
+  --color-font-tertiary: #6cd0e9;
+
+  --color-primary: #04adbf;
+  --color-primary-darker: #0e3c4d;
+
+  --color-background: #0f1e26;
+  --color-background-lighter: #1d2f38;
+
+  --color-tag-background: #057e7e;
+  --color-card-background: #173039;
+
+  --color-accent: #ffec6e;
+  --color-hover: #59cbe5;
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* --background: #0a0a0a;
@@ -213,6 +233,9 @@ small {
 .align-items-center {
   align-items: center;
 }
+.align-items-baseline {
+  align-items: baseline;
+}
 
 .justify-content-center {
   justify-content: center;
@@ -271,6 +294,14 @@ nav ul {
 li {
   padding: 0.25rem;
   font-size: 1.2rem;
+}
+
+.main-header .theme-toggle-btn {
+  background-color: transparent;
+  color: var(--color-font-primary);
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
 }
 
 /*mobile menu*/
@@ -762,6 +793,22 @@ footer span {
   }
 }
 
+/* search bar */
+.search-bar {
+  padding: 1rem;
+  width: 100%;
+  max-width: 25rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background-color: var(--color-background);
+}
+
+.search-icon {
+  position: relative;
+  left: -2rem;
+}
+
 /* --- 404 --- */
 .error-404.not-found-container {
   display: flex;
@@ -781,14 +828,7 @@ footer span {
   margin-bottom: 1.5rem;
 }
 
-.error-404 .search-bar {
-  padding: 1rem;
-  width: 100%;
-  max-width: 25rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: 5px;
-}
+
 
 .error-404 .button-group {
   display: flex;
