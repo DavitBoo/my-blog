@@ -588,6 +588,7 @@ li {
   justify-content: center;
   margin-top: 4rem;
   margin-bottom: 3rem;
+  flex-wrap: wrap;
 }
 
 .archive .pagination .btn {
@@ -774,10 +775,16 @@ footer span {
 }
 
 /* --- loader --- */
+.loaderContainer {
+  text-align: center;
+}
+
 .loader {
   animation: spin 1s infinite linear;
   font-size: 5rem;
   color: var(--color-primary);
+  margin: 3rem auto;
+
 }
 
 .loaderContainer p {

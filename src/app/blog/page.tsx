@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Post from "../components/Post";
 import { fetchPosts } from "../utils/api";
 import SearchInput from "../components/SearchInput";
+import Loader from "../components/Loader";
 
 interface Label {
   id: number;
@@ -28,6 +29,7 @@ const Blog: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -35,6 +37,7 @@ const Blog: React.FC = () => {
       setPosts(fetchedPosts);
       const uniqueLabels = Array.from(new Set(fetchedPosts.flatMap((post) => post.labels.map((label) => label.name))));
       setLabels(uniqueLabels);
+      setIsLoading(false);
     };
     loadPosts();
   }, []);
@@ -47,6 +50,10 @@ const Blog: React.FC = () => {
 
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+
+  if (isLoading) {
+    return <Loader message="Cargando artículos..." />;
+  }
 
   return (
     <div className="archive">
