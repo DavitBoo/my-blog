@@ -9,7 +9,7 @@ import { es } from "date-fns/locale";
 
 import { ILabel } from "../../../interfaces/Label";
 
-import { FaGlasses } from "react-icons/fa";
+import { FaGlasses, FaEye } from "react-icons/fa";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -57,6 +57,7 @@ const PostPage = async ({ params }: PostProps) => {
     content: string;
     createdAt: string;
     labels: ILabel[];
+    views: number;
   }
 
   let relatedPosts: IPost[] = allPosts.filter(
@@ -95,6 +96,9 @@ const PostPage = async ({ params }: PostProps) => {
               <time>{format(new Date(post.createdAt), "EEEE, dd MMMM yyyy", { locale: es })}</time>
             </div>
           </header>
+          <div className="views-count d-flex align-items-center gap-2">
+            <FaEye /> {post.views} visitas
+          </div>
         </div>
         <Image src="/placeholder.jpg" alt="Placeholder" width={200} height={150} className="featured-image" />
 
@@ -133,7 +137,6 @@ const PostPage = async ({ params }: PostProps) => {
                   <h4>
                     <Link href={`/post/${relatedPost.id}`}>{relatedPost.title}</Link>
                   </h4>
-
                 </div>
               ))}
             </div>

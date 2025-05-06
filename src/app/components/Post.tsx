@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-import { FaCalendar } from 'react-icons/fa';
+import { FaCalendar, FaEye } from 'react-icons/fa';
 
 interface Label {
   id: number;
@@ -16,6 +16,7 @@ interface PostProps {
   content: string;
   createdAt: string;
   labels: Label[];
+  views: number;
 }
 
 const formatRelativeDate = (dateString: string): string => {
@@ -40,7 +41,7 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Post = ({ id, title, content, createdAt, labels }: PostProps) => {
+const Post = ({ id, title, content, createdAt, labels, views }: PostProps) => {
   return (
     <div key={id} className="customCard">
       <Image src="/placeholder.jpg" alt="Placeholder" width={200} height={150} className="postImage" />
@@ -57,6 +58,9 @@ const Post = ({ id, title, content, createdAt, labels }: PostProps) => {
         </h3>
         <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
         <small><FaCalendar/> {formatRelativeDate(createdAt)}</small>
+        <small><div className="views-count d-flex align-items-center gap-1">
+          <FaEye /> {views} visitas
+        </div></small>
       </div>
     </div>
   );

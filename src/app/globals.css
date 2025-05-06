@@ -453,6 +453,10 @@ li {
   margin: 1em 0;
 }
 
+.views-count {
+  color: var(--color-font-tertiary);
+}
+
 .interesting-posts h4 {
   line-height: 1.35rem;
 }
