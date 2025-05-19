@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type PostProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
@@ -24,7 +24,8 @@ const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
   return shuffled.slice(0, count);
 };
 
-const PostPage = async ({ params }: PostProps) => {
+const PostPage = async (props: PostProps) => {
+  const params = await props.params;
   const postId = parseInt(params.id);
   const post = await fetchPostById(postId);
 
