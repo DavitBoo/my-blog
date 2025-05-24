@@ -20,6 +20,7 @@ interface Post {
   createdAt: string;
   labels: Label[];
   views: number
+  coverUrl: string;
 }
 
 const POSTS_PER_PAGE = 3;
@@ -66,6 +67,7 @@ const BlogCategory: React.FC = () => {
                   createdAt={post.createdAt}
                   labels={post.labels}
                   views={post.views}
+                  coverUrl={post.coverUrl}
                 />
               ))
             ) : (
