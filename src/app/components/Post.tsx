@@ -17,6 +17,7 @@ interface PostProps {
   createdAt: string;
   labels: Label[];
   views: number;
+  coverUrl: string;
 }
 
 const formatRelativeDate = (dateString: string): string => {
@@ -41,10 +42,10 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Post = ({ id, title, content, createdAt, labels, views }: PostProps) => {
+const Post = ({ id, title, content, createdAt, labels, views, coverUrl }: PostProps) => {
   return (
     <div key={id} className="customCard">
-      <Image src="/placeholder.jpg" alt="Placeholder" width={200} height={150} className="postImage" />
+      <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="postImage" />
       <div className="labels">
         {labels.map((label) => (
           <span key={label.id} className="label">

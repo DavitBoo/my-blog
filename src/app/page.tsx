@@ -16,6 +16,7 @@ interface Post {
   createdAt: string;
   labels: Label[];
   views: number;
+  coverUrl: string;
 }
 
 const Home = async () => {
@@ -38,6 +39,7 @@ const Home = async () => {
                 createdAt={post.createdAt}
                 labels={post.labels}
                 views={post.views}
+                coverUrl={post.coverUrl}
               />
             ))}
           </div>
