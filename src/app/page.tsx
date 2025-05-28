@@ -22,8 +22,6 @@ interface Post {
 const Home = async () => {
   // Fetch posts directly
   const posts: Post[] = await fetchPosts();
-  console.log(posts);
-
   return (
     <div className="archive">
       <HomeHero />

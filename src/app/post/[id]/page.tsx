@@ -59,6 +59,7 @@ const PostPage = async (props: PostProps) => {
     createdAt: string;
     labels: ILabel[];
     views: number;
+    coverUrl: string
   }
 
   let relatedPosts: IPost[] = allPosts.filter(
@@ -101,7 +102,7 @@ const PostPage = async (props: PostProps) => {
             <FaEye /> {post.views} visitas
           </div>
         </div>
-        <Image src="/placeholder.jpg" alt="Placeholder" width={200} height={150} className="featured-image" />
+        <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'}  alt="Placeholder" width={200} height={150} className="featured-image" />
 
         <div className="article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
         <BackButton />
