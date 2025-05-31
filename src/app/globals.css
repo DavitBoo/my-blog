@@ -399,6 +399,7 @@ li {
   margin-bottom: 0rem;
 }
 
+/* table */
 .article-content table {
   width: 100%;
   border-collapse: collapse;
@@ -444,6 +445,125 @@ li {
   line-height: 1.4;
 }
 
+
+/* slider/carousel */
+/* Carousel Container */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  margin: 2rem 0;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-lighter);
+  padding: 1rem;
+}
+
+/* Carousel Track */
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Carousel Slide */
+.carousel-slide {
+  flex: 0 0 calc(33.333% - 1rem);
+  max-width: calc(33.333% - 1rem);
+  transition: all 0.3s ease;
+}
+
+.carousel-slide:hover {
+  transform: scale(1.02);
+}
+
+.carousel-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Carousel Arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+.carousel-arrow:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.carousel-arrow-prev {
+  left: 1rem;
+}
+
+.carousel-arrow-next {
+  right: 1rem;
+}
+
+.carousel-arrow-icon {
+  font-size: 1.2rem;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.carousel-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--color-font-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.carousel-indicator.active {
+  background-color: var(--color-primary);
+  width: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .carousel-slide {
+    flex: 0 0 calc(50% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .carousel-track {
+    gap: 0.5rem;
+  }
+}
 
 .article-header {
   text-align: right;

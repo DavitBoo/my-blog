@@ -1,6 +1,9 @@
 import { fetchPostById, fetchLabels, fetchPosts } from "../../utils/api";
-import CommentSection from "../../components/CommentSection";
 import BackButton from "../../components/BackButton";
+import CommentSection from "../../components/CommentSection";
+import ProcessedContent from "@/app/components/ProcessedContent";
+
+
 import { slugify } from "../../utils/slugify";
 
 import { format } from "date-fns";
@@ -104,7 +107,7 @@ const PostPage = async (props: PostProps) => {
         </div>
         <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'}  alt="Placeholder" width={200} height={150} className="featured-image" />
 
-        <div className="article-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+        <ProcessedContent html={decodedString} />
         <BackButton />
         <small>Published on {new Date(post.createdAt).toLocaleDateString()}</small>
         <CommentSection postId={post.id} />
