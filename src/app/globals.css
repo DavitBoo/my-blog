@@ -980,6 +980,7 @@ footer span {
   border: 1px solid var(--color-border);
   border-radius: 5px;
   background-color: var(--color-background);
+  color: var(--color-font-secondary);
 }
 
 .search-icon {

@@ -40,6 +40,8 @@ const PostPage = async (props: PostProps) => {
     );
   }
 
+
+  console.log(post?.content);
   const decodedString = decode(post?.content);
 
   const readingTime = () => {

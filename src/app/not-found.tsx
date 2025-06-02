@@ -14,10 +14,10 @@ const custom404 = () => {
       />
       <div className="button-group">
         <button className="btn" onClick={() => window.location.href = '/'}>
-          Volver al inicio
+          <span>Volver al inicio</span>
         </button>
         <button className="btn" onClick={() => window.location.href = '/contacto'}>
-          Visitar artículo random
+          <span>Visitar artículo random</span>
         </button>
       </div>
     </div>

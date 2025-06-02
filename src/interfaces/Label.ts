@@ -1,4 +1,6 @@
 export interface ILabel {
-    id: string;
-    name: string;
-  }
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
