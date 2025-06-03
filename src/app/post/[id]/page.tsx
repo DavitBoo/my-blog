@@ -11,6 +11,8 @@ import { decode } from "html-entities";
 import { es } from "date-fns/locale";
 
 import { ILabel } from "../../../interfaces/Label";
+import { IPost } from "../../../interfaces/Posts";
+
 
 import { FaGlasses, FaEye } from "react-icons/fa";
 
@@ -55,17 +57,6 @@ const PostPage = async (props: PostProps) => {
 
   // Obtener la categoría principal del post actual (suponiendo que tiene al menos una)
   const mainCategory = post.labels.length > 0 ? slugify(post.labels[0].name) : null;
-
-  // Filtrar posts de la misma categoría
-  interface IPost {
-    id: number;
-    title: string;
-    content: string;
-    createdAt: string;
-    labels: ILabel[];
-    views: number;
-    coverUrl: string
-  }
 
   let relatedPosts: IPost[] = allPosts.filter(
     (p: IPost) =>

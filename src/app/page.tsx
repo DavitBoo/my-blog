@@ -2,26 +2,13 @@ import HomeHero from "./components/HomeHero";
 import Post from "./components/Post";
 import { fetchPosts } from "./utils/api";
 
-interface Label {
-  id: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { IPost } from "../interfaces/Posts";
 
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  labels: Label[];
-  views: number;
-  coverUrl: string;
-}
+// ! updating urls from id => slug
 
 const Home = async () => {
   // Fetch posts directly
-  const posts: Post[] = await fetchPosts();
+  const posts: IPost[] = await fetchPosts();
   return (
     <div className="archive">
       <HomeHero />
