@@ -73,6 +73,7 @@ const Blog: React.FC = () => {
                 id={post.id}
                 title={post.title}
                 content={post.content}
+                slug={post.slug}
                 createdAt={post.createdAt}
                 labels={post.labels}
                 views={post.views}

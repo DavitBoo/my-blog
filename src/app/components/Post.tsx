@@ -27,7 +27,7 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Post = ({ id, title, content, createdAt, labels, views, coverUrl }: IPost) => {
+const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: IPost) => {
   return (
     <div key={id} className="customCard">
       <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="postImage" />
@@ -40,7 +40,7 @@ const Post = ({ id, title, content, createdAt, labels, views, coverUrl }: IPost)
       </div>
       <div className="card-body">
         <h3 className="mb-4">
-          <a href={`/post/${id}`}>{title}</a>
+          <a href={`/post/${slug}`}>{title}</a>
         </h3>
         <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
         <small><FaCalendar/> {formatRelativeDate(createdAt)}</small>

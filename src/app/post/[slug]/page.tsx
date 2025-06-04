@@ -1,4 +1,4 @@
-import { fetchPostById, fetchLabels, fetchPosts } from "../../utils/api";
+import { fetchPostBySlug, fetchLabels, fetchPosts } from "../../utils/api";
 import BackButton from "../../components/BackButton";
 import CommentSection from "../../components/CommentSection";
 import ProcessedContent from "@/app/components/ProcessedContent";
@@ -20,7 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type PostProps = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 };
 
 const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
@@ -30,9 +30,8 @@ const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
 };
 
 const PostPage = async (props: PostProps) => {
-  const params = await props.params;
-  const postId = parseInt(params.id);
-  const post = await fetchPostById(postId);
+  const { slug } = await props.params;
+const post = await fetchPostBySlug(slug);
 
   if (!post) {
     return (
@@ -42,16 +41,19 @@ const PostPage = async (props: PostProps) => {
     );
   }
 
-
+  
   console.log(post?.content);
   const decodedString = decode(post?.content);
-
+  
   const readingTime = () => {
     const wpm = 250;
     const words = decodedString.trim().split(/\s+/).length;
     return Math.ceil(words / wpm);
   };
+  
 
+  const postId = post.id;
+  
   const labels = await fetchLabels();
   const allPosts = await fetchPosts();
 
@@ -133,7 +135,7 @@ const PostPage = async (props: PostProps) => {
                   </ul>
                   {/* Título del post */}
                   <h4>
-                    <Link href={`/post/${relatedPost.id}`}>{relatedPost.title}</Link>
+                    <Link href={`/post/${relatedPost.slug}`}>{relatedPost.title}</Link>
                   </h4>
                 </div>
               ))}

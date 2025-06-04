@@ -1,20 +1,28 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const fetchPosts = async () => {
-  const response = await fetch(`${API_URL}/posts`);
-  if (!response.ok) {
-    return null;
-  }
-  return response.json();
-};
+  export const fetchPosts = async () => {
+    const response = await fetch(`${API_URL}/posts`);
+    console.log(response);
+    if (!response.ok) {
+      return null;
+    }
+    return response.json();
+  };
 
-export const fetchPostById = async (id: number) => {
-  const response = await fetch(`${API_URL}/posts/${id}`);
-  if (!response.ok) {
-    return null;
-  }
-  return response.json();
-};
+  export const fetchPostById = async (id: number) => {
+    const response = await fetch(`${API_URL}/posts/${id}`);
+    if (!response.ok) {
+      return null;
+    }
+    return response.json();
+  };
+
+  export const fetchPostBySlug = async (slug: string) => {
+    console.log(slug);
+    const res = await fetch(`${API_URL}/posts/bySlug/${slug}`);
+    const data = await res.json();
+    return data.length > 0 ? data[0] : null;
+  };
 
 export const fetchCommentsByPostId = async (postId: number) => {
   const response = await fetch(`${API_URL}/comments/${postId}`);

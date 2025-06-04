@@ -4,11 +4,12 @@ import { fetchPosts } from "./utils/api";
 
 import { IPost } from "../interfaces/Posts";
 
-// ! updating urls from id => slug + IPost interface
+// ! updating urls from id => slug
 
 const Home = async () => {
   // Fetch posts directly
   const posts: IPost[] = await fetchPosts();
+  console.log(posts[0]);
   return (
     <div className="archive">
       <HomeHero />
@@ -21,6 +22,7 @@ const Home = async () => {
                 id={post.id}
                 title={post.title}
                 content={post.content}
+                slug={post.slug}
                 createdAt={post.createdAt}
                 labels={post.labels}
                 views={post.views}
