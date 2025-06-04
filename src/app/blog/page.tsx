@@ -5,28 +5,13 @@ import Post from "../components/Post";
 import { fetchPosts } from "../utils/api";
 import SearchInput from "../components/SearchInput";
 import Loader from "../components/Loader";
+import {IPost} from '../../interfaces/Posts'
 
-interface Label {
-  id: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  labels: Label[];
-  views: number;
-  coverUrl: string
-}
 
 const POSTS_PER_PAGE = 3;
 
 const Blog: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,7 +20,7 @@ const Blog: React.FC = () => {
 
   useEffect(() => {
     const loadPosts = async () => {
-      const fetchedPosts: Post[] = await fetchPosts();
+      const fetchedPosts: IPost[] = await fetchPosts();
       setPosts(fetchedPosts);
       const uniqueLabels = Array.from(new Set(fetchedPosts.flatMap((post) => post.labels.map((label) => label.name))));
       setLabels(uniqueLabels);

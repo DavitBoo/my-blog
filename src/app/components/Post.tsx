@@ -3,22 +3,7 @@ import Image from "next/image";
 
 import { FaCalendar, FaEye } from 'react-icons/fa';
 
-interface Label {
-  id: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface PostProps {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  labels: Label[];
-  views: number;
-  coverUrl: string;
-}
+import {IPost} from '../../interfaces/Posts'
 
 const formatRelativeDate = (dateString: string): string => {
   const now = new Date();
@@ -42,7 +27,7 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Post = ({ id, title, content, createdAt, labels, views, coverUrl }: PostProps) => {
+const Post = ({ id, title, content, createdAt, labels, views, coverUrl }: IPost) => {
   return (
     <div key={id} className="customCard">
       <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="postImage" />

@@ -4,7 +4,7 @@ import { fetchPosts } from "./utils/api";
 
 import { IPost } from "../interfaces/Posts";
 
-// ! updating urls from id => slug
+// ! updating urls from id => slug + IPost interface
 
 const Home = async () => {
   // Fetch posts directly

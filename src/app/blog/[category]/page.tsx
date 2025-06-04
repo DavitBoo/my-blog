@@ -6,22 +6,8 @@ import Post from "../../components/Post";
 import { fetchPosts } from "../../utils/api";
 import { slugify } from "@/app/utils/slugify";
 
-interface Label {
-  id: number;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {IPost} from '../../../interfaces/Posts'
 
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  labels: Label[];
-  views: number
-  coverUrl: string;
-}
 
 const POSTS_PER_PAGE = 3;
 
@@ -29,12 +15,12 @@ const BlogCategory: React.FC = () => {
   const { category } = useParams();
   const decodedCategory = category ? decodeURIComponent(category.toString()) : "";
 
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const loadPosts = async () => {
-      const fetchedPosts: Post[] = await fetchPosts();
+      const fetchedPosts: IPost[] = await fetchPosts();
 
       const filteredPosts = fetchedPosts.filter((post) =>
         post.labels.some((label) => slugify(label.name) === slugify(decodedCategory))
