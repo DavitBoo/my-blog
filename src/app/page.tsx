@@ -3,8 +3,7 @@ import Post from "./components/Post";
 import { fetchPosts } from "./utils/api";
 
 import { IPost } from "../interfaces/Posts";
-
-// ! updating urls from id => slug
+  
 
 const Home = async () => {
   // Fetch posts directly

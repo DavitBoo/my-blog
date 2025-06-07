@@ -5,14 +5,15 @@ import React, { useEffect, useState } from "react";
 import { fetchPosts } from "../utils/api";
 
 const HomeHero = () => {
-  const [randomPostId, setRandomPostId] = useState<number | null>(null);
+  const [randomPostSlug, setRandomPostSlug] = useState<string | null>(null);
 
   useEffect(() => {
     const loadRandomPost = async () => {
       const fetchedPosts = await fetchPosts();
       if (fetchedPosts && fetchedPosts.length > 0) {
         const randomIndex = Math.floor(Math.random() * fetchedPosts.length);
-        setRandomPostId(fetchedPosts[randomIndex].id);
+        const randomPost = fetchedPosts[randomIndex];
+        setRandomPostSlug(randomPost.slug); // 👈 Usamos el slug
       }
     };
     loadRandomPost();
@@ -42,7 +43,10 @@ const HomeHero = () => {
               <span>Venga, leamos</span>
             </Link>
 
-            <Link href={`/post/${randomPostId}`} className="btn btn-primary">
+            <Link
+              href={randomPostSlug ? `/post/${randomPostSlug}` : "#"}
+              className={`btn btn-primary ${!randomPostSlug ? "disabled" : ""}`}
+            >
               <span>Artículo random</span>
             </Link>
           </div>
