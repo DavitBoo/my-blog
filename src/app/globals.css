@@ -324,7 +324,7 @@ li {
   overflow: hidden;
   transform: translateY(-10px);
   opacity: 0;
-  transition: max-height 0.3s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .main-header.menu-expanded .mobile {
