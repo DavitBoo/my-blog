@@ -36,14 +36,14 @@ const Header = () => {
   ];
 
   return (
-    <header className="main-header">
+    <header className={`main-header ${isMenuOpen ? "menu-expanded" : ""}`}>
       <div className="container headerContainer">
         <div className="logoContainer">
           <h1>
             davi<span className="highlight">db</span>oo
           </h1>
         </div>
-        <nav className="d-flex gap-4 align-items-baseline">
+        <nav className="d-flex gap-4 align-items-center">
           <ul className="desktop">
             {menuItems.map((item) => (
               <li key={item.href}>
@@ -57,17 +57,17 @@ const Header = () => {
           </button>
 
           <RxHamburgerMenu className="menu" onClick={toggleMenu} />
-          {isMenuOpen && (
-            <ul className="mobile">
-              {menuItems.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.label}</Link>
-                </li>
-              ))}
-            </ul>
-          )}
         </nav>
       </div>
+
+      {/* Menú móvil movido fuera del nav y del container */}
+      <ul className="mobile">
+        {menuItems.map((item) => (
+          <li key={item.href}>
+            <Link href={item.href}>{item.label}</Link>
+          </li>
+        ))}
+      </ul>
     </header>
   );
 };
