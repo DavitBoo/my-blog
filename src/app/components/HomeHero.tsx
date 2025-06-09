@@ -4,6 +4,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { fetchPosts } from "../utils/api";
 
+// components
+import { ThreeBackground } from "./ThreeBackground";
+
 const HomeHero = () => {
   const [randomPostSlug, setRandomPostSlug] = useState<string | null>(null);
 
@@ -20,7 +23,8 @@ const HomeHero = () => {
   }, []);
 
   return (
-    <div className="home-hero">
+    <div className="home-hero" style={{ position: 'relative', minHeight: '100vh' }}>
+      <ThreeBackground/>
       <div className="container">
         <div className="mw-48">
           <h1>Mi blog</h1>
@@ -51,6 +55,7 @@ const HomeHero = () => {
             </Link>
           </div>
         </div>
+        
       </div>
     </div>
   );
