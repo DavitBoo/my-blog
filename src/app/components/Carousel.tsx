@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/style.css";
 
 interface CarouselProps {
   images: string[];
@@ -16,19 +18,29 @@ export default function Carousel({ images }: CarouselProps) {
   // Asegurarnos de que siempre haya suficientes imágenes
   const extendedImages = [...images, ...images.slice(0, visibleSlides - 1)];
 
+  useEffect(() => {
+    // Inicializar PhotoSwipe Lightbox
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: "#carousel-gallery",
+      children: "a",
+      pswpModule: () => import("photoswipe"),
+    });
+    lightbox.init();
+
+    return () => {
+      lightbox.destroy();
+    };
+  }, []);
+
   const goToPrev = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
   };
 
-  // Auto-advance slides (opcional)
+  // Auto-advance slides
   useEffect(() => {
     if (!isHovered) {
       const interval = setInterval(goToNext, 5000);
@@ -47,14 +59,22 @@ export default function Carousel({ images }: CarouselProps) {
   };
 
   return (
-    <div 
+    <div
       className="carousel-container"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="carousel-track">
+      <div className="carousel-track" id="carousel-gallery">
         {getVisibleImages().map((src, index) => (
-          <div key={`${currentIndex}-${index}`} className="carousel-slide">
+          <a
+            key={`${currentIndex}-${index}`}
+            href={src}
+            data-pswp-width={1200}
+            data-pswp-height={800}
+            target="_blank"
+            rel="noreferrer"
+            className="carousel-slide"
+          >
             <Image
               src={src}
               alt={`Slide ${currentIndex + index + 1}`}
@@ -63,23 +83,15 @@ export default function Carousel({ images }: CarouselProps) {
               className="carousel-image"
               priority={index === 0}
             />
-          </div>
+          </a>
         ))}
       </div>
 
       {/* Navigation arrows */}
-      <button 
-        onClick={goToPrev}
-        className="carousel-arrow carousel-arrow-prev"
-        aria-label="Previous slide"
-      >
+      <button onClick={goToPrev} className="carousel-arrow carousel-arrow-prev" aria-label="Previous slide">
         <FaChevronLeft className="carousel-arrow-icon" />
       </button>
-      <button 
-        onClick={goToNext}
-        className="carousel-arrow carousel-arrow-next"
-        aria-label="Next slide"
-      >
+      <button onClick={goToNext} className="carousel-arrow carousel-arrow-next" aria-label="Next slide">
         <FaChevronRight className="carousel-arrow-icon" />
       </button>
 
@@ -89,7 +101,7 @@ export default function Carousel({ images }: CarouselProps) {
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`carousel-indicator ${index === currentIndex ? 'active' : ''}`}
+            className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}

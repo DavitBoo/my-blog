@@ -406,6 +406,10 @@ li {
   font-size: 0.9rem;
 }
 
+.article-content img {
+  max-width: 100%;
+}
+
 .article-page ol,
 .article-page ul {
   padding-left: 1.5rem;
@@ -487,6 +491,11 @@ li {
   flex: 0 0 calc(33.333% - 1rem);
   max-width: calc(33.333% - 1rem);
   transition: all 0.3s ease;
+
+  display: block;
+  cursor: zoom-in;
+  text-decoration: none;
+  color: inherit;
 }
 
 .carousel-slide:hover {
@@ -499,6 +508,15 @@ li {
   object-fit: cover;
   border-radius: 0.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* photo swipe */
+.pswp__img {
+  object-fit: contain;
+}
+
+.pswp__caption {
+  text-align: center;
 }
 
 /* Carousel Arrows */
