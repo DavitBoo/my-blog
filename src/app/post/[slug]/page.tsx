@@ -50,6 +50,8 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
   // Construir la URL canónica
   const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app'}/post/${post.slug}`;
 
+  const socialImage = post.coverUrl || '/placeholder.jpg';
+
   return {
     title: metaTitle,
     description: metaDescription,
@@ -85,6 +87,47 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       // creator: '@tu_usuario', // Cambia por tu usuario de Twitter
     },
 
+    other: {
+      // WhatsApp específico
+      'whatsapp:title': metaTitle,
+      'whatsapp:description': metaDescription,
+      'whatsapp:image': socialImage,
+      
+      // LinkedIn específico
+      'linkedin:owner': 'tu-perfil-linkedin', // Cambia por tu perfil
+      'linkedin:title': metaTitle,
+      'linkedin:description': metaDescription,
+      'linkedin:image': socialImage,
+      
+      // Instagram (usa principalmente Open Graph)
+      'instagram:title': metaTitle,
+      'instagram:description': metaDescription,
+      'instagram:image': socialImage,
+      
+      // Metadatos adicionales para mejor indexación
+      'article:author': 'david',
+      'article:section': post.labels?.[0]?.name || 'Blog',
+      'article:published_time': post.createdAt,
+      'article:modified_time': post.updatedAt || post.createdAt,
+      'article:tag': post.labels?.map((label: ILabel) => label.name).join(','),
+      
+      // Información del sitio
+      'theme-color': '#000000', // Cambia por el color principal de tu sitio
+      'msapplication-TileColor': '#000000',
+      'application-name': 'Diogenes Brain',
+      
+      // Para mejor rendimiento en redes sociales
+      'og:rich_attachment': 'true',
+      'og:image:secure_url': socialImage,
+      'og:image:width': '1200',
+      'og:image:height': '630',
+      'og:image:alt': post.title,
+      
+      // Metadatos para lectores de feeds
+      'syndication-source': canonicalUrl,
+      'original-source': canonicalUrl,
+    },
+
     // Datos estructurados básicos
     alternates: {
       canonical: canonicalUrl,
@@ -92,11 +135,11 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
 
     // Metadatos adicionales
     robots: {
-      index: true,
-      follow: true,
+      index: false,
+      follow: false,
       googleBot: {
-        index: true,
-        follow: true,
+        index: false,
+        follow: false,
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
