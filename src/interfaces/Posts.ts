@@ -9,4 +9,6 @@ export interface IPost {
   labels: ILabel[];
   views: number;
   coverUrl: string
+  metaTitle?: string;
+  metaDescription?: string;
 }

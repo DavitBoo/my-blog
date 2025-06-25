@@ -2,6 +2,7 @@ import { fetchPostBySlug, fetchLabels, fetchPosts } from "../../utils/api";
 import BackButton from "../../components/BackButton";
 import CommentSection from "../../components/CommentSection";
 import ProcessedContent from "@/app/components/ProcessedContent";
+import { Metadata } from "next";
 
 
 import { slugify } from "../../utils/slugify";
@@ -29,6 +30,81 @@ const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
   return shuffled.slice(0, count);
 };
 
+// Función para generar metadatos dinámicos
+export async function generateMetadata(props: PostProps): Promise<Metadata> {
+  const { slug } = await props.params;
+  const post = await fetchPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: 'Artículo no encontrado',
+      description: 'El artículo que buscas no está disponible.',
+    };
+  }
+
+  // Usar metaTitle y metaDescription si están disponibles, sino usar valores por defecto
+  const metaTitle = post.metaTitle || post.title;
+  const metaDescription = post.metaDescription || 
+    decode(post.content).replace(/<[^>]*>/g, "").substring(0, 160) + "...";
+
+  // Construir la URL canónica
+  const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app'}/post/${post.slug}`;
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    keywords: post.labels?.map((label: ILabel) => label.name).join(', '),
+    authors: [{ name: 'david' }], // Cambia por tu nombre o el del autor
+    
+    // Open Graph para redes sociales
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      url: canonicalUrl,
+      siteName: 'Diogenes Brain', 
+      images: [
+        {
+          url: post.coverUrl || '/placeholder.jpg',
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      locale: 'es_ES',
+      type: 'article',
+      publishedTime: post.createdAt,
+      tags: post.labels?.map((label: ILabel) => label.name),
+    },
+
+    // Twitter Card
+    twitter: {
+      card: 'summary_large_image',
+      title: metaTitle,
+      description: metaDescription,
+      images: [post.coverUrl || '/placeholder.jpg'],
+      // creator: '@tu_usuario', // Cambia por tu usuario de Twitter
+    },
+
+    // Datos estructurados básicos
+    alternates: {
+      canonical: canonicalUrl,
+    },
+
+    // Metadatos adicionales
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  };
+}
+
 const PostPage = async (props: PostProps) => {
   const { slug } = await props.params;
 const post = await fetchPostBySlug(slug);
@@ -42,7 +118,6 @@ const post = await fetchPostBySlug(slug);
   }
 
   
-  console.log(post?.content);
   const decodedString = decode(post?.content);
   
   const readingTime = () => {
