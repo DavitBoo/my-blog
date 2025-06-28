@@ -2,7 +2,7 @@ import { fetchPostBySlug, fetchLabels, fetchPosts } from "../../utils/api";
 import BackButton from "../../components/BackButton";
 import CommentSection from "../../components/CommentSection";
 import ProcessedContent from "@/app/components/ProcessedContent";
-import { Metadata } from "next";
+import { Metadata } from "next";  // tipos, metadata no es compatible la exportación de metadata y generateMetadata
 
 
 import { slugify } from "../../utils/slugify";
@@ -32,6 +32,7 @@ const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
 
 // Función para generar metadatos dinámicos
 export async function generateMetadata(props: PostProps): Promise<Metadata> {
+  console.log( props);
   const { slug } = await props.params;
   const post = await fetchPostBySlug(slug);
 
@@ -56,7 +57,7 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
     title: metaTitle,
     description: metaDescription,
     keywords: post.labels?.map((label: ILabel) => label.name).join(', '),
-    authors: [{ name: 'david' }], // Cambia por tu nombre o el del autor
+    authors: [{ name: 'david' }], 
     
     // Open Graph para redes sociales
     openGraph: {
@@ -112,8 +113,8 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       'article:tag': post.labels?.map((label: ILabel) => label.name).join(','),
       
       // Información del sitio
-      'theme-color': '#000000', // Cambia por el color principal de tu sitio
-      'msapplication-TileColor': '#000000',
+      'theme-color': '#04adbf', // Cambia por el color principal de tu sitio
+      'msapplication-TileColor': '#04adbf',
       'application-name': 'Diogenes Brain',
       
       // Para mejor rendimiento en redes sociales

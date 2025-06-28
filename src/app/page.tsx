@@ -3,7 +3,30 @@ import Post from "./components/Post";
 import { fetchPosts } from "./utils/api";
 
 import { IPost } from "../interfaces/Posts";
-  
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blog de David Boo | Inicio",
+  description: "Bienvenido a mi sitio web sobre muchas cosas.",
+  keywords: ["desarrollo web", "programación", "lectura", "idiomas", "lutheria"],
+  authors: [{ name: "David", url: "https://my-blog-omega-pearl.vercel.app/" }],
+  openGraph: {
+    title: "Web de un polímata",
+    description: "Mis últimos artículos sobre ....",
+    url: "https://my-blog-omega-pearl.vercel.app/",
+    siteName: "Diogenes Brain",
+    images: [
+      {
+        url: "https://tusitio.com/og-image.jpg", // reemplaza con tu imagen real
+        width: 1200,
+        height: 630,
+        alt: "Imagen de portada del blog",
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+};
 
 const Home = async () => {
   // Fetch posts directly
