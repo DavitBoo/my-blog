@@ -3,26 +3,88 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BsSun, BsMoon } from "react-icons/bs";
-import { GiCampingTent } from "react-icons/gi"; // Icono para survival theme
+import { GiCampingTent } from "react-icons/gi";
+
+type ThemeType = "light" | "dark" | "survival";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark" | "survival">("light");
+  const [theme, setTheme] = useState<ThemeType>("light");
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "light" | "dark" | "survival" | null;
-    if (savedTheme) {
-      applyTheme(savedTheme);
-      setTheme(savedTheme);
+  // Función para leer cookies
+  const getCookie = (name: string): string | null => {
+    if (typeof document === 'undefined') return null;
+    
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+      return parts.pop()?.split(';').shift() || null;
     }
+    return null;
+  };
+
+  // Función para establecer cookies
+  const setCookie = (name: string, value: string, days: number = 365) => {
+    if (typeof document === 'undefined') return;
+    
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  };
+
+  // Función para detectar la preferencia del sistema
+  const getSystemTheme = (): "light" | "dark" => {
+    if (typeof window === 'undefined') return "light";
+    
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches 
+      ? "dark" 
+      : "light";
+  };
+
+  useEffect(() => {
+    // Intentar obtener el tema de las cookies
+    const savedTheme = getCookie("theme") as ThemeType | null;
+    
+    let initialTheme: ThemeType;
+    
+    if (savedTheme && ["light", "dark", "survival"].includes(savedTheme)) {
+      // Si hay tema guardado en cookies, usarlo
+      initialTheme = savedTheme;
+    } else {
+      // Si no hay cookies, usar la configuración del sistema
+      const systemTheme = getSystemTheme();
+      initialTheme = systemTheme;
+      // Guardar la preferencia detectada en cookies
+      setCookie("theme", systemTheme);
+    }
+    
+    setTheme(initialTheme);
+    applyTheme(initialTheme);
+
+    // Opcional: Escuchar cambios en la preferencia del sistema
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      // Solo cambiar si no hay tema guardado explícitamente
+      const currentSavedTheme = getCookie("theme");
+      if (!currentSavedTheme) {
+        const newTheme = e.matches ? "dark" : "light";
+        setTheme(newTheme);
+        applyTheme(newTheme);
+        setCookie("theme", newTheme);
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
+    
+    // Cleanup
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, []);
 
-  const applyTheme = (newTheme: "light" | "dark" | "survival") => {
-    // Remover todas las clases de tema
+  const applyTheme = (newTheme: ThemeType) => {
+    if (typeof document === 'undefined') return;
+    
     document.documentElement.classList.remove("dark", "survival");
-
-    // Aplicar la nueva clase de tema
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else if (newTheme === "survival") {
@@ -30,10 +92,10 @@ const Header = () => {
     }
   };
 
-  const handleThemeChange = (newTheme: "light" | "dark" | "survival") => {
+  const handleThemeChange = (newTheme: ThemeType) => {
     setTheme(newTheme);
     applyTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    setCookie("theme", newTheme);
     setIsThemeMenuOpen(false);
   };
 
@@ -87,19 +149,17 @@ const Header = () => {
               </li>
             ))}
           </ul>
-
           {/* Theme Selector */}
           <div className="theme-selector">
             <button onClick={toggleThemeMenu} className="theme-toggle-btn" aria-label="Seleccionar tema">
               {getThemeIcon()}
             </button>
-
             {isThemeMenuOpen && (
               <div className="theme-menu">
                 {themes.map((themeOption) => (
                   <button
                     key={themeOption.key}
-                    onClick={() => handleThemeChange(themeOption.key as "light" | "dark" | "survival")}
+                    onClick={() => handleThemeChange(themeOption.key as ThemeType)}
                     className={`theme-option ${theme === themeOption.key ? "active" : ""}`}
                   >
                     {themeOption.icon}
@@ -109,11 +169,9 @@ const Header = () => {
               </div>
             )}
           </div>
-
           <RxHamburgerMenu className="menu" onClick={toggleMenu} />
         </nav>
       </div>
-
       {/* Menú móvil */}
       <ul className="mobile">
         {menuItems.map((item) => (
