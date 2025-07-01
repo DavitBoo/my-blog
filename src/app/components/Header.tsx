@@ -16,7 +16,6 @@ const Header = () => {
     if (typeof document === 'undefined') return null;
     
     const value = `; ${document.cookie}`;
-    console.log(value);
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
       return parts.pop()?.split(';').shift() || null;
@@ -33,7 +32,7 @@ const Header = () => {
     document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
   };
 
-  // Función para detectar la preferencia del sistema
+  // Get sys theme
   const getSystemTheme = (): "light" | "dark" => {
     if (typeof window === 'undefined') return "light";
     
@@ -43,42 +42,24 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // Intentar obtener el tema de las cookies
     const savedTheme = getCookie("theme") as ThemeType | null;
     
     let initialTheme: ThemeType;
     
     if (savedTheme && ["light", "dark", "survival"].includes(savedTheme)) {
-      // Si hay tema guardado en cookies, usarlo
+      // Just using theme saved on cookies
       initialTheme = savedTheme;
     } else {
-      // Si no hay cookies, usar la configuración del sistema
+      // Use sys config if no cookie for theme setup
       const systemTheme = getSystemTheme();
       initialTheme = systemTheme;
-      // Guardar la preferencia detectada en cookies
+
       setCookie("theme", systemTheme);
     }
     
     setTheme(initialTheme);
     applyTheme(initialTheme);
 
-    // Opcional: Escuchar cambios en la preferencia del sistema
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      // Solo cambiar si no hay tema guardado explícitamente
-      const currentSavedTheme = getCookie("theme");
-      if (!currentSavedTheme) {
-        const newTheme = e.matches ? "dark" : "light";
-        setTheme(newTheme);
-        applyTheme(newTheme);
-        setCookie("theme", newTheme);
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
-    
-    // Cleanup
-    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, []);
 
   const applyTheme = (newTheme: ThemeType) => {
