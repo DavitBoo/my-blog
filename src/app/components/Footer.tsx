@@ -1,19 +1,35 @@
-import React from 'react'
-import Image from 'next/image'
-
-import githubLogo from '@/assets/icons/github.svg'
+import React from "react";
+import { FaInstagram, FaLinkedin, FaGithub } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const Footer = () => {
   return (
-    <footer>
-      <span>made by DavitBoo</span>
-        <div className="socialContainer">
-          <a href="https://www.github.com/davitboo">
-              <Image src={githubLogo} alt="github logo"></Image>
-          </a>
-        </div>
+    <footer className="main-footer">
+      <div className="container d-flex align-items-center justify-content-between gap-4">
+          <div>
+            <p>📍 Vitoria-Gasteiz</p>
+            <p>© 2025 — Todos los derechos reservados</p>
+          </div>
+          <div className="d-flex gap-4 social-icons">
+            <a href="" target="_blank">
+              <FaInstagram />
+            </a>
+            •
+            <a href="" target="_blank">
+              <FaLinkedin />
+            </a>
+            •
+            <a href="" target="_blank">
+              <FaGithub />
+            </a>
+            •
+            <a href="" target="_blank">
+              <MdEmail />
+            </a>
+          </div>
+      </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
