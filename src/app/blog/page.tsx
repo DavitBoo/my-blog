@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 import {IPost} from '../../interfaces/Posts'
 
 
-const POSTS_PER_PAGE = 3;
+const POSTS_PER_PAGE = 9;
 
 const Blog: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([]);

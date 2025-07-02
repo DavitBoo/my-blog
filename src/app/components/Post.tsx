@@ -30,7 +30,7 @@ const formatRelativeDate = (dateString: string): string => {
 const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: IPost) => {
   return (
     <div key={id} className="customCard">
-      <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="postImage" />
+      <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={300} height={200} className="postImage" />
       <div className="labels">
         {labels.map((label) => (
           <span key={label.id} className="label">
