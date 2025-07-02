@@ -26,7 +26,7 @@
   --color-accent: #d9cb04;
   --color-hover: #0388a6;
 
-  --color-gradient-1: var(--color-primary-darker);
+  --color-gradient-1: var(--color-primary);
   --color-gradient-2: var(--color-hover);
   --color-gradient-3: var(--color-accent);
   --gradient-heading: linear-gradient(
@@ -469,7 +469,7 @@ li {
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: animate-gradient 4s ease-in-out infinite;
+  animation: animate-gradient 6s ease infinite;
 }
 
 @keyframes animate-gradient {

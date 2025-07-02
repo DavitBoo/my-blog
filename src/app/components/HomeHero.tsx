@@ -26,7 +26,7 @@ const HomeHero = () => {
     <div className="home-hero" style={{ position: 'relative', minHeight: '100vh' }}>
       <ThreeBackground/>
       <div className="container">
-        <div className="mw-48">
+        <div className="mw-48" style={{zIndex: '999'}}>
           <h1>Mi blog</h1>
           <h2 className="mb-8">
             Aprendo cosas, experimento y te las cuento: Programación, deportes, salud, lutheria, guitarras, idiomas,
