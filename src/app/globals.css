@@ -399,6 +399,10 @@ li {
   font-size: 2rem;
 }
 
+.now-btn-modal {
+  display: none;
+}
+
 .mobile {
   padding: 0;
   gap: 0;
@@ -448,6 +452,9 @@ li {
   }
   .desktop {
     display: none;
+  }
+  .now-btn-modal{
+    display: block;
   }
 }
 
@@ -1199,6 +1206,464 @@ footer span {
   gap: 0.75rem;
 }
 
+
+/* === now modal === */
+/* ==== Now Modal ==== */
+.now-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+.now-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.now-modal {
+  position: relative;
+  z-index: 10;
+  margin: 1rem;
+  max-height: 90vh;
+  width: 100%;
+  max-width: 64rem;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.now-modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-background-lighter);
+  padding: 1.5rem;
+}
+
+.now-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-subtitle {
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-close-btn {
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-font-primary);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.now-modal-close-btn:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+.now-modal-content {
+  padding: 1.5rem;
+}
+
+.now-modal-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 768px) {
+  .now-modal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .now-modal-project-card {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 992px) {
+  .now-modal-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .now-modal-card-fitness,
+  .now-modal-card-hikking{
+    grid-column: span 2;
+  }
+
+  .now-modal-card-hikking {
+    order: 8;
+  }
+
+  .now-modal-experiment {
+    grid-row: span 2;
+  }
+}
+
+.now-modal-card {
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card-background);
+  padding: 1rem;
+}
+
+
+
+.now-modal-card-header {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.now-modal-icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: var(--color-primary);
+}
+
+.now-modal-card-title {
+  font-weight: 700;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+/* Reading card */
+.now-modal-reading-content {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.now-modal-book-cover {
+  height: 4rem;
+  width: 3rem;
+  border-radius: 0.25rem;
+  object-fit: cover;
+}
+
+.now-modal-reading-info {
+  flex: 1;
+}
+
+.now-modal-book-title {
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-book-author {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+/* Progress bars */
+.now-modal-progress-container {
+  margin-top: 0.5rem;
+}
+
+.now-modal-progress-track {
+  height: 0.5rem;
+  width: 100%;
+  border-radius: 9999px;
+  background-color: var(--color-background-lighter);
+}
+
+.now-modal-progress-bar {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.now-modal-progress-text {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin-bottom: 0;
+}
+
+/* Language card */
+.now-modal-language-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.now-modal-flag {
+  font-size: 2rem;
+}
+
+.now-modal-language-name {
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-language-level {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-language-platform {
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin: 0;
+}
+
+/* Music card */
+.now-modal-song-title {
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-song-artist {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-music-link {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.now-modal-music-link:hover {
+  text-decoration: underline;
+}
+
+/* Project card */
+.now-modal-project-name {
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-project-description {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-tech-tags {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.now-modal-tech-tag {
+  border-radius: 9999px;
+  background-color: var(--color-tag-background);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-background);
+}
+
+/* Learning card */
+.now-modal-learning-focus {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin-top: 0;
+}
+
+.now-modal-learning-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.now-modal-learning-tag {
+  border-radius: 9999px;
+  background-color: rgba(var(--color-primary), 0.1);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+/* Fitness card */
+.now-modal-fitness-routine {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-fitness-last {
+  font-size: 0.75rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-fitness-focus {
+  margin-top: 0.5rem;
+}
+
+.now-modal-fitness-focus-label {
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin: 0;
+}
+
+.now-modal-fitness-tags {
+  margin-top: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.now-modal-fitness-tag {
+  border-radius: 0.25rem;
+  background-color: rgba(var(--color-accent), 0.2);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-font-primary);
+}
+
+/* Hiking card */
+.now-modal-mountain-name {
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0;
+}
+
+.now-modal-mountain-location {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-mountain-details {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+}
+
+/* Footer */
+.now-modal-footer {
+  margin-top: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-background-lighter);
+  padding: 1rem;
+  text-align: center;
+}
+
+.now-modal-footer-text {
+  font-size: 0.875rem;
+  color: var(--color-font-secondary);
+  margin: 0;
+}
+
+.now-modal-footer-date {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin-bottom: 0;
+}
+
+/* Experiments card */
+.now-modal-experiments-focus {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-font-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.now-modal-experiments-section {
+  margin-bottom: 0.75rem;
+}
+
+.now-modal-experiments-label {
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin: 0 0 0.25rem 0;
+}
+
+.now-modal-experiments-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.now-modal-experiment-tag {
+  border-radius: 0.25rem;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.now-modal-experiments-recent {
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.now-modal-experiments-recent-label {
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  margin: 0;
+}
+
+.now-modal-experiments-recent-text {
+  font-size: 0.8rem;
+  color: var(--color-font-secondary);
+  margin: 0.25rem 0 0 0;
+  font-style: italic;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
 
 /* ==== DevOverlay ==== */
 .dev-overlay {

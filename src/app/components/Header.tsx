@@ -2,8 +2,12 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
+
+import { TbActivityHeartbeat } from "react-icons/tb";
+
 import { BsSun, BsMoon } from "react-icons/bs";
 import { GiCampingTent } from "react-icons/gi";
+import { NowModal } from "./NowModal";
 
 type ThemeType = "light" | "dark" | "survival";
 
@@ -11,41 +15,40 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeType>("light");
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isNowModalOpen, setIsNowModalOpen] = useState(false);
 
   const getCookie = (name: string): string | null => {
-    if (typeof document === 'undefined') return null;
-    
+    if (typeof document === "undefined") return null;
+
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) {
-      return parts.pop()?.split(';').shift() || null;
+      return parts.pop()?.split(";").shift() || null;
     }
     return null;
   };
 
   // Función para establecer cookies
   const setCookie = (name: string, value: string, days: number = 365) => {
-    if (typeof document === 'undefined') return;
-    
+    if (typeof document === "undefined") return;
+
     const expires = new Date();
-    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
     document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
   };
 
   // Get sys theme
   const getSystemTheme = (): "light" | "dark" => {
-    if (typeof window === 'undefined') return "light";
-    
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches 
-      ? "dark" 
-      : "light";
+    if (typeof window === "undefined") return "light";
+
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   };
 
   useEffect(() => {
     const savedTheme = getCookie("theme") as ThemeType | null;
-    
+
     let initialTheme: ThemeType;
-    
+
     if (savedTheme && ["light", "dark", "survival"].includes(savedTheme)) {
       // Just using theme saved on cookies
       initialTheme = savedTheme;
@@ -56,15 +59,14 @@ const Header = () => {
 
       setCookie("theme", systemTheme);
     }
-    
+
     setTheme(initialTheme);
     applyTheme(initialTheme);
-
   }, []);
 
   const applyTheme = (newTheme: ThemeType) => {
-    if (typeof document === 'undefined') return;
-    
+    if (typeof document === "undefined") return;
+
     document.documentElement.classList.remove("dark", "survival");
     if (newTheme === "dark") {
       document.documentElement.classList.add("dark");
@@ -104,7 +106,7 @@ const Header = () => {
   const menuItems = [
     { href: "/", label: "Inicio" },
     { href: "/blog", label: "Blog" },
-    { href: "/now", label: "Ahora" },
+    // { href: "/now", label: "Ahora" },  
     { href: "/sobre-mi", label: "Sobre mi" },
   ];
 
@@ -115,53 +117,67 @@ const Header = () => {
   ];
 
   return (
-    <header className={`main-header ${isMenuOpen ? "menu-expanded" : ""}`}>
-      <div className="container headerContainer">
-        <div className="logoContainer">
-          <h1>
-            davi<span className="highlight">db</span>oo
-          </h1>
-        </div>
-        <nav className="d-flex gap-4 align-items-center">
-          <ul className="desktop">
-            {menuItems.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href}>{item.label}</Link>
-              </li>
-            ))}
-          </ul>
-          {/* Theme Selector */}
-          <div className="theme-selector">
-            <button onClick={toggleThemeMenu} className="theme-toggle-btn" aria-label="Seleccionar tema">
-              {getThemeIcon()}
-            </button>
-            {isThemeMenuOpen && (
-              <div className="theme-menu">
-                {themes.map((themeOption) => (
-                  <button
-                    key={themeOption.key}
-                    onClick={() => handleThemeChange(themeOption.key as ThemeType)}
-                    className={`theme-option ${theme === themeOption.key ? "active" : ""}`}
-                  >
-                    {themeOption.icon}
-                    <span>{themeOption.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
+    <>
+      <header className={`main-header ${isMenuOpen ? "menu-expanded" : ""}`}>
+        <div className="container headerContainer">
+          <div className="logoContainer">
+            <h1>
+              davi<span className="highlight">db</span>oo
+            </h1>
           </div>
-          <RxHamburgerMenu className="menu" onClick={toggleMenu} />
-        </nav>
-      </div>
-      {/* Menú móvil */}
-      <ul className="mobile">
-        {menuItems.map((item) => (
-          <li key={item.href}>
-            <Link href={item.href}>{item.label}</Link>
-          </li>
-        ))}
-      </ul>
-    </header>
+          <nav className="d-flex gap-4 align-items-center">
+            <ul className="desktop">
+              {menuItems.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href}>{item.label}</Link>
+                </li>
+              ))}
+              <button onClick={() => setIsNowModalOpen(true)} className="btn btn-primary">
+                <span className="m-0 p-0">
+                  <TbActivityHeartbeat className="mr-2" />
+                </span>
+              </button>
+            </ul>
+            {/* Theme Selector */}
+            <div className="theme-selector">
+              <button onClick={toggleThemeMenu} className="theme-toggle-btn" aria-label="Seleccionar tema">
+                {getThemeIcon()}
+              </button>
+              {isThemeMenuOpen && (
+                <div className="theme-menu">
+                  {themes.map((themeOption) => (
+                    <button
+                      key={themeOption.key}
+                      onClick={() => handleThemeChange(themeOption.key as ThemeType)}
+                      className={`theme-option ${theme === themeOption.key ? "active" : ""}`}
+                    >
+                      {themeOption.icon}
+                      <span>{themeOption.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={() => setIsNowModalOpen(true)} className="btn btn-primary now-btn-modal">
+          <span className="m-0 p-0">
+            <TbActivityHeartbeat className="mr-2" />
+          </span>
+        </button> 
+            <RxHamburgerMenu className="menu" onClick={toggleMenu} />
+        
+          </nav>
+        </div>
+        {/* Menú móvil */}
+        <ul className="mobile">
+          {menuItems.map((item) => (
+            <li key={item.href}>
+              <Link href={item.href}>{item.label}</Link>
+            </li>
+          ))}
+        </ul>
+      </header>
+      <NowModal isOpen={isNowModalOpen} onClose={() => setIsNowModalOpen(false)} />
+    </>
   );
 };
 
