@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   export const fetchPosts = async () => {
     const response = await fetch(`${API_URL}/posts`);
-    console.log(response);
+    
     if (!response.ok) {
       return null;
     }
@@ -18,7 +18,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
   };
 
   export const fetchPostBySlug = async (slug: string) => {
-    console.log(slug);
+    
     const res = await fetch(`${API_URL}/posts/bySlug/${slug}`);
     const data = await res.json();
     return data.length > 0 ? data[0] : null;
@@ -58,3 +58,21 @@ export const fetchLabels = async () => {
 
   return response.json();
 };
+
+export async function fetchTech() {
+  const NOT_API_URL = process.env.NEXT_PUBLIC_NOT_API_URL;
+  
+  try {
+    const response = await fetch(`${NOT_API_URL}/tech`, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error('Failed to fetch tech data');
+    }
+  const data = await response.json();
+
+    // ! me sigue devolviendo una promesa :( 
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw new Error('Failed to fetch tech data');
+  }
+}

@@ -134,6 +134,10 @@ small {
   color: var(--color-font-tertiary);
 }
 
+.highlight-2 {
+  color: var(--color-font-primary);
+}
+
 /*  custom buttons */
 .btn {
   position: relative;
@@ -296,6 +300,9 @@ small {
 }
 
 /* other custom */
+.text-start {
+  text-align: start;
+}
 .text-center {
   text-align: center;
 }
@@ -884,6 +891,36 @@ li {
   z-index: 0;
 }
 
+
+.sobre-mi {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-darker) 50%,
+    var(--color-font-primary) 100%
+  );
+  overflow-x: hidden;
+  color: var(--color-background);
+}
+.sobre-mi #container {
+  position: relative;
+  width: 100%;
+}
+.sobre-mi #three-canvas {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.sobre-mi #content {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+
+
+
 /*  ==== blog - archives ==== */
 .archive .container {
   display: flex;
@@ -1160,4 +1197,66 @@ footer span {
 .error-404 .button-group {
   display: flex;
   gap: 0.75rem;
+}
+
+
+/* ==== DevOverlay ==== */
+.dev-overlay {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  max-width: 90vw;
+  width: 380px;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  background-color: var(--color-background);
+  color: var(--color-font-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+  padding: 1rem;
+  z-index: 99999;
+  font-size: 0.9rem;
+}
+
+.dev-overlay-header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.dev-overlay-close {
+  background: transparent;
+  border: none;
+  color: var(--color-font-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.dev-overlay-close:hover {
+  color: var(--color-hover);
+}
+
+.dev-overlay-content section {
+  margin-bottom: 1rem;
+}
+
+.dev-overlay-content h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+  color: var(--color-font-secondary);
+}
+
+.dev-overlay-content ul {
+  margin: 0.25rem 0 0 1rem;
+  padding: 0;
+  list-style: disc;
+}
+
+.dev-overlay code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--color-font-tertiary);
 }

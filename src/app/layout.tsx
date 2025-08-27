@@ -1,6 +1,9 @@
+// /layout.tsx
+import DevOverlay from "./components/DevOverlay";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import "./globals.css";
+
 
 export const metadata = {
   title: "davidboo",
@@ -13,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         {children}
+        <DevOverlay/>
         <Footer />
       </body>
     </html>
