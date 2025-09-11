@@ -107,7 +107,7 @@ const Header = () => {
     { href: "/", label: "Inicio" },
     { href: "/blog", label: "Blog" },
     // { href: "/now", label: "Ahora" },  
-    { href: "/sobre-mi", label: "Sobre mi" },
+    // { href: "/sobre-mi", label: "Sobre mi" },
   ];
 
   const themes = [
@@ -126,7 +126,7 @@ const Header = () => {
             </h1>
           </div>
           <nav className="d-flex gap-4 align-items-center">
-            <ul className="desktop">
+            <ul className="desktop align-items-center">
               {menuItems.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href}>{item.label}</Link>

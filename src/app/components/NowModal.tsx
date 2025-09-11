@@ -83,15 +83,15 @@ const nowData: NowData = {
     focus: ["Muscle-up en anillas", "Handstand"],
   },
   hiking: {
-    lastMountain: "Ruta Ibones Benasque",
-    elevation: "ni idea",
-    date: "16 Ago 2025",
-    location: "Pirineos",
+    lastMountain: "Udalaitz",
+    elevation: "1.120 m",
+    date: "30 Ago 2025",
+    location: "País Vasco",
   },
   experiments: {
     // 👈 agregado
-    focus: "",
-    current: ["", ""],
+    focus: "Más que experimentos estoy en modo introspectivo ahora mismo.",
+    current: [],
     recent: "",
   },
 };
@@ -319,7 +319,7 @@ export function NowModal({ isOpen, onClose }: NowModalProps) {
             <p className="now-modal-footer-text">
               Esta información se actualiza un poco aleatoriamente, así que tampoco te fíes...
             </p>
-            <p className="now-modal-footer-date">La última vez fue: 27 de agosto de 2025</p>
+            <p className="now-modal-footer-date">La última vez fue: 10 de septiembre de 2025</p>
           </div>
         </div>
       </div>
