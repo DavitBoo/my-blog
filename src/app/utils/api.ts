@@ -1,7 +1,9 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   export const fetchPosts = async () => {
-    const response = await fetch(`${API_URL}/posts`);
+    const response = await fetch(`${API_URL}/posts`, {
+      next: { revalidate: 60 },
+    });
     
     if (!response.ok) {
       return null;
