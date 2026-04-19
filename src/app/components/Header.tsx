@@ -106,6 +106,7 @@ const Header = () => {
   const menuItems = [
     { href: "/", label: "Inicio" },
     { href: "/blog", label: "Blog" },
+    { href: "/proyectos", label: "Proyectos" },
     // { href: "/now", label: "Ahora" },  
     // { href: "/sobre-mi", label: "Sobre mi" },
   ];

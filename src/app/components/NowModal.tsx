@@ -53,34 +53,34 @@ interface NowData {
 
 const nowData: NowData = {
   reading: {
-    title: "The Master and His Emissary",
-    author: "Iain McGilchrist",
-    progress: 65,
-    cover: "https://imagessl9.casadellibro.com/a/l/s7/29/9780300245929.webp",
+    title: "EL arte de la buena vida",
+    author: "William B. Irvine",
+    progress: 67,
+    cover: "https://imagessl6.casadellibro.com/a/l/s7/76/9788449335976.webp",
   },
   language: {
     name: "Portugués",
-    level: "A1",
-    platform: "Duolingo, leo y veo vídeos en Youtube",
+    level: "A2",
+    platform: "Duolingo, Anki, canales de Youtube y charlas TEDx",
   },
   music: {
-    song: "Classical Dragon",
-    artist: "Marcin, Tim Henson",
-    youtubeUrl: "https://www.youtube.com/watch?v=FGM3U3buQj0",
+    song: "into the fire",
+    artist: "Dokken",
+    youtubeUrl: "https://www.youtube.com/watch?v=XQ9XcMybcX8",
   },
   project: {
     name: "4 guitarras electricas",
     description:
       "Empecé hace un tiempo 4 guitarras eléctricas hechas todas desde cero, quitando las partes metálicas y las pastillas, todo está prácticamente hecho a mano y de madera. Dos están terminadas, estoy a falta de colocar el hardware en las otras dos.",
     skills: ["Paciencia", "Electrónica", "Carpintería", "Acabados", "Epoxi"],
-    progress: 89,
+    progress: 94,
   },
   learning: {
-    technologies: ["Three.js", "ReactJS", "NextJS", "Selfhosting", "Linux", "Caddy"],
+    technologies: ["Flask", "AI tools"],
     currentFocus: "Todavía en la web",
   },
   fitness: {
-    focus: ["Muscle-up en anillas", "Handstand"],
+    focus: ["10 Muscle-up estrictos"],
   },
   hiking: {
     lastMountain: "Udalaitz",
@@ -90,7 +90,7 @@ const nowData: NowData = {
   },
   experiments: {
     // 👈 agregado
-    focus: "Más que experimentos estoy en modo introspectivo ahora mismo.",
+    focus: "Mejornando habilidades de carpintero. Afilando cepillos y mejorando el uso de estos.",
     current: [],
     recent: "",
   },
@@ -319,7 +319,7 @@ export function NowModal({ isOpen, onClose }: NowModalProps) {
             <p className="now-modal-footer-text">
               Esta información se actualiza un poco aleatoriamente, así que tampoco te fíes...
             </p>
-            <p className="now-modal-footer-date">La última vez fue: 10 de septiembre de 2025</p>
+            <p className="now-modal-footer-date">La última vez fue: 19 de abril de 2026</p>
           </div>
         </div>
       </div>

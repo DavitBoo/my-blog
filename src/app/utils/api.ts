@@ -78,3 +78,23 @@ export async function fetchTech() {
     throw new Error('Failed to fetch tech data');
   }
 }
+
+export const fetchProjects = async () => {
+  const response = await fetch(`${API_URL}/projects`, {
+    next: { revalidate: 60 },
+  });
+  if (!response.ok) return null;
+  return response.json();
+};
+
+export const fetchProjectById = async (id: number) => {
+  const response = await fetch(`${API_URL}/projects/${id}`);
+  if (!response.ok) return null;
+  return response.json();
+};
+
+export const fetchProjectBySlug = async (slug: string) => {
+  const res = await fetch(`${API_URL}/projects/bySlug/${slug}`);
+  const data = await res.json();
+  return data.length > 0 ? data[0] : null;
+};
