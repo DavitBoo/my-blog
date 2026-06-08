@@ -1,9 +1,14 @@
 import React from "react";
 import Image from "next/image";
 
-import { FaCalendar, FaEye } from 'react-icons/fa';
+import { FaCalendar, FaEye, FaGlasses } from 'react-icons/fa';
 
 import {IPost} from '../../interfaces/Posts'
+
+const readingTime = (content: string): number => {
+  const words = content.replace(/<[^>]*>/g, '').trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+};
 
 const formatRelativeDate = (dateString: string): string => {
   const now = new Date();
@@ -46,6 +51,7 @@ const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: 
         </h3>
         <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
         <small><FaCalendar/> {formatRelativeDate(createdAt)}</small>
+        <small><FaGlasses /> {readingTime(content)} min</small>
         <small><div className="views-count d-flex align-items-center gap-1">
           <FaEye /> {views} visitas
         </div></small>
