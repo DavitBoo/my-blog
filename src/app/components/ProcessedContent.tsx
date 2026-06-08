@@ -2,12 +2,14 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Carousel from './Carousel';
+import { TocHeading } from './TableOfContents';
 
 interface ProcessedContentProps {
   html: string;
+  headings?: TocHeading[];
 }
 
-export default function ProcessedContent({ html }: ProcessedContentProps) {
+export default function ProcessedContent({ html, headings }: ProcessedContentProps) {
   const [processedHtml, setProcessedHtml] = useState('');
   const [carousels, setCarousels] = useState<{id: string, images: string[]}[]>([]);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -32,9 +34,20 @@ export default function ProcessedContent({ html }: ProcessedContentProps) {
       }
     });
 
+    // Inject IDs into headings so TOC anchor links work
+    if (headings?.length) {
+      let i = 0;
+      doc.querySelectorAll('h2, h3').forEach((heading) => {
+        if (i < headings.length) {
+          heading.id = headings[i].id;
+          i++;
+        }
+      });
+    }
+
     setCarousels(foundCarousels);
     setProcessedHtml(doc.body.innerHTML);
-  }, [html]);
+  }, [html, headings]);
 
   useEffect(() => {
     if (!contentRef.current) return;

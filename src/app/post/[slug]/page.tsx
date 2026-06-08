@@ -2,8 +2,9 @@ import { fetchPostBySlug, fetchLabels, fetchPosts } from "../../utils/api";
 import BackButton from "../../components/BackButton";
 import CommentSection from "../../components/CommentSection";
 import ProcessedContent from "@/app/components/ProcessedContent";
-import { Metadata } from "next";  // tipos, metadata no es compatible la exportación de metadata y generateMetadata
-
+import ReadingProgressBar from "@/app/components/ReadingProgressBar";
+import TableOfContents, { TocHeading } from "@/app/components/TableOfContents";
+import { Metadata } from "next";
 
 import { slugify } from "../../utils/slugify";
 
@@ -163,13 +164,23 @@ const post = await fetchPostBySlug(slug);
 
   
   const decodedString = decode(post?.content);
-  
+
   const readingTime = () => {
     const wpm = 250;
     const words = decodedString.trim().split(/\s+/).length;
     return Math.ceil(words / wpm);
   };
-  
+
+  const slugifyHeading = (text: string) =>
+    text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+
+  const headings: TocHeading[] = [];
+  const headingRegex = /<(h[23])[^>]*>([\s\S]*?)<\/h[23]>/gi;
+  let hMatch: RegExpExecArray | null;
+  while ((hMatch = headingRegex.exec(decodedString)) !== null) {
+    const text = hMatch[2].replace(/<[^>]*>/g, '').trim();
+    if (text) headings.push({ level: hMatch[1].toLowerCase(), text, id: slugifyHeading(text) });
+  }
 
   const postId = post.id;
   
@@ -197,69 +208,76 @@ const post = await fetchPostBySlug(slug);
 
   return (
     <main className="article-page">
-      <div className="container">
-        <ul className="label-list">
-          {post?.labels?.map((label: ILabel) => (
-            <li key={label.id.toString()} className="label-list-item">
-              <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
-            </li>
-          ))}
-        </ul>
-        <h1 className="article-title text-center">{post.title}</h1>
-        <div className="d-flex align-items-center justify-content-center gap-6">
-          <div className="reading-time">
-            <FaGlasses /> {readingTime()} min
-          </div>
-          <header className="article-header" aria-label="Article Header">
-            <div className="timestamp">
-              <time>{format(new Date(post.createdAt), "EEEE, dd MMMM yyyy", { locale: es })}</time>
-            </div>
-          </header>
-          <div className="views-count d-flex align-items-center gap-2">
-            <FaEye /> {post.views} visitas
-          </div>
-        </div>
-        <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'}  alt="Placeholder" width={200} height={150} className="featured-image" />
-
-        <ProcessedContent html={decodedString} />
-        <BackButton />
-        <small>Published on {new Date(post.createdAt).toLocaleDateString()}</small>
-        <CommentSection postId={post.id} />
-
+      <ReadingProgressBar />
+      <div className="article-page-layout">
         <div className="container">
-          <h3>Otros temas que trato en el blog:</h3>
           <ul className="label-list">
-            {labels?.map((label: ILabel) => (
+            {post?.labels?.map((label: ILabel) => (
               <li key={label.id.toString()} className="label-list-item">
                 <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
               </li>
             ))}
           </ul>
-        </div>
-
-        {/* Sección de Posts Relacionados */}
-        {selectedRelatedPosts.length > 0 && (
-          <div className="interesting-posts">
-            <h3>También te puede interesar:</h3>
-            <div className="d-flex gap-2">
-              {selectedRelatedPosts.map((relatedPost) => (
-                <div key={relatedPost.id} className="related-post customCard">
-                  {/* Etiquetas dentro de la card */}
-                  <ul className="label-list">
-                    {relatedPost.labels.map((label: ILabel) => (
-                      <li key={label.id.toString()} className="label-list-item">
-                        <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                  {/* Título del post */}
-                  <h4>
-                    <Link href={`/post/${relatedPost.slug}`}>{relatedPost.title}</Link>
-                  </h4>
-                </div>
-              ))}
+          <h1 className="article-title text-center">{post.title}</h1>
+          <div className="d-flex align-items-center justify-content-center gap-6">
+            <div className="reading-time">
+              <FaGlasses /> {readingTime()} min
+            </div>
+            <header className="article-header" aria-label="Article Header">
+              <div className="timestamp">
+                <time>{format(new Date(post.createdAt), "EEEE, dd MMMM yyyy", { locale: es })}</time>
+              </div>
+            </header>
+            <div className="views-count d-flex align-items-center gap-2">
+              <FaEye /> {post.views} visitas
             </div>
           </div>
+          <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="featured-image" />
+
+          <ProcessedContent html={decodedString} headings={headings} />
+          <BackButton />
+          <small>Published on {new Date(post.createdAt).toLocaleDateString()}</small>
+          <CommentSection postId={post.id} />
+
+          <div className="container">
+            <h3>Otros temas que trato en el blog:</h3>
+            <ul className="label-list">
+              {labels?.map((label: ILabel) => (
+                <li key={label.id.toString()} className="label-list-item">
+                  <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Sección de Posts Relacionados */}
+          {selectedRelatedPosts.length > 0 && (
+            <div className="interesting-posts">
+              <h3>También te puede interesar:</h3>
+              <div className="d-flex gap-2">
+                {selectedRelatedPosts.map((relatedPost) => (
+                  <div key={relatedPost.id} className="related-post customCard">
+                    <ul className="label-list">
+                      {relatedPost.labels.map((label: ILabel) => (
+                        <li key={label.id.toString()} className="label-list-item">
+                          <Link href={`/blog/${slugify(label.name)}`}>{label.name}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <h4>
+                      <Link href={`/post/${relatedPost.slug}`}>{relatedPost.title}</Link>
+                    </h4>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {headings.length > 1 && (
+          <aside className="toc-sidebar" aria-label="Tabla de contenidos">
+            <TableOfContents headings={headings} />
+          </aside>
         )}
       </div>
     </main>
