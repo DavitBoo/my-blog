@@ -1853,3 +1853,399 @@ footer span {
     display: none;
   }
 }
+
+/* ============================================================
+   === /servicios page styles =================================
+   ============================================================ */
+
+.servicios-page {
+  position: relative;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+}
+
+/* --- Blob background layer ---
+   pointer-events: none ensures they never capture mouse events.
+   blob-morph animates border-radius for an organic liquid feel.
+*/
+.servicios-blobs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.servicios-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: blob-morph 14s ease-in-out infinite alternate;
+}
+
+.servicios-blob-1 {
+  width: 600px;
+  height: 600px;
+  top: -150px;
+  left: -100px;
+  background: var(--color-primary);
+  animation-duration: 16s;
+  animation-delay: 0s;
+}
+
+.servicios-blob-2 {
+  width: 500px;
+  height: 500px;
+  top: 30%;
+  right: -120px;
+  background: var(--color-primary-darker);
+  animation-duration: 20s;
+  animation-delay: -5s;
+}
+
+.servicios-blob-3 {
+  width: 400px;
+  height: 400px;
+  bottom: 10%;
+  left: 20%;
+  background: var(--color-accent);
+  opacity: 0.2;
+  animation-duration: 18s;
+  animation-delay: -9s;
+}
+
+@keyframes blob-morph {
+  0%   { border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%; transform: scale(1)    rotate(0deg); }
+  25%  { border-radius: 70% 30% 50% 50% / 50% 60% 40% 50%; transform: scale(1.05) rotate(5deg); }
+  50%  { border-radius: 50% 50% 30% 70% / 60% 30% 70% 40%; transform: scale(0.97) rotate(-3deg); }
+  75%  { border-radius: 30% 70% 60% 40% / 40% 70% 30% 60%; transform: scale(1.03) rotate(7deg); }
+  100% { border-radius: 60% 40% 40% 60% / 70% 30% 50% 50%; transform: scale(1)    rotate(0deg); }
+}
+
+/* --- Glassmorphism card --- */
+.glass-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(230, 247, 250, 0.18);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 4px 24px rgba(4, 173, 191, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 40px rgba(4, 173, 191, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+:root.dark .glass-card {
+  background: rgba(23, 48, 57, 0.35);
+  border-color: rgba(114, 198, 221, 0.2);
+  box-shadow:
+    0 4px 24px rgba(4, 173, 191, 0.18),
+    inset 0 1px 0 rgba(114, 198, 221, 0.15);
+}
+
+:root.survival .glass-card {
+  background: rgba(230, 230, 230, 0.3);
+  border-color: rgba(3, 64, 42, 0.25);
+  box-shadow:
+    0 4px 24px rgba(3, 65, 30, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* --- Hero section --- */
+.servicios-hero {
+  position: relative;
+  padding: 7rem 0 5rem;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.servicios-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.servicios-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+  background-image: var(--gradient-heading);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: animate-gradient 6s ease infinite;
+}
+
+.servicios-hero p {
+  font-size: 1.15rem;
+  max-width: 38rem;
+  color: var(--color-font-secondary);
+  margin-bottom: 2rem;
+}
+
+.servicios-hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* --- Section structure --- */
+.servicios-section {
+  position: relative;
+  padding: 5rem 0;
+}
+
+.servicios-section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-font-primary);
+}
+
+.servicios-section-subtitle {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-font-tertiary);
+  margin-bottom: 0.4rem;
+}
+
+/* --- Portfolio grid --- */
+.servicios-portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+}
+
+.servicios-portfolio-card {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.servicios-portfolio-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.servicios-portfolio-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-font-primary);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.servicios-portfolio-year {
+  font-size: 0.75rem;
+  color: var(--color-font-tertiary);
+  white-space: nowrap;
+  padding-top: 0.25rem;
+}
+
+.servicios-portfolio-desc {
+  font-size: 0.9rem;
+  color: var(--color-font-secondary);
+  line-height: 1.55;
+  margin: 0;
+  flex: 1;
+}
+
+.servicios-portfolio-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.servicios-portfolio-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.servicios-portfolio-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.servicios-portfolio-link:hover {
+  color: var(--color-hover);
+}
+
+/* --- Tech badge --- */
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background-color: var(--color-tag-background);
+  color: var(--color-background-lighter);
+  white-space: nowrap;
+}
+
+.tech-badge-outlined {
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+:root.dark .tech-badge-outlined {
+  border-color: var(--color-font-tertiary);
+  color: var(--color-font-tertiary);
+}
+
+:root.survival .tech-badge-outlined {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* --- Tech stack section --- */
+.servicios-tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.servicios-tech-category {
+  padding: 1.75rem;
+}
+
+.servicios-tech-category-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-font-tertiary);
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.servicios-tech-category-title::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: var(--color-primary);
+}
+
+.servicios-tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- CTA / contact section --- */
+.servicios-cta {
+  position: relative;
+  padding: 5rem 0 6rem;
+  text-align: center;
+}
+
+.servicios-cta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+}
+
+.servicios-cta-inner h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.servicios-cta-inner p {
+  color: var(--color-font-secondary);
+  margin-bottom: 2rem;
+}
+
+.servicios-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .servicios-hero {
+    padding: 5rem 0 3rem;
+  }
+
+  .servicios-hero h1 {
+    font-size: 2rem;
+  }
+
+  .servicios-portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .servicios-tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .servicios-blob-1 {
+    width: 350px;
+    height: 350px;
+  }
+
+  .servicios-blob-2 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .servicios-blob-3 {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 576px) {
+  .servicios-tech-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .glass-card {
+    border-radius: 1rem;
+  }
+
+  .servicios-cta-inner {
+    padding: 2rem 1.25rem;
+  }
+}
