@@ -1,16 +1,17 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FiExternalLink } from "react-icons/fi";
 import { Metadata } from "next";
 import { clientProjects, techCategories } from "../../data/clientProjects";
 
 export const metadata: Metadata = {
-  title: "Servicios | davidboo — Desarrollo web sencillo y bien hecho",
+  title: "Desarrollo web | davidboo — Webs sencillitas pero bien hechas",
   description:
     "Hago webs sencillitas pero bien hechas: React, Next.js, diseño limpio y atención al detalle. Mira algunos proyectos y contáctame.",
   keywords: ["desarrollo web", "freelance", "Next.js", "React", "diseño web"],
 };
 
-const ServiciosPage = () => {
+const DesarrolloWebPage = () => {
   return (
     <div className="servicios-page">
       {/* Blob background — cubre toda la página */}
@@ -30,7 +31,12 @@ const ServiciosPage = () => {
             pero bien hechas.
           </h1>
           <p>
-            Cualquier cosa que se te pase por la cabeza, te animo a que me la consultes, fácil, chungo, si me resulta interesante seguramente te diga que sí, el tema de la pasta lo hablamos si quieres también, no hay precios fijo, si me gusta mucho y no tienes €€€ a lo mejor te lo hago gratis. Si veo que yo solo no puedo y tienes presupuesto, conozco unos tipos que hacen unas webs bien chulas también.
+            Cualquier cosa que se te pase por la cabeza, te animo a que me la consultes,
+            fácil, chungo, si me resulta interesante seguramente te diga que sí, el tema
+            de la pasta lo hablamos si quieres también, no hay precios fijos, si me gusta
+            mucho y no tienes €€€ a lo mejor te lo hago gratis. Si veo que yo solo no
+            puedo y tienes presupuesto, conozco unos tipos que hacen unas webs bien chulas
+            también.
           </p>
           <div className="servicios-hero-cta">
             <a href="mailto:tu@correo.com" className="btn btn-primary">
@@ -55,6 +61,21 @@ const ServiciosPage = () => {
                 key={project.id}
                 className="glass-card servicios-portfolio-card"
               >
+                {/* Preview image / placeholder */}
+                <div className="servicios-portfolio-image-wrap">
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt={`Captura de ${project.name}`}
+                      width={560}
+                      height={315}
+                      className="servicios-portfolio-image"
+                    />
+                  ) : (
+                    <div className="servicios-portfolio-placeholder" aria-hidden="true" />
+                  )}
+                </div>
+
                 <div className="servicios-portfolio-card-header">
                   <h3 className="servicios-portfolio-card-title">{project.name}</h3>
                   <span className="servicios-portfolio-year">{project.year}</span>
@@ -92,22 +113,24 @@ const ServiciosPage = () => {
           <p className="servicios-section-subtitle">Stack tecnológico</p>
           <h2 className="servicios-section-title">Con qué trabajo</h2>
 
-          <div className="servicios-tech-grid">
-            {techCategories.map((category) => (
-              <div
-                key={category.id}
-                className="glass-card servicios-tech-category"
-              >
-                <h3 className="servicios-tech-category-title">{category.title}</h3>
-                <ul className="servicios-tech-badges">
-                  {category.techs.map((tech) => (
-                    <li key={tech}>
-                      <span className="tech-badge tech-badge-outlined">{tech}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="glass-card servicios-tech-category">
+            <ul className="servicios-tech-badges">
+              {techCategories.flatMap((category) =>
+                category.techs.map((tech) => (
+                  <li key={tech.name}>
+                    <span
+                      className="tech-badge"
+                      style={{
+                        background: tech.color,
+                        color: tech.text ?? "#fff",
+                      }}
+                    >
+                      {tech.name}
+                    </span>
+                  </li>
+                ))
+              )}
+            </ul>
           </div>
         </div>
       </section>
@@ -136,4 +159,4 @@ const ServiciosPage = () => {
   );
 };
 
-export default ServiciosPage;
+export default DesarrolloWebPage;
