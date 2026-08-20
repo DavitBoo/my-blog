@@ -1,0 +1,259 @@
+@keyframes librosGiro {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes librosEntra {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.page {
+  min-height: 100vh;
+  background: #061520;
+  color: #e2f5fa;
+  font-family: "Raleway", system-ui, sans-serif;
+  padding: 56px 24px 100px;
+}
+.page a {
+  color: #04adbf;
+  text-decoration: none;
+}
+.page a:hover {
+  color: #d9cb04;
+}
+
+.inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.backLink {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #7fb8cd;
+  width: fit-content;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.eyebrow {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #d9cb04;
+}
+.title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1.1;
+  margin: 0;
+}
+.subtitle {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #9fd3e4;
+  margin: 0;
+  max-width: 520px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #7fb8cd;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(114, 198, 221, 0.25);
+  border-top-color: #04adbf;
+  border-radius: 50%;
+  animation: librosGiro 0.8s linear infinite;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  animation: librosEntra 0.3s ease both;
+}
+
+.statsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.statCard {
+  flex: 1;
+  min-width: 120px;
+  border: 1px solid rgba(217, 203, 4, 0.22);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cifraCard {
+  flex: 2;
+  min-width: 220px;
+  justify-content: center;
+}
+.statNumber {
+  font-family: "Montserrat", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #d9cb04;
+  line-height: 1;
+}
+.statLabel {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a89b7c;
+}
+.cifraText {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #ddd2b4;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.searchInput {
+  font-family: "Raleway", sans-serif;
+  font-size: 13.5px;
+  color: #e2f5fa;
+  background: rgba(114, 198, 221, 0.06);
+  border: 1px solid rgba(114, 198, 221, 0.26);
+  border-radius: 8px;
+  padding: 11px 14px;
+  outline: none;
+  width: 100%;
+}
+.searchInput::placeholder {
+  color: #5f8a9c;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pill {
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 7px 13px;
+  border-radius: 50px;
+  border: 1px solid rgba(217, 203, 4, 0.28);
+  background: rgba(217, 203, 4, 0.08);
+  color: #ddd2b4;
+}
+.pillActive {
+  border-color: #d9cb04;
+  background: #d9cb04;
+  color: #1a1508;
+}
+.contador {
+  font-size: 11.5px;
+  color: #7fb8cd;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 0;
+  color: #7fb8cd;
+  font-size: 13px;
+}
+.emptyBtn {
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #1a1508;
+  background: #d9cb04;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+}
+
+.grupos {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.grupoHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-bottom: 1px solid rgba(114, 198, 221, 0.16);
+  padding-bottom: 8px;
+}
+.grupoTitulo {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #e2f5fa;
+}
+.grupoCuenta {
+  font-size: 11px;
+  color: #7fb8cd;
+}
+
+.libro {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+}
+.libroSpine {
+  flex: 0 0 6px;
+  border-radius: 3px;
+}
+.libroText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 2px 0 10px;
+}
+.libroTitulo {
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: #f2ead4;
+}
+.libroMeta {
+  font-size: 12px;
+  color: #b3a687;
+}
+.libroNota {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #9fd3e4;
+  margin-top: 2px;
+}

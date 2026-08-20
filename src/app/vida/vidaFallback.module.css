@@ -1,0 +1,45 @@
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+.notice {
+  background: var(--color-card-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 28px;
+  font-size: 14px;
+  color: var(--color-font-secondary);
+}
+.groupTitle {
+  font-family: "Monsterrat", sans-serif;
+  font-size: 20px;
+  margin: 32px 0 12px;
+  color: var(--color-font-primary);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--color-background-lighter);
+}
+.cardTitle {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-font-primary);
+}
+.cardResumen {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-font-secondary);
+}
+.empty {
+  color: var(--color-font-secondary);
+  font-size: 14px;
+}
