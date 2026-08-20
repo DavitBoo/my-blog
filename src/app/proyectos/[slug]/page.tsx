@@ -1,6 +1,7 @@
 import { fetchProjectBySlug } from "../../utils/api";
 import BackButton from "../../components/BackButton";
 import ProcessedContent from "@/app/components/ProcessedContent";
+import { processPostContent } from "@/app/utils/processPostContent";
 import { Metadata } from "next";
 
 import { format } from "date-fns";
@@ -76,7 +77,8 @@ const ProjectPage = async (props: ProjectProps) => {
   }
 
   const decodedString = decode(project?.content);
-  
+  const { html: processedHtml, carousels } = processPostContent(decodedString);
+
   const readingTime = () => {
     const wpm = 250;
     const words = decodedString.trim().split(/\s+/).length;
@@ -110,7 +112,7 @@ const ProjectPage = async (props: ProjectProps) => {
         </div>
         <Image src={project.coverUrl ? project.coverUrl : '/placeholder.jpg'}  alt={project.title} width={800} height={500} className="featured-image" />
 
-        <ProcessedContent html={decodedString} />
+        <ProcessedContent html={processedHtml} carousels={carousels} />
         
         <BackButton />
         <small>Publicado el {new Date(project.createdAt).toLocaleDateString()}</small>

@@ -4,6 +4,7 @@ import CommentSection from "../../components/CommentSection";
 import ProcessedContent from "@/app/components/ProcessedContent";
 import ReadingProgressBar from "@/app/components/ReadingProgressBar";
 import TableOfContents, { TocHeading } from "@/app/components/TableOfContents";
+import { processPostContent } from "@/app/utils/processPostContent";
 import { Metadata } from "next";
 
 import { slugify } from "../../utils/slugify";
@@ -182,8 +183,13 @@ const post = await fetchPostBySlug(slug);
     if (text) headings.push({ level: hMatch[1].toLowerCase(), text, id: slugifyHeading(text) });
   }
 
+  const { html: processedHtml, carousels } = processPostContent(
+    decodedString,
+    headings.map((h) => h.id)
+  );
+
   const postId = post.id;
-  
+
   const labels = await fetchLabels();
   const allPosts = await fetchPosts();
 
@@ -234,7 +240,7 @@ const post = await fetchPostBySlug(slug);
           </div>
           <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="featured-image" />
 
-          <ProcessedContent html={decodedString} headings={headings} />
+          <ProcessedContent html={processedHtml} carousels={carousels} />
           <BackButton />
           <small>Published on {new Date(post.createdAt).toLocaleDateString()}</small>
           <CommentSection postId={post.id} />
