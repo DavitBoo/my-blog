@@ -47,6 +47,17 @@ type Isla = {
   faroLuz?: THREE.Mesh;
 };
 
+// Casi todos los materiales de la isla comparten flatShading:true + roughness:1 por defecto
+// (los mismos valores que ya usaba cada `new THREE.MeshStandardMaterial({...})` suelto);
+// centralizarlo aquí evita repetir esas dos props en las ~17 llamadas de crearIsla/crearBiblioteca.
+type StdMatOpts = Partial<THREE.MeshStandardMaterialParameters> & {
+  color: THREE.ColorRepresentation;
+};
+
+function stdMat(opts: StdMatOpts): THREE.MeshStandardMaterial {
+  return new THREE.MeshStandardMaterial({ flatShading: true, roughness: 1, ...opts });
+}
+
 export class VidaEngine {
   private canvas: HTMLCanvasElement;
   private miniCanvas: HTMLCanvasElement | null;
@@ -142,11 +153,12 @@ export class VidaEngine {
     this.guardarProgreso();
     if (this.renderer) {
       this.scene.traverse((o) => {
-        const mesh = o as THREE.Mesh;
-        if ((mesh as any).geometry) (mesh as any).geometry.dispose?.();
-        const mat = (mesh as any).material;
-        if (Array.isArray(mat)) mat.forEach((m) => m.dispose?.());
-        else mat?.dispose?.();
+        if ('geometry' in o) (o as THREE.Mesh).geometry?.dispose?.();
+        if ('material' in o) {
+          const mat = (o as THREE.Mesh).material;
+          if (Array.isArray(mat)) mat.forEach((m) => m.dispose());
+          else mat?.dispose();
+        }
       });
       this.renderer.dispose();
     }
@@ -293,12 +305,7 @@ export class VidaEngine {
     this.marGeo = new T.PlaneGeometry(1800, 1800, 56, 56);
     this.marGeo.rotateX(-Math.PI / 2);
     this.marBase = Float32Array.from(this.marGeo.attributes.position.array);
-    this.marMat = new T.MeshStandardMaterial({
-      color: p.mar,
-      flatShading: true,
-      roughness: 0.38,
-      metalness: 0.18,
-    });
+    this.marMat = stdMat({ color: p.mar, roughness: 0.38, metalness: 0.18 });
     this.mar = new T.Mesh(this.marGeo, this.marMat);
     this.mar.receiveShadow = true;
     this.scene.add(this.mar);
@@ -308,13 +315,7 @@ export class VidaEngine {
     const rc = this.rnd(7);
     for (let i = 0; i < 9; i++) {
       const g = new T.Group();
-      const mat = new T.MeshStandardMaterial({
-        color: p.nube,
-        flatShading: true,
-        roughness: 1,
-        transparent: true,
-        opacity: 0.5,
-      });
+      const mat = stdMat({ color: p.nube, transparent: true, opacity: 0.5 });
       for (let j = 0; j < 4; j++) {
         const m = new T.Mesh(new T.IcosahedronGeometry(6 + rc() * 7, 0), mat);
         m.position.set((rc() - 0.5) * 26, (rc() - 0.5) * 4, (rc() - 0.5) * 18);
@@ -353,10 +354,7 @@ export class VidaEngine {
       if (y > 5) pos.setY(i, y + (r() - 0.5) * 2.2);
     }
     base.computeVertexNormals();
-    const tierra = new T.Mesh(
-      base,
-      new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.92 }),
-    );
+    const tierra = new T.Mesh(base, stdMat({ color: p.tierra, roughness: 0.92 }));
     tierra.position.y = -4;
     tierra.castShadow = true;
     tierra.receiveShadow = true;
@@ -364,7 +362,7 @@ export class VidaEngine {
 
     const meseta = new T.Mesh(
       new T.CylinderGeometry(R * 0.6, R * 0.68, 2.4, 11, 1),
-      new T.MeshStandardMaterial({ color: p.tierraAlta, flatShading: true, roughness: 0.88 }),
+      stdMat({ color: p.tierraAlta, roughness: 0.88 }),
     );
     meseta.position.y = 3.6;
     meseta.castShadow = true;
@@ -374,7 +372,7 @@ export class VidaEngine {
 
     const playa = new T.Mesh(
       new T.CylinderGeometry(R * 1.06, R * 1.16, 1.6, 22, 1),
-      new T.MeshStandardMaterial({ color: p.arena, flatShading: true, roughness: 1 }),
+      stdMat({ color: p.arena }),
     );
     playa.position.y = -8.6;
     playa.receiveShadow = true;
@@ -398,7 +396,7 @@ export class VidaEngine {
       const rad = R * (0.72 + r() * 0.24);
       const roca = new T.Mesh(
         new T.IcosahedronGeometry(1.2 + r() * 2.4, 0),
-        new T.MeshStandardMaterial({ color: p.roca, flatShading: true, roughness: 1 }),
+        stdMat({ color: p.roca }),
       );
       roca.position.set(Math.cos(ang) * rad, 0.4 + r(), Math.sin(ang) * rad);
       // Sin castShadow: son muchas por isla y apenas se nota su sombra a estas distancias,
@@ -412,12 +410,12 @@ export class VidaEngine {
       const tr = new T.Group();
       const tronco = new T.Mesh(
         new T.CylinderGeometry(0.32, 0.45, h * 0.4, 5),
-        new T.MeshStandardMaterial({ color: 0x5b4632, flatShading: true, roughness: 1 }),
+        stdMat({ color: 0x5b4632 }),
       );
       tronco.position.y = h * 0.2;
       const copa = new T.Mesh(
         new T.ConeGeometry(1.5 + r(), h * 0.85, 6),
-        new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.95 }),
+        stdMat({ color: p.tierra, roughness: 0.95 }),
       );
       copa.position.y = h * 0.62;
       tr.add(tronco, copa);
@@ -432,13 +430,7 @@ export class VidaEngine {
       R,
       edificios: [],
       niebla: new T.Group(),
-      nieblaMat: new T.MeshStandardMaterial({
-        color: 0xdfeef5,
-        flatShading: true,
-        roughness: 1,
-        transparent: true,
-        opacity: 0.94,
-      }),
+      nieblaMat: stdMat({ color: 0xdfeef5, transparent: true, opacity: 0.94 }),
       portal: cat.tipoContenido === 'portal',
       visto: false,
       disipando: null,
@@ -512,9 +504,8 @@ export class VidaEngine {
       const geo = this.formaEdificio(item, w, h);
       const c = col.clone();
       c.offsetHSL((r() - 0.5) * 0.045, 0, (item.peso - 3) * 0.045);
-      const mat = new T.MeshStandardMaterial({
+      const mat = stdMat({
         color: c,
-        flatShading: true,
         roughness: 0.42,
         metalness: 0.22,
         emissive: new T.Color(COL[cat.slug] ?? 0x04adbf),
@@ -533,12 +524,7 @@ export class VidaEngine {
       if (item.destacado) {
         const faro = new T.Mesh(
           new T.OctahedronGeometry(w * 0.34, 0),
-          new T.MeshStandardMaterial({
-            color: 0xffffff,
-            emissive: new T.Color(0xd9cb04),
-            emissiveIntensity: 1.5,
-            flatShading: true,
-          }),
+          stdMat({ color: 0xffffff, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.5 }),
         );
         faro.position.set(m.position.x, m.position.y + h / 2 + w * 0.42, m.position.z);
         faro.userData = { item, isla, faro: true };
@@ -560,9 +546,8 @@ export class VidaEngine {
     const T = THREE;
     const drum = new T.Mesh(
       new T.CylinderGeometry(isla.R * 0.44, isla.R * 0.5, 9, 10),
-      new T.MeshStandardMaterial({
+      stdMat({
         color: 0xc9a870,
-        flatShading: true,
         roughness: 0.6,
         emissive: new T.Color(0xb08d4a),
         emissiveIntensity: 0.16,
@@ -584,13 +569,7 @@ export class VidaEngine {
 
     const torre = new T.Mesh(
       new T.CylinderGeometry(1.9, 2.6, 20, 8),
-      new T.MeshStandardMaterial({
-        color: 0xe8dcc0,
-        flatShading: true,
-        roughness: 0.7,
-        transparent: true,
-        opacity: 1,
-      }),
+      stdMat({ color: 0xe8dcc0, roughness: 0.7, transparent: true, opacity: 1 }),
     );
     torre.position.set(isla.R * 0.02, isla.topY + 14, isla.R * 0.02);
     torre.castShadow = true;
@@ -605,12 +584,7 @@ export class VidaEngine {
 
     const luz = new T.Mesh(
       new T.OctahedronGeometry(2.1, 0),
-      new T.MeshStandardMaterial({
-        color: 0xfff6d0,
-        emissive: new T.Color(0xd9cb04),
-        emissiveIntensity: 2.1,
-        flatShading: true,
-      }),
+      stdMat({ color: 0xfff6d0, emissive: new T.Color(0xd9cb04), emissiveIntensity: 2.1 }),
     );
     luz.position.set(torre.position.x, isla.topY + 25.4, torre.position.z);
     isla.group.add(luz);
@@ -623,9 +597,8 @@ export class VidaEngine {
       const alto = 5 + r() * 4;
       const m = new T.Mesh(
         new T.BoxGeometry(4.6, alto, 1.5 + r()),
-        new T.MeshStandardMaterial({
+        stdMat({
           color: new T.Color(l.color || '#8a6a3d'),
-          flatShading: true,
           roughness: 0.75,
           transparent: true,
           opacity: 1,
@@ -884,12 +857,7 @@ export class VidaEngine {
         const T = THREE;
         const anillo = new T.Mesh(
           new T.TorusGeometry(4.6, 0.42, 8, 26),
-          new T.MeshStandardMaterial({
-            color: 0xd9cb04,
-            emissive: new T.Color(0xd9cb04),
-            emissiveIntensity: 1.2,
-            flatShading: true,
-          }),
+          stdMat({ color: 0xd9cb04, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.2 }),
         );
         anillo.rotation.x = -Math.PI / 2;
         anillo.position.set(found.mesh.position.x, found.isla.topY + 1.4, found.mesh.position.z);
@@ -933,12 +901,13 @@ export class VidaEngine {
       const curva = new T.QuadraticBezierCurve3(p0, mid, p1);
       const tubo = new T.Mesh(
         new T.TubeGeometry(curva, 44, 0.5, 6, false),
-        new T.MeshStandardMaterial({
+        stdMat({
           color: 0xd9cb04,
           emissive: new T.Color(0xd9cb04),
           emissiveIntensity: 1.1,
           transparent: true,
           opacity: 0.85,
+          flatShading: false, // única de las 17 que no llevaba flat-shading; se preserva igual
         }),
       );
       this.conex.add(tubo);
@@ -1005,7 +974,7 @@ export class VidaEngine {
     ctx.fillStyle = '#04101a';
     ctx.fillRect(0, 0, W, H);
     ctx.save();
-    if ('filter' in ctx) (ctx as any).filter = 'blur(5px)';
+    if ('filter' in ctx) ctx.filter = 'blur(5px)';
     ctx.fillStyle = 'rgba(4,110,140,0.55)';
     for (let j = 0; j < N; j++)
       for (let i = 0; i < N; i++) {
