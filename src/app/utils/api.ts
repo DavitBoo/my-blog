@@ -1,30 +1,29 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  export const fetchPosts = async () => {
-    const response = await fetch(`${API_URL}/posts`, {
-      next: { revalidate: 60 },
-    });
-    
-    if (!response.ok) {
-      return null;
-    }
-    return response.json();
-  };
+export const fetchPosts = async () => {
+  const response = await fetch(`${API_URL}/posts`, {
+    next: { revalidate: 60 },
+  });
 
-  export const fetchPostById = async (id: number) => {
-    const response = await fetch(`${API_URL}/posts/${id}`);
-    if (!response.ok) {
-      return null;
-    }
-    return response.json();
-  };
+  if (!response.ok) {
+    return null;
+  }
+  return response.json();
+};
 
-  export const fetchPostBySlug = async (slug: string) => {
-    
-    const res = await fetch(`${API_URL}/posts/bySlug/${slug}`);
-    const data = await res.json();
-    return data.length > 0 ? data[0] : null;
-  };
+export const fetchPostById = async (id: number) => {
+  const response = await fetch(`${API_URL}/posts/${id}`);
+  if (!response.ok) {
+    return null;
+  }
+  return response.json();
+};
+
+export const fetchPostBySlug = async (slug: string) => {
+  const res = await fetch(`${API_URL}/posts/bySlug/${slug}`);
+  const data = await res.json();
+  return data.length > 0 ? data[0] : null;
+};
 
 export const fetchCommentsByPostId = async (postId: number) => {
   const response = await fetch(`${API_URL}/comments/${postId}`);
@@ -48,7 +47,6 @@ export const createComment = async (postId: number, content: string, email: stri
   return response.json();
 };
 
-
 export const fetchLabels = async () => {
   const response = await fetch(`${API_URL}/labels/`, {
     method: 'GET',
@@ -63,15 +61,15 @@ export const fetchLabels = async () => {
 
 export async function fetchTech() {
   const NOT_API_URL = process.env.NEXT_PUBLIC_NOT_API_URL;
-  
+
   try {
-    const response = await fetch(`${NOT_API_URL}/tech`, { cache: "no-store" });
+    const response = await fetch(`${NOT_API_URL}/tech`, { cache: 'no-store' });
     if (!response.ok) {
       throw new Error('Failed to fetch tech data');
     }
-  const data = await response.json();
+    const data = await response.json();
 
-    // ! me sigue devolviendo una promesa :( 
+    // ! me sigue devolviendo una promesa :(
     console.log(data);
     return data;
   } catch (error) {

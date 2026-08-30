@@ -1,10 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { IoClose } from "react-icons/io5";
-import { IoBook, IoGlobe, IoMusicalNotes, IoCode, IoFitness, IoPlay, IoFlask } from "react-icons/io5";
-import { FaMountain } from "react-icons/fa";
-import { FiExternalLink } from "react-icons/fi";
+import { useEffect } from 'react';
+import { IoClose } from 'react-icons/io5';
+import {
+  IoBook,
+  IoGlobe,
+  IoMusicalNotes,
+  IoCode,
+  IoFitness,
+  IoPlay,
+  IoFlask,
+} from 'react-icons/io5';
+import { FaMountain } from 'react-icons/fa';
+import { FiExternalLink } from 'react-icons/fi';
 
 interface NowData {
   reading: {
@@ -53,46 +61,46 @@ interface NowData {
 
 const nowData: NowData = {
   reading: {
-    title: "EL arte de la buena vida",
-    author: "William B. Irvine",
+    title: 'EL arte de la buena vida',
+    author: 'William B. Irvine',
     progress: 67,
-    cover: "https://imagessl6.casadellibro.com/a/l/s7/76/9788449335976.webp",
+    cover: 'https://imagessl6.casadellibro.com/a/l/s7/76/9788449335976.webp',
   },
   language: {
-    name: "Portugués",
-    level: "A2",
-    platform: "Duolingo, Anki, canales de Youtube y charlas TEDx",
+    name: 'Portugués',
+    level: 'A2',
+    platform: 'Duolingo, Anki, canales de Youtube y charlas TEDx',
   },
   music: {
-    song: "into the fire",
-    artist: "Dokken",
-    youtubeUrl: "https://www.youtube.com/watch?v=XQ9XcMybcX8",
+    song: 'into the fire',
+    artist: 'Dokken',
+    youtubeUrl: 'https://www.youtube.com/watch?v=XQ9XcMybcX8',
   },
   project: {
-    name: "4 guitarras electricas",
+    name: '4 guitarras electricas',
     description:
-      "Empecé hace un tiempo 4 guitarras eléctricas hechas todas desde cero, quitando las partes metálicas y las pastillas, todo está prácticamente hecho a mano y de madera. Dos están terminadas, estoy a falta de colocar el hardware en las otras dos.",
-    skills: ["Paciencia", "Electrónica", "Carpintería", "Acabados", "Epoxi"],
+      'Empecé hace un tiempo 4 guitarras eléctricas hechas todas desde cero, quitando las partes metálicas y las pastillas, todo está prácticamente hecho a mano y de madera. Dos están terminadas, estoy a falta de colocar el hardware en las otras dos.',
+    skills: ['Paciencia', 'Electrónica', 'Carpintería', 'Acabados', 'Epoxi'],
     progress: 94,
   },
   learning: {
-    technologies: ["Flask", "AI tools"],
-    currentFocus: "Todavía en la web",
+    technologies: ['Flask', 'AI tools'],
+    currentFocus: 'Todavía en la web',
   },
   fitness: {
-    focus: ["10 Muscle-up estrictos"],
+    focus: ['10 Muscle-up estrictos'],
   },
   hiking: {
-    lastMountain: "Udalaitz",
-    elevation: "1.120 m",
-    date: "30 Ago 2025",
-    location: "País Vasco",
+    lastMountain: 'Udalaitz',
+    elevation: '1.120 m',
+    date: '30 Ago 2025',
+    location: 'País Vasco',
   },
   experiments: {
     // 👈 agregado
-    focus: "Mejornando habilidades de carpintero. Afilando cepillos y mejorando el uso de estos.",
+    focus: 'Mejornando habilidades de carpintero. Afilando cepillos y mejorando el uso de estos.',
     current: [],
-    recent: "",
+    recent: '',
   },
 };
 
@@ -104,29 +112,29 @@ interface NowModalProps {
 export function NowModal({ isOpen, onClose }: NowModalProps) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, onClose]);
 
@@ -162,7 +170,7 @@ export function NowModal({ isOpen, onClose }: NowModalProps) {
               </div>
               <div className="now-modal-reading-content">
                 <img
-                  src={nowData.reading.cover || "/placeholder.svg"}
+                  src={nowData.reading.cover || '/placeholder.svg'}
                   alt={nowData.reading.title}
                   className="now-modal-book-cover"
                 />
@@ -228,7 +236,10 @@ export function NowModal({ isOpen, onClose }: NowModalProps) {
                 </div>
                 <div className="now-modal-progress-container">
                   <div className="now-modal-progress-track">
-                    <div className="now-modal-progress-bar" style={{ width: `${nowData.project.progress}%` }} />
+                    <div
+                      className="now-modal-progress-bar"
+                      style={{ width: `${nowData.project.progress}%` }}
+                    />
                   </div>
                   <p className="now-modal-progress-text">{nowData.project.progress}% completado</p>
                 </div>

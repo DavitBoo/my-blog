@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import Loader from "../components/Loader";
-import VidaFallback from "./VidaFallback";
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Loader from '../components/Loader';
+import VidaFallback from './VidaFallback';
 
-const VidaScene = dynamic(() => import("./VidaScene"), {
+const VidaScene = dynamic(() => import('./VidaScene'), {
   ssr: false,
   loading: () => <Loader message="Levantando el archipiélago..." />,
 });
 
 const soportaWebGL = () => {
   try {
-    const canvas = document.createElement("canvas");
-    return !!(canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
+    const canvas = document.createElement('canvas');
+    return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
   } catch {
     return false;
   }

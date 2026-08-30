@@ -13,7 +13,7 @@
   color: var(--color-font-secondary);
 }
 .groupTitle {
-  font-family: "Monsterrat", sans-serif;
+  font-family: 'Monsterrat', sans-serif;
   font-size: 20px;
   margin: 32px 0 12px;
   color: var(--color-font-primary);

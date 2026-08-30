@@ -53,7 +53,7 @@ function extractCarousels(html: string): ProcessedPostContent {
 
     const inner = html.slice(contentStart, innerEnd);
     const images = Array.from(inner.matchAll(/<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi)).map(
-      (m) => m[1]
+      (m) => m[1],
     );
 
     if (images.length > 0) {
@@ -85,10 +85,7 @@ function injectHeadingIds(html: string, headingIds: string[]): string {
   });
 }
 
-export function processPostContent(
-  html: string,
-  headingIds: string[] = []
-): ProcessedPostContent {
+export function processPostContent(html: string, headingIds: string[] = []): ProcessedPostContent {
   const { html: withoutCarousels, carousels } = extractCarousels(html);
   return { html: injectHeadingIds(withoutCarousels, headingIds), carousels };
 }

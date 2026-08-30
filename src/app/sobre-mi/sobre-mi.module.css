@@ -1,4 +1,3 @@
-
 /* sobre-mi.module.css */
 
 .timelineSection {
@@ -131,11 +130,9 @@
 }
 
 .introText h1 {
-
   font-size: 2.5em;
   margin-bottom: 10px;
   color: var(--color-accent);
-
 }
 
 .introText p {
@@ -163,8 +160,6 @@
     top: 20px;
   }
 }
-
-
 
 /* --- tags  --- */
 .tag-musica {

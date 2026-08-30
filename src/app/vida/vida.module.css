@@ -1,10 +1,21 @@
 @keyframes vidaPulso {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 @keyframes vidaEntra {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .root {
@@ -19,7 +30,7 @@
   height: 100vh;
   overflow: hidden;
   background: #061520;
-  font-family: "Raleway", system-ui, sans-serif;
+  font-family: 'Raleway', system-ui, sans-serif;
   color: #e2f5fa;
   user-select: none;
 }
@@ -50,7 +61,7 @@
   gap: 6px;
 }
 .eyebrow {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.34em;
@@ -58,7 +69,7 @@
   color: var(--acc);
 }
 .title {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 26px;
   line-height: 1.15;
@@ -85,7 +96,7 @@
   top: 22px;
   right: 24px;
   pointer-events: auto;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -126,7 +137,7 @@
   padding: 0 2px;
 }
 .minimapLabel {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -209,7 +220,7 @@
   margin-bottom: 3px;
 }
 .tooltipTitle {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 13.5px;
   line-height: 1.25;
@@ -287,7 +298,7 @@
   padding-left: 8px;
 }
 .panelTitle {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 23px;
   line-height: 1.18;
@@ -392,12 +403,13 @@
   border: 1px solid rgba(114, 198, 221, 0.2);
 }
 .mediaItem::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(4, 16, 23, 0.85));
 }
-.mediaLabel, .mediaAlt {
+.mediaLabel,
+.mediaAlt {
   position: relative;
   z-index: 1;
 }
@@ -532,7 +544,7 @@
   color: var(--acc2);
 }
 .relItemTitulo {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13px;
   font-weight: 500;
 }
@@ -555,7 +567,7 @@
   gap: 3px;
 }
 .statNumber {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 27px;
   font-weight: 700;
   color: var(--acc2);
@@ -589,7 +601,9 @@
 .libroSpine {
   flex: 0 0 34px;
   border-radius: 2px 4px 4px 2px;
-  box-shadow: inset 4px 0 0 rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 4px 0 0 rgba(0, 0, 0, 0.28),
+    0 4px 12px rgba(0, 0, 0, 0.4);
 }
 .libroText {
   display: flex;
@@ -598,7 +612,7 @@
   padding: 6px 0;
 }
 .libroTitulo {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13.5px;
   font-weight: 500;
   line-height: 1.25;
@@ -613,7 +627,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -647,7 +661,7 @@
   animation: vidaPulso 1.4s ease-in-out infinite;
 }
 .loadingLabel {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   letter-spacing: 0.24em;
   text-transform: uppercase;

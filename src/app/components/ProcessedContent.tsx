@@ -24,13 +24,20 @@ export default function ProcessedContent({ html, carousels = [] }: ProcessedCont
       btn.setAttribute('aria-label', 'Copiar código');
       btn.addEventListener('click', () => {
         const text = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
-        navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = '¡Copiado!';
-          setTimeout(() => { btn.textContent = 'Copiar'; }, 2000);
-        }).catch(() => {
-          btn.textContent = 'Error';
-          setTimeout(() => { btn.textContent = 'Copiar'; }, 2000);
-        });
+        navigator.clipboard
+          .writeText(text)
+          .then(() => {
+            btn.textContent = '¡Copiado!';
+            setTimeout(() => {
+              btn.textContent = 'Copiar';
+            }, 2000);
+          })
+          .catch(() => {
+            btn.textContent = 'Error';
+            setTimeout(() => {
+              btn.textContent = 'Copiar';
+            }, 2000);
+          });
       });
 
       pre.appendChild(btn);

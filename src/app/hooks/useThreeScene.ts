@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
-import { createFloatingGeometries } from "../utils/threeHelpers";
+import { createFloatingGeometries } from '../utils/threeHelpers';
 
 export const useThreeScene = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,7 +16,12 @@ export const useThreeScene = () => {
     if (!canvasRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       alpha: true,
@@ -45,8 +50,8 @@ export const useThreeScene = () => {
       const mouse = new THREE.Vector2();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
-      console.log(mouse.x, mouse.y); 
+
+      console.log(mouse.x, mouse.y);
       // Configurar raycaster
       raycasterRef.current.setFromCamera(mouse, cameraRef.current);
 
@@ -96,30 +101,32 @@ export const useThreeScene = () => {
       });
 
       // move camera
-      cameraRef.current.position.x += (mouseRef.current.x * 2 - cameraRef.current.position.x) * 0.02;
-      cameraRef.current.position.y += (mouseRef.current.y * 2 - cameraRef.current.position.y) * 0.02;
+      cameraRef.current.position.x +=
+        (mouseRef.current.x * 2 - cameraRef.current.position.x) * 0.02;
+      cameraRef.current.position.y +=
+        (mouseRef.current.y * 2 - cameraRef.current.position.y) * 0.02;
       cameraRef.current.lookAt(0, 0, 0);
 
       rendererRef.current.render(sceneRef.current, cameraRef.current);
       requestAnimationFrame(animate);
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("click", handleClick);
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('click', handleClick);
+    window.addEventListener('resize', handleResize);
     animate();
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("click", handleClick);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('click', handleClick);
+      window.removeEventListener('resize', handleResize);
 
       if (rendererRef.current) {
         rendererRef.current.dispose();
       }
 
       geometriesRef.current.forEach((mesh) => {
-        if (mesh.geometry) mesh.geometry.dispose(); 
-        if (mesh.material && "dispose" in mesh.material) {
+        if (mesh.geometry) mesh.geometry.dispose();
+        if (mesh.material && 'dispose' in mesh.material) {
           mesh.material.dispose();
         }
       });

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import styles from "./vidaFallback.module.css";
-import { fetchVidaCategorias, fetchVidaItems, VidaCategoria, VidaItem } from "../utils/vidaApi";
-import Loader from "../components/Loader";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import styles from './vidaFallback.module.css';
+import { fetchVidaCategorias, fetchVidaItems, VidaCategoria, VidaItem } from '../utils/vidaApi';
+import Loader from '../components/Loader';
 
 // Vista simplificada y honesta para cuando el navegador no soporta WebGL:
 // misma información, sin la escena 3D.
@@ -27,8 +27,8 @@ const VidaFallback = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.notice}>
-        Vista simplificada — tu navegador no soporta WebGL, así que no se puede mostrar la escena 3D del
-        archipiélago. Aquí tienes el mismo contenido organizado por categorías.
+        Vista simplificada — tu navegador no soporta WebGL, así que no se puede mostrar la escena 3D
+        del archipiélago. Aquí tienes el mismo contenido organizado por categorías.
       </div>
 
       {categorias.map((cat) => {
@@ -36,10 +36,10 @@ const VidaFallback = () => {
         return (
           <section key={cat.slug}>
             <h2 className={styles.groupTitle}>{cat.nombre}</h2>
-            {cat.tipoContenido === "portal" ? (
+            {cat.tipoContenido === 'portal' ? (
               <p className={styles.empty}>
-                Los libros no están aquí: visita{" "}
-                <Link href={cat.urlDestino || "/libros"}>{cat.urlDestino || "/libros"}</Link>.
+                Los libros no están aquí: visita{' '}
+                <Link href={cat.urlDestino || '/libros'}>{cat.urlDestino || '/libros'}</Link>.
               </p>
             ) : catItems.length === 0 ? (
               <p className={styles.empty}>Sin ítems todavía.</p>

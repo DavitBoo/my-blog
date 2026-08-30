@@ -18,7 +18,7 @@ export default function TableOfContents({ headings }: { headings: TocHeading[] }
           if (entry.isIntersecting) setActiveId(entry.target.id);
         });
       },
-      { rootMargin: '-15% 0% -70% 0%' }
+      { rootMargin: '-15% 0% -70% 0%' },
     );
 
     headings.forEach(({ id }) => {
@@ -34,10 +34,7 @@ export default function TableOfContents({ headings }: { headings: TocHeading[] }
       <p className="toc-title">Contenidos</p>
       <ul className="toc-list">
         {headings.map(({ level, text, id }) => (
-          <li
-            key={id}
-            className={`toc-item toc-${level}${activeId === id ? ' toc-active' : ''}`}
-          >
+          <li key={id} className={`toc-item toc-${level}${activeId === id ? ' toc-active' : ''}`}>
             <a href={`#${id}`} className="toc-link">
               {text}
             </a>

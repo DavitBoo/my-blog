@@ -1,19 +1,18 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import Post from "../../components/Post";
-import { fetchPosts } from "../../utils/api";
-import { slugify } from "@/app/utils/slugify";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import Post from '../../components/Post';
+import { fetchPosts } from '../../utils/api';
+import { slugify } from '@/app/utils/slugify';
 
-import {IPost} from '../../../interfaces/Posts'
-
+import { IPost } from '../../../interfaces/Posts';
 
 const POSTS_PER_PAGE = 3;
 
 const BlogCategory: React.FC = () => {
   const { category } = useParams();
-  const decodedCategory = category ? decodeURIComponent(category.toString()) : "";
+  const decodedCategory = category ? decodeURIComponent(category.toString()) : '';
 
   const [posts, setPosts] = useState<IPost[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +22,7 @@ const BlogCategory: React.FC = () => {
       const fetchedPosts: IPost[] = await fetchPosts();
 
       const filteredPosts = fetchedPosts.filter((post) =>
-        post.labels.some((label) => slugify(label.name) === slugify(decodedCategory))
+        post.labels.some((label) => slugify(label.name) === slugify(decodedCategory)),
       );
 
       setPosts(filteredPosts);
@@ -33,12 +32,15 @@ const BlogCategory: React.FC = () => {
   }, [category]);
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-  const paginatedPosts = posts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE,
+  );
 
   return (
     <div className="archive">
       <div className="container">
-        <h2>Posts en la categoría: {decodedCategory.replace("-", " ")}</h2>
+        <h2>Posts en la categoría: {decodedCategory.replace('-', ' ')}</h2>
 
         <div className="last-posts mb-8">
           <h2 className="mb-4">Mis últimos posts</h2>
@@ -76,7 +78,7 @@ const BlogCategory: React.FC = () => {
             {Array.from({ length: totalPages }, (_, index) => (
               <button
                 key={index + 1}
-                className={`btn btn-tab ${currentPage === index + 1 ? "active" : ""}`}
+                className={`btn btn-tab ${currentPage === index + 1 ? 'active' : ''}`}
                 onClick={() => setCurrentPage(index + 1)}
               >
                 <span>{index + 1}</span>

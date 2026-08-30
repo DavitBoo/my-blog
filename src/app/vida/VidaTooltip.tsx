@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { RefObject } from "react";
-import styles from "./vida.module.css";
-import { VidaHoverInfo } from "./vidaEngine";
+import { RefObject } from 'react';
+import styles from './vida.module.css';
+import { VidaHoverInfo } from './vidaEngine';
 
 interface Props {
   tipRef: RefObject<HTMLDivElement | null>;

@@ -1,5 +1,5 @@
-import React from "react";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 import { FaCalendar, FaEye } from 'react-icons/fa';
 
 export interface IProjectCategory {
@@ -45,24 +45,28 @@ const Project = ({ id, title, content, slug, createdAt, category, views, coverUr
   return (
     <div key={id} className="customCard">
       <div>
-        <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={300} height={200} className="postImage" />
-      </div>    
-      <div className="labels">
-        {category && (
-          <span className="label">
-            {category.name}
-          </span>
-        )}
+        <Image
+          src={coverUrl ? coverUrl : '/placeholder.jpg'}
+          alt="Placeholder"
+          width={300}
+          height={200}
+          className="postImage"
+        />
       </div>
+      <div className="labels">{category && <span className="label">{category.name}</span>}</div>
       <div className="card-body">
         <h3 className="mb-4">
           <a href={`/proyectos/${slug}`}>{title}</a>
         </h3>
-        <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
-        <small><FaCalendar/> {formatRelativeDate(createdAt)}</small>
-        <small><div className="views-count d-flex align-items-center gap-1">
-          <FaEye /> {views} visitas
-        </div></small>
+        <p>{content.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
+        <small>
+          <FaCalendar /> {formatRelativeDate(createdAt)}
+        </small>
+        <small>
+          <div className="views-count d-flex align-items-center gap-1">
+            <FaEye /> {views} visitas
+          </div>
+        </small>
       </div>
     </div>
   );

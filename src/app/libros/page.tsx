@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import styles from "./libros.module.css";
-import { fetchVidaLibros, VidaLibro, VidaLibrosResumen } from "../utils/vidaApi";
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import styles from './libros.module.css';
+import { fetchVidaLibros, VidaLibro, VidaLibrosResumen } from '../utils/vidaApi';
 
 interface LibroConMeta extends VidaLibro {
   meta: string;
@@ -16,7 +16,7 @@ interface Grupo {
   libros: LibroConMeta[];
 }
 
-const RESUMEN_VACIO: VidaLibrosResumen = { total: 0, esteAnio: 0, cifra: "" };
+const RESUMEN_VACIO: VidaLibrosResumen = { total: 0, esteAnio: 0, cifra: '' };
 
 const agrupar = (libros: VidaLibro[]): Grupo[] => {
   const mapa = new Map<number, VidaLibro[]>();
@@ -26,13 +26,16 @@ const agrupar = (libros: VidaLibro[]): Grupo[] => {
   });
   const anios = Array.from(mapa.keys()).sort((a, b) => b - a);
   return anios.map((anio) => {
-    const items = mapa.get(anio)!.slice().sort((a, b) => a.titulo.localeCompare(b.titulo));
+    const items = mapa
+      .get(anio)!
+      .slice()
+      .sort((a, b) => a.titulo.localeCompare(b.titulo));
     return {
       titulo: String(anio),
-      cuenta: items.length === 1 ? "1 libro" : `${items.length} libros`,
+      cuenta: items.length === 1 ? '1 libro' : `${items.length} libros`,
       libros: items.map((l) => ({
         ...l,
-        meta: [l.autor, l.genero].filter(Boolean).join(" · "),
+        meta: [l.autor, l.genero].filter(Boolean).join(' · '),
         mostrarNota: !!l.nota,
       })),
     };
@@ -43,8 +46,8 @@ const LibrosPage = () => {
   const [libros, setLibros] = useState<VidaLibro[]>([]);
   const [resumen, setResumen] = useState<VidaLibrosResumen>(RESUMEN_VACIO);
   const [cargando, setCargando] = useState(true);
-  const [busqueda, setBusqueda] = useState("");
-  const [genero, setGenero] = useState("Todos");
+  const [busqueda, setBusqueda] = useState('');
+  const [genero, setGenero] = useState('Todos');
 
   useEffect(() => {
     let vivo = true;
@@ -60,15 +63,19 @@ const LibrosPage = () => {
   }, []);
 
   const generos = useMemo(
-    () => ["Todos", ...Array.from(new Set(libros.map((l) => l.genero).filter((g): g is string => !!g))).sort()],
-    [libros]
+    () => [
+      'Todos',
+      ...Array.from(new Set(libros.map((l) => l.genero).filter((g): g is string => !!g))).sort(),
+    ],
+    [libros],
   );
 
   const filtrados = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
     return libros.filter((l) => {
-      const okGenero = genero === "Todos" || l.genero === genero;
-      const okTexto = !q || (l.titulo + " " + l.autor + " " + (l.nota || "")).toLowerCase().includes(q);
+      const okGenero = genero === 'Todos' || l.genero === genero;
+      const okTexto =
+        !q || (l.titulo + ' ' + l.autor + ' ' + (l.nota || '')).toLowerCase().includes(q);
       return okGenero && okTexto;
     });
   }, [libros, busqueda, genero]);
@@ -76,8 +83,8 @@ const LibrosPage = () => {
   const grupos = useMemo(() => agrupar(filtrados), [filtrados]);
   const sinResultados = !cargando && filtrados.length === 0;
   const limpiarFiltros = () => {
-    setBusqueda("");
-    setGenero("Todos");
+    setBusqueda('');
+    setGenero('Todos');
   };
 
   return (
@@ -127,7 +134,7 @@ const LibrosPage = () => {
                   <button
                     key={g}
                     onClick={() => setGenero(g)}
-                    className={`${styles.pill} ${g === genero ? styles.pillActive : ""}`}
+                    className={`${styles.pill} ${g === genero ? styles.pillActive : ''}`}
                   >
                     {g}
                   </button>
@@ -156,11 +163,16 @@ const LibrosPage = () => {
                   </div>
                   {grupo.libros.map((libro, i) => (
                     <div key={i} className={styles.libro}>
-                      <div className={styles.libroSpine} style={{ background: libro.color || "#7a6a4a" }} />
+                      <div
+                        className={styles.libroSpine}
+                        style={{ background: libro.color || '#7a6a4a' }}
+                      />
                       <div className={styles.libroText}>
                         <span className={styles.libroTitulo}>{libro.titulo}</span>
                         <span className={styles.libroMeta}>{libro.meta}</span>
-                        {libro.mostrarNota && <span className={styles.libroNota}>{libro.nota}</span>}
+                        {libro.mostrarNota && (
+                          <span className={styles.libroNota}>{libro.nota}</span>
+                        )}
                       </div>
                     </div>
                   ))}

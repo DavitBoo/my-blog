@@ -1,4 +1,4 @@
-import {ILabel} from './Label'
+import { ILabel } from './Label';
 
 export interface IPost {
   id: number;
@@ -8,7 +8,7 @@ export interface IPost {
   createdAt: string;
   labels: ILabel[];
   views: number;
-  coverUrl: string
+  coverUrl: string;
   metaTitle?: string;
   metaDescription?: string;
 }

@@ -1,12 +1,15 @@
-import React from "react";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 
 import { FaCalendar, FaEye, FaGlasses } from 'react-icons/fa';
 
-import {IPost} from '../../interfaces/Posts'
+import { IPost } from '../../interfaces/Posts';
 
 const readingTime = (content: string): number => {
-  const words = content.replace(/<[^>]*>/g, '').trim().split(/\s+/).length;
+  const words = content
+    .replace(/<[^>]*>/g, '')
+    .trim()
+    .split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
 };
 
@@ -36,8 +39,14 @@ const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: 
   return (
     <div key={id} className="customCard">
       <div>
-        <Image src={coverUrl ? coverUrl : '/placeholder.jpg'} alt="Placeholder" width={300} height={200} className="postImage" />
-      </div>    
+        <Image
+          src={coverUrl ? coverUrl : '/placeholder.jpg'}
+          alt="Placeholder"
+          width={300}
+          height={200}
+          className="postImage"
+        />
+      </div>
       <div className="labels">
         {labels.map((label) => (
           <span key={label.id} className="label">
@@ -49,12 +58,18 @@ const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: 
         <h3 className="mb-4">
           <a href={`/post/${slug}`}>{title}</a>
         </h3>
-        <p>{content.replace(/<[^>]*>/g, "").substring(0, 150)}...</p>
-        <small><FaCalendar/> {formatRelativeDate(createdAt)}</small>
-        <small><FaGlasses /> {readingTime(content)} min</small>
-        <small><div className="views-count d-flex align-items-center gap-1">
-          <FaEye /> {views} visitas
-        </div></small>
+        <p>{content.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
+        <small>
+          <FaCalendar /> {formatRelativeDate(createdAt)}
+        </small>
+        <small>
+          <FaGlasses /> {readingTime(content)} min
+        </small>
+        <small>
+          <div className="views-count d-flex align-items-center gap-1">
+            <FaEye /> {views} visitas
+          </div>
+        </small>
       </div>
     </div>
   );

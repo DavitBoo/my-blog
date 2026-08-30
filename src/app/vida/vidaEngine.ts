@@ -3,14 +3,14 @@
 // (Vida - Archipielago.dc.html), sin el framework DCLogic del sandbox del diseño.
 // No usa React: expone callbacks para que el componente que lo monta actualice su UI.
 
-import * as THREE from "three";
-import { VidaCategoria, VidaItem, VidaLibroDestacado } from "../utils/vidaApi";
-import { PAL, COL, Tema } from "./vidaFormat";
+import * as THREE from 'three';
+import { VidaCategoria, VidaItem, VidaLibroDestacado } from '../utils/vidaApi';
+import { PAL, COL, Tema } from './vidaFormat';
 
 const MAPA = { x0: -270, x1: 270, z0: -200, z1: 260 };
 const N = 52;
-const K_NIEBLA = "vida:niebla:v1";
-const K_ISLAS = "vida:islas:v1";
+const K_NIEBLA = 'vida:niebla:v1';
+const K_ISLAS = 'vida:islas:v1';
 
 export interface VidaHoverInfo {
   titulo: string;
@@ -106,7 +106,7 @@ export class VidaEngine {
     librosDestacados: VidaLibroDestacado[],
     tema: Tema,
     nieblaActiva: boolean,
-    callbacks: VidaEngineCallbacks
+    callbacks: VidaEngineCallbacks,
   ) {
     this.canvas = canvas;
     this.miniCanvas = miniCanvas;
@@ -224,8 +224,9 @@ export class VidaEngine {
   private cargarProgreso() {
     try {
       const f = localStorage.getItem(K_NIEBLA);
-      if (f && f.length === N * N) for (let i = 0; i < f.length; i++) this.fog[i] = f[i] === "1" ? 1 : 0;
-      const d = JSON.parse(localStorage.getItem(K_ISLAS) || "[]");
+      if (f && f.length === N * N)
+        for (let i = 0; i < f.length; i++) this.fog[i] = f[i] === '1' ? 1 : 0;
+      const d = JSON.parse(localStorage.getItem(K_ISLAS) || '[]');
       if (Array.isArray(d)) d.forEach((s: string) => (this.desc[s] = true));
     } catch {
       /* sesión limpia */
@@ -233,8 +234,8 @@ export class VidaEngine {
   }
   private guardarProgreso() {
     try {
-      let s = "";
-      for (let i = 0; i < this.fog.length; i++) s += this.fog[i] ? "1" : "0";
+      let s = '';
+      for (let i = 0; i < this.fog.length; i++) s += this.fog[i] ? '1' : '0';
       localStorage.setItem(K_NIEBLA, s);
       localStorage.setItem(K_ISLAS, JSON.stringify(Object.keys(this.desc)));
     } catch {
@@ -251,7 +252,11 @@ export class VidaEngine {
     // antialias:false + pixelRatio tope 1.5 recortan mucho coste de fragment shading
     // (notable en pantallas de alta densidad) a cambio de un antialiasing casi imperceptible
     // sobre una estética ya low-poly/flat-shaded.
-    this.renderer = new T.WebGLRenderer({ canvas: this.canvas, antialias: false, powerPreference: "high-performance" });
+    this.renderer = new T.WebGLRenderer({
+      canvas: this.canvas,
+      antialias: false,
+      powerPreference: 'high-performance',
+    });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = T.PCFSoftShadowMap;
@@ -288,7 +293,12 @@ export class VidaEngine {
     this.marGeo = new T.PlaneGeometry(1800, 1800, 56, 56);
     this.marGeo.rotateX(-Math.PI / 2);
     this.marBase = Float32Array.from(this.marGeo.attributes.position.array);
-    this.marMat = new T.MeshStandardMaterial({ color: p.mar, flatShading: true, roughness: 0.38, metalness: 0.18 });
+    this.marMat = new T.MeshStandardMaterial({
+      color: p.mar,
+      flatShading: true,
+      roughness: 0.38,
+      metalness: 0.18,
+    });
     this.mar = new T.Mesh(this.marGeo, this.marMat);
     this.mar.receiveShadow = true;
     this.scene.add(this.mar);
@@ -298,7 +308,13 @@ export class VidaEngine {
     const rc = this.rnd(7);
     for (let i = 0; i < 9; i++) {
       const g = new T.Group();
-      const mat = new T.MeshStandardMaterial({ color: p.nube, flatShading: true, roughness: 1, transparent: true, opacity: 0.5 });
+      const mat = new T.MeshStandardMaterial({
+        color: p.nube,
+        flatShading: true,
+        roughness: 1,
+        transparent: true,
+        opacity: 0.5,
+      });
       for (let j = 0; j < 4; j++) {
         const m = new T.Mesh(new T.IcosahedronGeometry(6 + rc() * 7, 0), mat);
         m.position.set((rc() - 0.5) * 26, (rc() - 0.5) * 4, (rc() - 0.5) * 18);
@@ -337,7 +353,10 @@ export class VidaEngine {
       if (y > 5) pos.setY(i, y + (r() - 0.5) * 2.2);
     }
     base.computeVertexNormals();
-    const tierra = new T.Mesh(base, new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.92 }));
+    const tierra = new T.Mesh(
+      base,
+      new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.92 }),
+    );
     tierra.position.y = -4;
     tierra.castShadow = true;
     tierra.receiveShadow = true;
@@ -345,7 +364,7 @@ export class VidaEngine {
 
     const meseta = new T.Mesh(
       new T.CylinderGeometry(R * 0.6, R * 0.68, 2.4, 11, 1),
-      new T.MeshStandardMaterial({ color: p.tierraAlta, flatShading: true, roughness: 0.88 })
+      new T.MeshStandardMaterial({ color: p.tierraAlta, flatShading: true, roughness: 0.88 }),
     );
     meseta.position.y = 3.6;
     meseta.castShadow = true;
@@ -355,7 +374,7 @@ export class VidaEngine {
 
     const playa = new T.Mesh(
       new T.CylinderGeometry(R * 1.06, R * 1.16, 1.6, 22, 1),
-      new T.MeshStandardMaterial({ color: p.arena, flatShading: true, roughness: 1 })
+      new T.MeshStandardMaterial({ color: p.arena, flatShading: true, roughness: 1 }),
     );
     playa.position.y = -8.6;
     playa.receiveShadow = true;
@@ -363,7 +382,12 @@ export class VidaEngine {
 
     const espuma = new T.Mesh(
       new T.RingGeometry(R * 1.14, R * 1.3, 30),
-      new T.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.2, side: T.DoubleSide })
+      new T.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.2,
+        side: T.DoubleSide,
+      }),
     );
     espuma.rotation.x = -Math.PI / 2;
     espuma.position.y = 0.35;
@@ -374,7 +398,7 @@ export class VidaEngine {
       const rad = R * (0.72 + r() * 0.24);
       const roca = new T.Mesh(
         new T.IcosahedronGeometry(1.2 + r() * 2.4, 0),
-        new T.MeshStandardMaterial({ color: p.roca, flatShading: true, roughness: 1 })
+        new T.MeshStandardMaterial({ color: p.roca, flatShading: true, roughness: 1 }),
       );
       roca.position.set(Math.cos(ang) * rad, 0.4 + r(), Math.sin(ang) * rad);
       // Sin castShadow: son muchas por isla y apenas se nota su sombra a estas distancias,
@@ -388,12 +412,12 @@ export class VidaEngine {
       const tr = new T.Group();
       const tronco = new T.Mesh(
         new T.CylinderGeometry(0.32, 0.45, h * 0.4, 5),
-        new T.MeshStandardMaterial({ color: 0x5b4632, flatShading: true, roughness: 1 })
+        new T.MeshStandardMaterial({ color: 0x5b4632, flatShading: true, roughness: 1 }),
       );
       tronco.position.y = h * 0.2;
       const copa = new T.Mesh(
         new T.ConeGeometry(1.5 + r(), h * 0.85, 6),
-        new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.95 })
+        new T.MeshStandardMaterial({ color: p.tierra, flatShading: true, roughness: 0.95 }),
       );
       copa.position.y = h * 0.62;
       tr.add(tronco, copa);
@@ -408,8 +432,14 @@ export class VidaEngine {
       R,
       edificios: [],
       niebla: new T.Group(),
-      nieblaMat: new T.MeshStandardMaterial({ color: 0xdfeef5, flatShading: true, roughness: 1, transparent: true, opacity: 0.94 }),
-      portal: cat.tipoContenido === "portal",
+      nieblaMat: new T.MeshStandardMaterial({
+        color: 0xdfeef5,
+        flatShading: true,
+        roughness: 1,
+        transparent: true,
+        opacity: 0.94,
+      }),
+      portal: cat.tipoContenido === 'portal',
       visto: false,
       disipando: null,
     };
@@ -441,25 +471,25 @@ export class VidaEngine {
     const T = THREE;
     const clave = item.ambito || item.categoria;
     switch (clave) {
-      case "lutheria":
+      case 'lutheria':
         return new T.CylinderGeometry(w * 0.5, w * 0.62, h, 6);
-      case "electronica":
+      case 'electronica':
         return new T.BoxGeometry(w * 0.72, h, w * 0.72);
-      case "carpinteria":
+      case 'carpinteria':
         return new T.BoxGeometry(w, h, w * 1.15);
-      case "comunidad":
+      case 'comunidad':
         return new T.CylinderGeometry(w * 0.95, w * 1.05, h * 0.7, 8);
-      case "audiovisual":
+      case 'audiovisual':
         return new T.ConeGeometry(w * 0.8, h, 5);
-      case "desarrollo":
+      case 'desarrollo':
         return new T.BoxGeometry(w * 0.85, h, w * 0.85);
-      case "viajes":
+      case 'viajes':
         return new T.CylinderGeometry(w * 0.18, w * 0.72, h, 4);
-      case "estudios":
+      case 'estudios':
         return new T.CylinderGeometry(w * 0.55, w * 0.7, h, 6);
-      case "idiomas":
+      case 'idiomas':
         return new T.CylinderGeometry(w * 0.6, w * 0.6, h, 10);
-      case "musica":
+      case 'musica':
         return new T.ConeGeometry(w * 0.75, h, 4);
       default:
         return new T.BoxGeometry(w * 0.9, h, w * 0.9);
@@ -469,7 +499,9 @@ export class VidaEngine {
   private crearEdificios(isla: Isla, r: () => number) {
     const T = THREE;
     const cat = isla.cat;
-    const items = this.items.filter((i) => i.categoria === cat.slug).sort((a, b) => b.peso - a.peso);
+    const items = this.items
+      .filter((i) => i.categoria === cat.slug)
+      .sort((a, b) => b.peso - a.peso);
     const col = new T.Color(COL[cat.slug] ?? 0x04adbf);
     const g = 2.399963;
     items.forEach((item, k) => {
@@ -501,12 +533,22 @@ export class VidaEngine {
       if (item.destacado) {
         const faro = new T.Mesh(
           new T.OctahedronGeometry(w * 0.34, 0),
-          new T.MeshStandardMaterial({ color: 0xffffff, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.5, flatShading: true })
+          new T.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: new T.Color(0xd9cb04),
+            emissiveIntensity: 1.5,
+            flatShading: true,
+          }),
         );
         faro.position.set(m.position.x, m.position.y + h / 2 + w * 0.42, m.position.z);
         faro.userData = { item, isla, faro: true };
         isla.group.add(faro);
-        isla.edificios.push({ item, mesh: faro, mat: faro.material as THREE.MeshStandardMaterial, esFaro: true });
+        isla.edificios.push({
+          item,
+          mesh: faro,
+          mat: faro.material as THREE.MeshStandardMaterial,
+          esFaro: true,
+        });
         this.picks.push(faro);
       }
       isla.edificios.push({ item, mesh: m, mat });
@@ -518,7 +560,15 @@ export class VidaEngine {
     const T = THREE;
     const drum = new T.Mesh(
       new T.CylinderGeometry(isla.R * 0.44, isla.R * 0.5, 9, 10),
-      new T.MeshStandardMaterial({ color: 0xc9a870, flatShading: true, roughness: 0.6, emissive: new T.Color(0xb08d4a), emissiveIntensity: 0.16, transparent: true, opacity: 1 })
+      new T.MeshStandardMaterial({
+        color: 0xc9a870,
+        flatShading: true,
+        roughness: 0.6,
+        emissive: new T.Color(0xb08d4a),
+        emissiveIntensity: 0.16,
+        transparent: true,
+        opacity: 1,
+      }),
     );
     drum.position.y = isla.topY + 4.5;
     drum.castShadow = true;
@@ -526,22 +576,41 @@ export class VidaEngine {
     drum.userData = { portal: true, isla };
     isla.group.add(drum);
     this.picks.push(drum);
-    isla.edificios.push({ item: { slug: "__lecturas", peso: 5 }, mesh: drum, mat: drum.material as THREE.MeshStandardMaterial });
+    isla.edificios.push({
+      item: { slug: '__lecturas', peso: 5 },
+      mesh: drum,
+      mat: drum.material as THREE.MeshStandardMaterial,
+    });
 
     const torre = new T.Mesh(
       new T.CylinderGeometry(1.9, 2.6, 20, 8),
-      new T.MeshStandardMaterial({ color: 0xe8dcc0, flatShading: true, roughness: 0.7, transparent: true, opacity: 1 })
+      new T.MeshStandardMaterial({
+        color: 0xe8dcc0,
+        flatShading: true,
+        roughness: 0.7,
+        transparent: true,
+        opacity: 1,
+      }),
     );
     torre.position.set(isla.R * 0.02, isla.topY + 14, isla.R * 0.02);
     torre.castShadow = true;
     torre.userData = { portal: true, isla };
     isla.group.add(torre);
     this.picks.push(torre);
-    isla.edificios.push({ item: { slug: "__torre", peso: 3 }, mesh: torre, mat: torre.material as THREE.MeshStandardMaterial });
+    isla.edificios.push({
+      item: { slug: '__torre', peso: 3 },
+      mesh: torre,
+      mat: torre.material as THREE.MeshStandardMaterial,
+    });
 
     const luz = new T.Mesh(
       new T.OctahedronGeometry(2.1, 0),
-      new T.MeshStandardMaterial({ color: 0xfff6d0, emissive: new T.Color(0xd9cb04), emissiveIntensity: 2.1, flatShading: true })
+      new T.MeshStandardMaterial({
+        color: 0xfff6d0,
+        emissive: new T.Color(0xd9cb04),
+        emissiveIntensity: 2.1,
+        flatShading: true,
+      }),
     );
     luz.position.set(torre.position.x, isla.topY + 25.4, torre.position.z);
     isla.group.add(luz);
@@ -554,7 +623,13 @@ export class VidaEngine {
       const alto = 5 + r() * 4;
       const m = new T.Mesh(
         new T.BoxGeometry(4.6, alto, 1.5 + r()),
-        new T.MeshStandardMaterial({ color: new T.Color(l.color || "#8a6a3d"), flatShading: true, roughness: 0.75, transparent: true, opacity: 1 })
+        new T.MeshStandardMaterial({
+          color: new T.Color(l.color || '#8a6a3d'),
+          flatShading: true,
+          roughness: 0.75,
+          transparent: true,
+          opacity: 1,
+        }),
       );
       m.position.set(Math.cos(ang) * rad, isla.topY + alto / 2, Math.sin(ang) * rad);
       m.rotation.y = -ang;
@@ -562,7 +637,11 @@ export class VidaEngine {
       m.userData = { portal: true, isla };
       isla.group.add(m);
       this.picks.push(m);
-      isla.edificios.push({ item: { slug: "__libro" + k, peso: 2 }, mesh: m, mat: m.material as THREE.MeshStandardMaterial });
+      isla.edificios.push({
+        item: { slug: '__libro' + k, peso: 2 },
+        mesh: m,
+        mat: m.material as THREE.MeshStandardMaterial,
+      });
     });
   }
 
@@ -580,16 +659,19 @@ export class VidaEngine {
     this.nubes.children.forEach((g) =>
       (g as THREE.Group).children.forEach((m) => {
         ((m as THREE.Mesh).material as THREE.MeshStandardMaterial).color = new T.Color(p.nube);
-      })
+      }),
     );
     this.islas.forEach((isla) => {
       const ch = isla.group.children;
       const tierra = ch[0] as THREE.Mesh;
       const meseta = ch[1] as THREE.Mesh;
       const playa = ch[2] as THREE.Mesh;
-      if (tierra?.material) (tierra.material as THREE.MeshStandardMaterial).color = new T.Color(p.tierra);
-      if (meseta?.material) (meseta.material as THREE.MeshStandardMaterial).color = new T.Color(p.tierraAlta);
-      if (playa?.material) (playa.material as THREE.MeshStandardMaterial).color = new T.Color(p.arena);
+      if (tierra?.material)
+        (tierra.material as THREE.MeshStandardMaterial).color = new T.Color(p.tierra);
+      if (meseta?.material)
+        (meseta.material as THREE.MeshStandardMaterial).color = new T.Color(p.tierraAlta);
+      if (playa?.material)
+        (playa.material as THREE.MeshStandardMaterial).color = new T.Color(p.arena);
     });
   }
 
@@ -602,7 +684,12 @@ export class VidaEngine {
     this.miniEnlazado = null;
   }
 
-  private on(target: EventTarget, type: string, fn: EventListenerOrEventListenerObject, opts?: AddEventListenerOptions) {
+  private on(
+    target: EventTarget,
+    type: string,
+    fn: EventListenerOrEventListenerObject,
+    opts?: AddEventListenerOptions,
+  ) {
     target.addEventListener(type, fn, opts);
     this.listeners.push(() => target.removeEventListener(type, fn, opts));
   }
@@ -620,13 +707,16 @@ export class VidaEngine {
       moved = 0,
       pinch = 0;
     const pos = (e: MouseEvent | TouchEvent) => {
-      const t = "touches" in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
+      const t = 'touches' in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
       return { x: t.clientX, y: t.clientY };
     };
 
     const onDown = (e: MouseEvent | TouchEvent) => {
-      if ("touches" in e && e.touches.length === 2) {
-        pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      if ('touches' in e && e.touches.length === 2) {
+        pinch = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY,
+        );
         return;
       }
       const q = pos(e);
@@ -634,11 +724,14 @@ export class VidaEngine {
       py = q.y;
       down = true;
       moved = 0;
-      cv.style.cursor = "grabbing";
+      cv.style.cursor = 'grabbing';
     };
     const onMove = (e: MouseEvent | TouchEvent) => {
-      if ("touches" in e && e.touches.length === 2 && pinch) {
-        const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      if ('touches' in e && e.touches.length === 2 && pinch) {
+        const d = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY,
+        );
         this.camObj.dist = Math.max(80, Math.min(430, this.camObj.dist * (pinch / d)));
         pinch = d;
         return;
@@ -659,14 +752,14 @@ export class VidaEngine {
         this.camObj.tz -= (dy * cy - dx * sy) * k;
         this.camObj.tx = Math.max(-320, Math.min(320, this.camObj.tx));
         this.camObj.tz = Math.max(-260, Math.min(310, this.camObj.tz));
-      } else if (!("touches" in e)) {
+      } else if (!('touches' in e)) {
         this.puntero = q;
         this.pedirHover = true;
         this.cb.onCursorMove(q.x, q.y);
       }
     };
     const onUp = (e: MouseEvent | TouchEvent) => {
-      cv.style.cursor = "grab";
+      cv.style.cursor = 'grab';
       if (down && moved < 8) {
         this.puntero = pos(e);
         this.clic();
@@ -676,23 +769,26 @@ export class VidaEngine {
     };
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      this.camObj.dist = Math.max(80, Math.min(430, this.camObj.dist * (1 + Math.sign(e.deltaY) * 0.09)));
+      this.camObj.dist = Math.max(
+        80,
+        Math.min(430, this.camObj.dist * (1 + Math.sign(e.deltaY) * 0.09)),
+      );
     };
 
-    this.on(cv, "mousedown", onDown as EventListener);
-    this.on(cv, "touchstart", onDown as EventListener, { passive: true });
-    this.on(window, "mousemove", onMove as EventListener);
-    this.on(cv, "touchmove", onMove as EventListener, { passive: true });
-    this.on(window, "mouseup", onUp as EventListener);
-    this.on(cv, "touchend", onUp as EventListener);
-    this.on(cv, "wheel", onWheel as EventListener, { passive: false });
-    this.on(window, "resize", () => this.medir());
+    this.on(cv, 'mousedown', onDown as EventListener);
+    this.on(cv, 'touchstart', onDown as EventListener, { passive: true });
+    this.on(window, 'mousemove', onMove as EventListener);
+    this.on(cv, 'touchmove', onMove as EventListener, { passive: true });
+    this.on(window, 'mouseup', onUp as EventListener);
+    this.on(cv, 'touchend', onUp as EventListener);
+    this.on(cv, 'wheel', onWheel as EventListener, { passive: false });
+    this.on(window, 'resize', () => this.medir());
 
     const mini_ = this.miniCanvas;
     if (mini_) {
       const onMini = (e: MouseEvent | TouchEvent) => {
         const R = mini_.getBoundingClientRect();
-        const t = "touches" in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
+        const t = 'touches' in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
         const fx = (t.clientX - R.left) / R.width;
         const fy = (t.clientY - R.top) / R.height;
         const wx = MAPA.x0 + fx * (MAPA.x1 - MAPA.x0);
@@ -703,8 +799,8 @@ export class VidaEngine {
         this.camObj.tx = wx;
         this.camObj.tz = wz;
       };
-      this.on(mini_, "mousedown", onMini as EventListener);
-      this.on(mini_, "touchstart", onMini as EventListener, { passive: true });
+      this.on(mini_, 'mousedown', onMini as EventListener);
+      this.on(mini_, 'touchstart', onMini as EventListener, { passive: true });
     }
   }
 
@@ -723,7 +819,10 @@ export class VidaEngine {
     const q = this.puntero;
     if (!cv || !q) return null;
     const R = cv.getBoundingClientRect();
-    const v = new THREE.Vector2(((q.x - R.left) / R.width) * 2 - 1, -((q.y - R.top) / R.height) * 2 + 1);
+    const v = new THREE.Vector2(
+      ((q.x - R.left) / R.width) * 2 - 1,
+      -((q.y - R.top) / R.height) * 2 + 1,
+    );
     this.raycaster.setFromCamera(v, this.camera);
     const hits = this.raycaster.intersectObjects(this.picks, false);
     for (const h of hits) {
@@ -765,13 +864,15 @@ export class VidaEngine {
         const m = e.mat;
         if (!rel) {
           m.opacity = 1;
-          if (m.emissiveIntensity != null && e.mesh.userData.baseEm != null) m.emissiveIntensity = e.mesh.userData.baseEm;
+          if (m.emissiveIntensity != null && e.mesh.userData.baseEm != null)
+            m.emissiveIntensity = e.mesh.userData.baseEm;
           return;
         }
         const on = rel.has(e.item.slug);
         m.opacity = on ? 1 : 0.16;
-        if (m.emissiveIntensity != null && e.mesh.userData.baseEm != null) m.emissiveIntensity = on ? 0.75 : 0.02;
-      })
+        if (m.emissiveIntensity != null && e.mesh.userData.baseEm != null)
+          m.emissiveIntensity = on ? 0.75 : 0.02;
+      }),
     );
     if (this.marca) {
       this.marca.parent?.remove(this.marca);
@@ -783,7 +884,12 @@ export class VidaEngine {
         const T = THREE;
         const anillo = new T.Mesh(
           new T.TorusGeometry(4.6, 0.42, 8, 26),
-          new T.MeshStandardMaterial({ color: 0xd9cb04, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.2, flatShading: true })
+          new T.MeshStandardMaterial({
+            color: 0xd9cb04,
+            emissive: new T.Color(0xd9cb04),
+            emissiveIntensity: 1.2,
+            flatShading: true,
+          }),
         );
         anillo.rotation.x = -Math.PI / 2;
         anillo.position.set(found.mesh.position.x, found.isla.topY + 1.4, found.mesh.position.z);
@@ -827,7 +933,13 @@ export class VidaEngine {
       const curva = new T.QuadraticBezierCurve3(p0, mid, p1);
       const tubo = new T.Mesh(
         new T.TubeGeometry(curva, 44, 0.5, 6, false),
-        new T.MeshStandardMaterial({ color: 0xd9cb04, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.1, transparent: true, opacity: 0.85 })
+        new T.MeshStandardMaterial({
+          color: 0xd9cb04,
+          emissive: new T.Color(0xd9cb04),
+          emissiveIntensity: 1.1,
+          transparent: true,
+          opacity: 0.85,
+        }),
       );
       this.conex.add(tubo);
     });
@@ -881,20 +993,20 @@ export class VidaEngine {
   // de pintarMini() (islas, viewport, punto de cámara) es barato y sí se hace cada vez.
   private pintarFogCache(W: number, H: number) {
     if (!this.miniFogCanvas || this.miniFogCanvas.width !== W || this.miniFogCanvas.height !== H) {
-      this.miniFogCanvas = document.createElement("canvas");
+      this.miniFogCanvas = document.createElement('canvas');
       this.miniFogCanvas.width = W;
       this.miniFogCanvas.height = H;
     }
-    const ctx = this.miniFogCanvas.getContext("2d");
+    const ctx = this.miniFogCanvas.getContext('2d');
     if (!ctx) return;
     const cw = W / N,
       ch = H / N;
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = "#04101a";
+    ctx.fillStyle = '#04101a';
     ctx.fillRect(0, 0, W, H);
     ctx.save();
-    if ("filter" in ctx) (ctx as any).filter = "blur(5px)";
-    ctx.fillStyle = "rgba(4,110,140,0.55)";
+    if ('filter' in ctx) (ctx as any).filter = 'blur(5px)';
+    ctx.fillStyle = 'rgba(4,110,140,0.55)';
     for (let j = 0; j < N; j++)
       for (let i = 0; i < N; i++) {
         if (this.fog[j * N + i]) ctx.fillRect(i * cw - 1, j * ch - 1, cw + 2, ch + 2);
@@ -906,7 +1018,7 @@ export class VidaEngine {
   private pintarMini() {
     const cv = this.miniCanvas;
     if (!cv) return;
-    const ctx = cv.getContext("2d");
+    const ctx = cv.getContext('2d');
     if (!ctx) return;
     const W = cv.width,
       H = cv.height;
@@ -915,35 +1027,35 @@ export class VidaEngine {
     if (this.miniFogCanvas) ctx.drawImage(this.miniFogCanvas, 0, 0);
     const px = (x: number) => ((x - MAPA.x0) / (MAPA.x1 - MAPA.x0)) * W;
     const pz = (z: number) => ((z - MAPA.z0) / (MAPA.z1 - MAPA.z0)) * H;
-    ctx.textAlign = "center";
-    ctx.font = "600 15px Montserrat, sans-serif";
+    ctx.textAlign = 'center';
+    ctx.font = '600 15px Montserrat, sans-serif';
     this.islas.forEach((isla) => {
       if (!isla.visto) return;
       const x = px(isla.cat.posX),
         y = pz(isla.cat.posY);
       const r = (isla.R / (MAPA.x1 - MAPA.x0)) * W * 1.15;
-      const c = "#" + (COL[isla.cat.slug] ?? 0x04adbf).toString(16).padStart(6, "0");
+      const c = '#' + (COL[isla.cat.slug] ?? 0x04adbf).toString(16).padStart(6, '0');
       ctx.beginPath();
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fillStyle = c;
       ctx.globalAlpha = 0.85;
       ctx.fill();
       ctx.globalAlpha = 1;
-      ctx.strokeStyle = "rgba(255,255,255,.5)";
+      ctx.strokeStyle = 'rgba(255,255,255,.5)';
       ctx.lineWidth = 1;
       ctx.stroke();
-      ctx.fillStyle = "rgba(226,245,250,.92)";
+      ctx.fillStyle = 'rgba(226,245,250,.92)';
       ctx.fillText(isla.cat.nombre, x, y - r - 7);
     });
     const cx = px(this.cam.tx),
       cy = pz(this.cam.tz);
     const vw = ((this.cam.dist * 0.9) / (MAPA.x1 - MAPA.x0)) * W;
-    ctx.strokeStyle = "rgba(226,245,250,.9)";
+    ctx.strokeStyle = 'rgba(226,245,250,.9)';
     ctx.lineWidth = 2;
     ctx.strokeRect(cx - vw / 2, cy - vw * 0.34, vw, vw * 0.68);
     ctx.beginPath();
     ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-    ctx.fillStyle = "#d9cb04";
+    ctx.fillStyle = '#d9cb04';
     ctx.fill();
   }
 
@@ -963,7 +1075,7 @@ export class VidaEngine {
     this.camera.position.set(
       this.cam.tx + Math.sin(this.yaw) * this.cam.dist * cd,
       this.cam.dist * sd,
-      this.cam.tz + Math.cos(this.yaw) * this.cam.dist * cd
+      this.cam.tz + Math.cos(this.yaw) * this.cam.dist * cd,
     );
     this.camera.lookAt(this.cam.tx, 0, this.cam.tz);
 
@@ -973,7 +1085,9 @@ export class VidaEngine {
       const x = b[i * 3],
         z = b[i * 3 + 2];
       pos.array[i * 3 + 1] =
-        Math.sin(x * 0.035 + t * 0.9) * 1.5 + Math.sin(z * 0.052 - t * 1.15) * 1.1 + Math.sin((x + z) * 0.017 + t * 0.5) * 1.6;
+        Math.sin(x * 0.035 + t * 0.9) * 1.5 +
+        Math.sin(z * 0.052 - t * 1.15) * 1.1 +
+        Math.sin((x + z) * 0.017 + t * 0.5) * 1.6;
     }
     pos.needsUpdate = true;
     this.tick++;
@@ -1005,7 +1119,8 @@ export class VidaEngine {
     });
 
     this.conex.children.forEach((c, i) => {
-      ((c as THREE.Mesh).material as THREE.MeshStandardMaterial).opacity = 0.55 + Math.sin(t * 2.2 + i) * 0.3;
+      ((c as THREE.Mesh).material as THREE.MeshStandardMaterial).opacity =
+        0.55 + Math.sin(t * 2.2 + i) * 0.3;
     });
     if (this.marca) {
       this.marca.rotation.z += 0.02;
@@ -1028,15 +1143,23 @@ export class VidaEngine {
     const cv = this.canvas;
     const item = o?.userData.item as VidaItem | undefined;
     const portal = o?.userData.portal;
-    if (cv) cv.style.cursor = o ? "pointer" : "grab";
-    const slug = item ? item.slug : portal ? "__portal" : null;
+    if (cv) cv.style.cursor = o ? 'pointer' : 'grab';
+    const slug = item ? item.slug : portal ? '__portal' : null;
     if (slug === this.hoverSlug) return;
     this.hoverSlug = slug;
-    if (item && !item.slug.startsWith("__")) {
-      this.cb.onHover({ titulo: item.titulo, resumen: item.resumen, categoria: this.catMap[item.categoria]?.nombre || "" });
+    if (item && !item.slug.startsWith('__')) {
+      this.cb.onHover({
+        titulo: item.titulo,
+        resumen: item.resumen,
+        categoria: this.catMap[item.categoria]?.nombre || '',
+      });
     } else if (portal) {
-      const c = this.catMap["lecturas"];
-      this.cb.onHover({ titulo: c?.nombre || "Lecturas", resumen: c?.descripcion || "", categoria: "Isla portal" });
+      const c = this.catMap['lecturas'];
+      this.cb.onHover({
+        titulo: c?.nombre || 'Lecturas',
+        resumen: c?.descripcion || '',
+        categoria: 'Isla portal',
+      });
     } else {
       this.cb.onHover(null);
     }

@@ -1,26 +1,25 @@
-import { fetchPostBySlug, fetchLabels, fetchPosts } from "../../utils/api";
-import BackButton from "../../components/BackButton";
-import CommentSection from "../../components/CommentSection";
-import ProcessedContent from "@/app/components/ProcessedContent";
-import ReadingProgressBar from "@/app/components/ReadingProgressBar";
-import TableOfContents, { TocHeading } from "@/app/components/TableOfContents";
-import { processPostContent } from "@/app/utils/processPostContent";
-import { Metadata } from "next";
+import { fetchPostBySlug, fetchLabels, fetchPosts } from '../../utils/api';
+import BackButton from '../../components/BackButton';
+import CommentSection from '../../components/CommentSection';
+import ProcessedContent from '@/app/components/ProcessedContent';
+import ReadingProgressBar from '@/app/components/ReadingProgressBar';
+import TableOfContents, { TocHeading } from '@/app/components/TableOfContents';
+import { processPostContent } from '@/app/utils/processPostContent';
+import { Metadata } from 'next';
 
-import { slugify } from "../../utils/slugify";
+import { slugify } from '../../utils/slugify';
 
-import { format } from "date-fns";
-import { decode } from "html-entities";
-import { es } from "date-fns/locale";
+import { format } from 'date-fns';
+import { decode } from 'html-entities';
+import { es } from 'date-fns/locale';
 
-import { ILabel } from "../../../interfaces/Label";
-import { IPost } from "../../../interfaces/Posts";
+import { ILabel } from '../../../interfaces/Label';
+import { IPost } from '../../../interfaces/Posts';
 
+import { FaGlasses, FaEye } from 'react-icons/fa';
 
-import { FaGlasses, FaEye } from "react-icons/fa";
-
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
 type PostProps = {
   params: Promise<{ slug: string }>;
@@ -34,7 +33,7 @@ const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
 
 // Función para generar metadatos dinámicos
 export async function generateMetadata(props: PostProps): Promise<Metadata> {
-  console.log( props);
+  console.log(props);
   const { slug } = await props.params;
   const post = await fetchPostBySlug(slug);
 
@@ -47,8 +46,11 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
 
   // Usar metaTitle y metaDescription si están disponibles, sino usar valores por defecto
   const metaTitle = post.metaTitle || post.title;
-  const metaDescription = post.metaDescription || 
-    decode(post.content).replace(/<[^>]*>/g, "").substring(0, 160) + "...";
+  const metaDescription =
+    post.metaDescription ||
+    decode(post.content)
+      .replace(/<[^>]*>/g, '')
+      .substring(0, 160) + '...';
 
   // Construir la URL canónica
   const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app'}/post/${post.slug}`;
@@ -59,14 +61,14 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
     title: metaTitle,
     description: metaDescription,
     keywords: post.labels?.map((label: ILabel) => label.name).join(', '),
-    authors: [{ name: 'david' }], 
-    
+    authors: [{ name: 'david' }],
+
     // Open Graph para redes sociales
     openGraph: {
       title: metaTitle,
       description: metaDescription,
       url: canonicalUrl,
-      siteName: 'Diogenes Brain', 
+      siteName: 'Diogenes Brain',
       images: [
         {
           url: post.coverUrl || '/placeholder.jpg',
@@ -95,37 +97,37 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       'whatsapp:title': metaTitle,
       'whatsapp:description': metaDescription,
       'whatsapp:image': socialImage,
-      
+
       // LinkedIn específico
       'linkedin:owner': 'tu-perfil-linkedin', // Cambia por tu perfil
       'linkedin:title': metaTitle,
       'linkedin:description': metaDescription,
       'linkedin:image': socialImage,
-      
+
       // Instagram (usa principalmente Open Graph)
       'instagram:title': metaTitle,
       'instagram:description': metaDescription,
       'instagram:image': socialImage,
-      
+
       // Metadatos adicionales para mejor indexación
       'article:author': 'david',
       'article:section': post.labels?.[0]?.name || 'Blog',
       'article:published_time': post.createdAt,
       'article:modified_time': post.updatedAt || post.createdAt,
       'article:tag': post.labels?.map((label: ILabel) => label.name).join(','),
-      
+
       // Información del sitio
       'theme-color': '#04adbf', // Cambia por el color principal de tu sitio
       'msapplication-TileColor': '#04adbf',
       'application-name': 'Diogenes Brain',
-      
+
       // Para mejor rendimiento en redes sociales
       'og:rich_attachment': 'true',
       'og:image:secure_url': socialImage,
       'og:image:width': '1200',
       'og:image:height': '630',
       'og:image:alt': post.title,
-      
+
       // Metadatos para lectores de feeds
       'syndication-source': canonicalUrl,
       'original-source': canonicalUrl,
@@ -153,7 +155,7 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
 
 const PostPage = async (props: PostProps) => {
   const { slug } = await props.params;
-const post = await fetchPostBySlug(slug);
+  const post = await fetchPostBySlug(slug);
 
   if (!post) {
     return (
@@ -163,7 +165,6 @@ const post = await fetchPostBySlug(slug);
     );
   }
 
-  
   const decodedString = decode(post?.content);
 
   const readingTime = () => {
@@ -173,7 +174,12 @@ const post = await fetchPostBySlug(slug);
   };
 
   const slugifyHeading = (text: string) =>
-    text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+    text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
 
   const headings: TocHeading[] = [];
   const headingRegex = /<(h[23])[^>]*>([\s\S]*?)<\/h[23]>/gi;
@@ -185,7 +191,7 @@ const post = await fetchPostBySlug(slug);
 
   const { html: processedHtml, carousels } = processPostContent(
     decodedString,
-    headings.map((h) => h.id)
+    headings.map((h) => h.id),
   );
 
   const postId = post.id;
@@ -199,7 +205,7 @@ const post = await fetchPostBySlug(slug);
   let relatedPosts: IPost[] = allPosts.filter(
     (p: IPost) =>
       p.id !== postId && // No incluir el post actual
-      p.labels.some((label: ILabel) => slugify(label.name) === mainCategory) // Coincide con la categoría principal
+      p.labels.some((label: ILabel) => slugify(label.name) === mainCategory), // Coincide con la categoría principal
   );
 
   // Seleccionar 3 posts aleatorios de la misma categoría
@@ -231,14 +237,22 @@ const post = await fetchPostBySlug(slug);
             </div>
             <header className="article-header" aria-label="Article Header">
               <div className="timestamp">
-                <time>{format(new Date(post.createdAt), "EEEE, dd MMMM yyyy", { locale: es })}</time>
+                <time>
+                  {format(new Date(post.createdAt), 'EEEE, dd MMMM yyyy', { locale: es })}
+                </time>
               </div>
             </header>
             <div className="views-count d-flex align-items-center gap-2">
               <FaEye /> {post.views} visitas
             </div>
           </div>
-          <Image src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'} alt="Placeholder" width={200} height={150} className="featured-image" />
+          <Image
+            src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'}
+            alt="Placeholder"
+            width={200}
+            height={150}
+            className="featured-image"
+          />
 
           <ProcessedContent html={processedHtml} carousels={carousels} />
           <BackButton />

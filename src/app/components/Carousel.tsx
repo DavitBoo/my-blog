@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import PhotoSwipeLightbox from "photoswipe/lightbox";
-import "photoswipe/style.css";
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
 
 interface CarouselProps {
   images: string[];
@@ -21,9 +21,9 @@ export default function Carousel({ images }: CarouselProps) {
   useEffect(() => {
     // Inicializar PhotoSwipe Lightbox
     const lightbox = new PhotoSwipeLightbox({
-      gallery: "#carousel-gallery",
-      children: "a",
-      pswpModule: () => import("photoswipe"),
+      gallery: '#carousel-gallery',
+      children: 'a',
+      pswpModule: () => import('photoswipe'),
     });
     lightbox.init();
 
@@ -88,10 +88,18 @@ export default function Carousel({ images }: CarouselProps) {
       </div>
 
       {/* Navigation arrows */}
-      <button onClick={goToPrev} className="carousel-arrow carousel-arrow-prev" aria-label="Previous slide">
+      <button
+        onClick={goToPrev}
+        className="carousel-arrow carousel-arrow-prev"
+        aria-label="Previous slide"
+      >
         <FaChevronLeft className="carousel-arrow-icon" />
       </button>
-      <button onClick={goToNext} className="carousel-arrow carousel-arrow-next" aria-label="Next slide">
+      <button
+        onClick={goToNext}
+        className="carousel-arrow carousel-arrow-next"
+        aria-label="Next slide"
+      >
         <FaChevronRight className="carousel-arrow-icon" />
       </button>
 
@@ -101,7 +109,7 @@ export default function Carousel({ images }: CarouselProps) {
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
+            className={`carousel-indicator ${index === currentIndex ? 'active' : ''}`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}

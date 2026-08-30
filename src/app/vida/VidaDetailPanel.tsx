@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import styles from "./vida.module.css";
-import { VidaEnlace, VidaMediaItem } from "../utils/vidaApi";
+import styles from './vida.module.css';
+import { VidaEnlace, VidaMediaItem } from '../utils/vidaApi';
 
 export interface VidaDetalleRelacionado {
   slug: string;
@@ -133,7 +133,9 @@ const VidaDetailPanel = ({ sel, onClose, onIrA }: Props) => (
       {sel.tieneRel && (
         <div className={styles.relBlock}>
           <div className={styles.relTitle}>Conectado con</div>
-          <div className={styles.relHint}>Los arcos sobre el mar unen este ítem con otras islas.</div>
+          <div className={styles.relHint}>
+            Los arcos sobre el mar unen este ítem con otras islas.
+          </div>
           {sel.relacionados.map((r) => (
             <button key={r.slug} onClick={() => onIrA(r.slug)} className={styles.relItem}>
               <span className={styles.relItemText}>

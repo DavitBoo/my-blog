@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import styles from './customCard.module.css';
-import {IPost} from '../../interfaces/Posts'
-
+import { IPost } from '../../interfaces/Posts';
 
 const customCard = ({ post }: { post: IPost }) => {
   return (

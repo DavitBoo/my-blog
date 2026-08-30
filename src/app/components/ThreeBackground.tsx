@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { useThreeScene } from '../hooks/useThreeScene';
 
 interface ThreeBackgroundProps {
@@ -19,7 +19,7 @@ export const ThreeBackground: React.FC<ThreeBackgroundProps> = ({ className }) =
         bottom: 0,
         right: 0,
         zIndex: 1,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
       }}
     />
   );

@@ -1,14 +1,14 @@
-import Link from "next/link";
-import Image from "next/image";
-import { FiExternalLink } from "react-icons/fi";
-import { Metadata } from "next";
-import { clientProjects, techCategories } from "../../data/clientProjects";
+import Link from 'next/link';
+import Image from 'next/image';
+import { FiExternalLink } from 'react-icons/fi';
+import { Metadata } from 'next';
+import { clientProjects, techCategories } from '../../data/clientProjects';
 
 export const metadata: Metadata = {
-  title: "Desarrollo web | davidboo — Webs sencillitas pero bien hechas",
+  title: 'Desarrollo web | davidboo — Webs sencillitas pero bien hechas',
   description:
-    "Hago webs sencillitas pero bien hechas: React, Next.js, diseño limpio y atención al detalle. Mira algunos proyectos y contáctame.",
-  keywords: ["desarrollo web", "freelance", "Next.js", "React", "diseño web"],
+    'Hago webs sencillitas pero bien hechas: React, Next.js, diseño limpio y atención al detalle. Mira algunos proyectos y contáctame.',
+  keywords: ['desarrollo web', 'freelance', 'Next.js', 'React', 'diseño web'],
 };
 
 const DesarrolloWebPage = () => {
@@ -31,12 +31,11 @@ const DesarrolloWebPage = () => {
             pero bien hechas.
           </h1>
           <p>
-            Cualquier cosa que se te pase por la cabeza, te animo a que me la consultes,
-            fácil, chungo, si me resulta interesante seguramente te diga que sí, el tema
-            de la pasta lo hablamos si quieres también, no hay precios fijos, si me gusta
-            mucho y no tienes €€€ a lo mejor te lo hago gratis. Si veo que yo solo no
-            puedo y tienes presupuesto, conozco unos tipos que hacen unas webs bien chulas
-            también.
+            Cualquier cosa que se te pase por la cabeza, te animo a que me la consultes, fácil,
+            chungo, si me resulta interesante seguramente te diga que sí, el tema de la pasta lo
+            hablamos si quieres también, no hay precios fijos, si me gusta mucho y no tienes €€€ a
+            lo mejor te lo hago gratis. Si veo que yo solo no puedo y tienes presupuesto, conozco
+            unos tipos que hacen unas webs bien chulas también.
           </p>
           <div className="servicios-hero-cta">
             <a href="mailto:tu@correo.com" className="btn btn-primary">
@@ -57,10 +56,7 @@ const DesarrolloWebPage = () => {
 
           <div className="servicios-portfolio-grid">
             {clientProjects.map((project) => (
-              <article
-                key={project.id}
-                className="glass-card servicios-portfolio-card"
-              >
+              <article key={project.id} className="glass-card servicios-portfolio-card">
                 {/* Preview image / placeholder */}
                 <div className="servicios-portfolio-image-wrap">
                   {project.image ? (
@@ -122,13 +118,13 @@ const DesarrolloWebPage = () => {
                       className="tech-badge"
                       style={{
                         background: tech.color,
-                        color: tech.text ?? "#fff",
+                        color: tech.text ?? '#fff',
                       }}
                     >
                       {tech.name}
                     </span>
                   </li>
-                ))
+                )),
               )}
             </ul>
           </div>
@@ -141,8 +137,8 @@ const DesarrolloWebPage = () => {
           <div className="glass-card servicios-cta-inner">
             <h2>¿Tienes un proyecto en mente?</h2>
             <p>
-              Cuéntame de qué va, qué necesitas y cuándo. Sin compromisos — si
-              encaja, lo hacemos; si no, te digo dónde acudir.
+              Cuéntame de qué va, qué necesitas y cuándo. Sin compromisos — si encaja, lo hacemos;
+              si no, te digo dónde acudir.
             </p>
             <div className="servicios-cta-buttons">
               <a href="mailto:tu@correo.com" className="btn btn-primary">

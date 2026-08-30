@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { FaSearch } from "react-icons/fa";
+import { FaSearch } from 'react-icons/fa';
 
 interface SearchInputProps {
   value: string;
@@ -19,7 +19,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <FaSearch className="search-icon"/>
+      <FaSearch className="search-icon" />
     </>
   );
 };

@@ -1,10 +1,10 @@
 // TimelineThreeScene.tsx
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 
-import styles from "./sobre-mi.module.css";
+import styles from './sobre-mi.module.css';
 
 const TimelineThreeScene = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -22,7 +22,12 @@ const TimelineThreeScene = () => {
     const scene = new THREE.Scene();
     sceneRef.current = scene;
 
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000,
+    );
     camera.position.z = 5;
     cameraRef.current = camera;
 
@@ -58,14 +63,14 @@ const TimelineThreeScene = () => {
 
     createParticles(scene);
 
-    window.addEventListener("resize", onWindowResize);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('scroll', onScroll);
 
     animate();
 
     return () => {
-      window.removeEventListener("resize", onWindowResize);
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener('resize', onWindowResize);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -80,7 +85,7 @@ const TimelineThreeScene = () => {
     }
 
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const material = new THREE.PointsMaterial({
       color: 0x04bfbf,
@@ -105,7 +110,7 @@ const TimelineThreeScene = () => {
   };
 
   const onScroll = () => {
-    console.log("holaaa");
+    console.log('holaaa');
     const scrollTop = window.pageYOffset;
     const docHeight = document.body.scrollHeight - window.innerHeight;
     const scrollProgress = scrollTop / docHeight;
@@ -130,26 +135,27 @@ const TimelineThreeScene = () => {
     updateSections(scrollTop);
   };
 
- const updateSections = (scrollTop: number) => {
-  const sections = document.querySelectorAll<HTMLElement>('[data-section]');
-  const dots = document.querySelectorAll<HTMLElement>('[data-dot]');  
-  const windowHeight = window.innerHeight;
+  const updateSections = (scrollTop: number) => {
+    const sections = document.querySelectorAll<HTMLElement>('[data-section]');
+    const dots = document.querySelectorAll<HTMLElement>('[data-dot]');
+    const windowHeight = window.innerHeight;
 
-sections.forEach((section, index) => {
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.offsetHeight;
-    const inView = scrollTop >= sectionTop - windowHeight * 0.7 && scrollTop < sectionTop + sectionHeight * 0.3;
+    sections.forEach((section, index) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+      const inView =
+        scrollTop >= sectionTop - windowHeight * 0.7 &&
+        scrollTop < sectionTop + sectionHeight * 0.3;
 
-
-    if (inView) {
-      section.classList.add(styles.active);
-      dots[index]?.classList.add(styles.active);
-    } else {
-      section.classList.remove(styles.active);
-      dots[index]?.classList.remove(styles.active);
-    }
-  });
-};
+      if (inView) {
+        section.classList.add(styles.active);
+        dots[index]?.classList.add(styles.active);
+      } else {
+        section.classList.remove(styles.active);
+        dots[index]?.classList.remove(styles.active);
+      }
+    });
+  };
 
   const animate = () => {
     requestAnimationFrame(animate);
@@ -201,16 +207,16 @@ sections.forEach((section, index) => {
 
   useEffect(() => {
     // Smooth scroll for dots
-    const dots = document.querySelectorAll<HTMLElement>(".scrollDot");
-    const sections = document.querySelectorAll<HTMLElement>(".timelineSection");
+    const dots = document.querySelectorAll<HTMLElement>('.scrollDot');
+    const sections = document.querySelectorAll<HTMLElement>('.timelineSection');
 
     dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
+      dot.addEventListener('click', () => {
         const section = sections[index];
         if (section) {
           window.scrollTo({
             top: section.offsetTop,
-            behavior: "smooth",
+            behavior: 'smooth',
           });
         }
       });
@@ -228,11 +234,11 @@ sections.forEach((section, index) => {
       id="three-canvas"
       ref={canvasRef}
       style={{
-        position: "fixed",
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
         zIndex: 0,
       }}
     />

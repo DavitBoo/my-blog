@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { fetchCommentsByPostId, createComment } from "../utils/api";
+import { useState, useEffect } from 'react';
+import { fetchCommentsByPostId, createComment } from '../utils/api';
 
 type Comment = {
   id: number;
@@ -12,8 +12,8 @@ type Comment = {
 
 const CommentSection = ({ postId }: { postId: number }) => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState("");
-  const [email, setEmail] = useState("");
+  const [newComment, setNewComment] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     const loadComments = async () => {
@@ -27,12 +27,12 @@ const CommentSection = ({ postId }: { postId: number }) => {
     e.preventDefault();
     try {
       await createComment(postId, newComment, email);
-      setNewComment("");
-      setEmail("");
+      setNewComment('');
+      setEmail('');
       const updatedComments = await fetchCommentsByPostId(postId);
       setComments(updatedComments);
     } catch (error) {
-      console.error("Error creating comment:", error);
+      console.error('Error creating comment:', error);
     }
   };
 
@@ -41,7 +41,12 @@ const CommentSection = ({ postId }: { postId: number }) => {
       <div className="commentCreatorWrapper">
         <h3>Deja un comentario</h3>
         <form action="" onSubmit={handleSubmit}>
-          <input type="email" placeholder="Tu email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            placeholder="Tu email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <textarea
             placeholder="Añade un comentario"
             value={newComment}

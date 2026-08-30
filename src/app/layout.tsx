@@ -1,13 +1,12 @@
 // /layout.tsx
-import DevOverlay from "./components/DevOverlay";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import "./globals.css";
-
+import DevOverlay from './components/DevOverlay';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import './globals.css';
 
 export const metadata = {
-  title: "davidboo",
-  description: "Personal Website",
+  title: 'davidboo',
+  description: 'Personal Website',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         {children}
-        <DevOverlay/>
+        <DevOverlay />
         <Footer />
       </body>
     </html>

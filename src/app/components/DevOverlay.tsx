@@ -1,6 +1,6 @@
-"use client";
-import { useEffect, useState, useRef, useMemo } from "react";
-import { fetchTech } from "../utils/api";
+'use client';
+import { useEffect, useState, useRef, useMemo } from 'react';
+import { fetchTech } from '../utils/api';
 
 type Tech = {
   app: { name: string; description: string };
@@ -12,7 +12,7 @@ type Tech = {
   };
 };
 
-const DEV_SEQUENCE = ["e", "a", "d", "g", "b", "e"];
+const DEV_SEQUENCE = ['e', 'a', 'd', 'g', 'b', 'e'];
 
 export default function DevOverlay() {
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ export default function DevOverlay() {
   // Abrir con query/hash
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("stack") === "1" || window.location.hash.includes("stack")) {
+    if (params.get('stack') === '1' || window.location.hash.includes('stack')) {
       setOpen(true);
     }
   }, []);
@@ -48,8 +48,8 @@ export default function DevOverlay() {
       }
     };
 
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [sequenceIndex]);
 
   // Detectar cuando se completa la secuencia y abrir el modal
@@ -93,9 +93,8 @@ export default function DevOverlay() {
             <p>Frontend: {data.stack.frontend}</p>
             <p>Backend: {data.stack.backend}</p>
             <p>Base de datos: {data.stack.database}</p>
-            <p>Hosting: {data.stack.hosting.join(", ")}</p>
+            <p>Hosting: {data.stack.hosting.join(', ')}</p>
           </section>
-        
         </div>
       )}
     </div>

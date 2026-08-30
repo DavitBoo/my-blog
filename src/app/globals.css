@@ -1,11 +1,11 @@
 @font-face {
-  font-family: "Raleway";
-  src: url("../assets/fonts/Raleway-VariableFont_wght.ttf") format("truetype");
+  font-family: 'Raleway';
+  src: url('../assets/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "Monsterrat";
-  src: url("../assets/fonts/Montserrat-VariableFont_wght.ttf");
+  font-family: 'Monsterrat';
+  src: url('../assets/fonts/Montserrat-VariableFont_wght.ttf');
 }
 
 :root {
@@ -168,7 +168,7 @@ small {
 } */
 
 .btn::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -416,7 +416,9 @@ li {
   overflow: hidden;
   transform: translateY(-10px);
   opacity: 0;
-  transition: max-height 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
 }
 
 .main-header.menu-expanded .mobile {
@@ -894,7 +896,7 @@ li {
 }
 
 .customCard .card-body a:before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -983,7 +985,7 @@ li {
 }
 
 .commentCreatorWrapper form textarea,
-.commentCreatorWrapper form input[type="email"] {
+.commentCreatorWrapper form input[type='email'] {
   flex: 1;
   width: 100%;
   overflow: scroll-y;
@@ -1001,13 +1003,13 @@ li {
 }
 
 .commentCreatorWrapper form textarea:focus,
-.commentCreatorWrapper form input[type="email"]:focus {
+.commentCreatorWrapper form input[type='email']:focus {
   outline: none;
   box-shadow: var(--color-primary) 0px 0px 0px 1px;
   border-color: var(--color-primary);
 }
 
-.commentCreatorWrapper form input[type="submit"] {
+.commentCreatorWrapper form input[type='submit'] {
   padding: 0.5rem 1rem;
   align-self: flex-end;
 }
@@ -1296,7 +1298,6 @@ footer span {
   grid-template-columns: repeat(1, 1fr);
 }
 
-
 .now-modal-card {
   border-radius: 0.5rem;
   border: 1px solid var(--color-border);
@@ -1326,7 +1327,6 @@ footer span {
 .now-modal-card-fitness {
   order: -1;
 }
-
 
 @media (min-width: 768px) {
   .now-modal-grid {
@@ -1360,7 +1360,6 @@ footer span {
     order: unset;
   }
 }
-
 
 /* Reading card */
 .now-modal-reading-content {
@@ -1750,7 +1749,9 @@ footer span {
   border-radius: 4px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.2s, background 0.2s;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
 }
 
 .article-content pre:hover .copy-code-btn {
@@ -1917,11 +1918,26 @@ footer span {
 }
 
 @keyframes blob-morph {
-  0%   { border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%; transform: scale(1)    rotate(0deg); }
-  25%  { border-radius: 70% 30% 50% 50% / 50% 60% 40% 50%; transform: scale(1.05) rotate(5deg); }
-  50%  { border-radius: 50% 50% 30% 70% / 60% 30% 70% 40%; transform: scale(0.97) rotate(-3deg); }
-  75%  { border-radius: 30% 70% 60% 40% / 40% 70% 30% 60%; transform: scale(1.03) rotate(7deg); }
-  100% { border-radius: 60% 40% 40% 60% / 70% 30% 50% 50%; transform: scale(1)    rotate(0deg); }
+  0% {
+    border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    border-radius: 70% 30% 50% 50% / 50% 60% 40% 50%;
+    transform: scale(1.05) rotate(5deg);
+  }
+  50% {
+    border-radius: 50% 50% 30% 70% / 60% 30% 70% 40%;
+    transform: scale(0.97) rotate(-3deg);
+  }
+  75% {
+    border-radius: 30% 70% 60% 40% / 40% 70% 30% 60%;
+    transform: scale(1.03) rotate(7deg);
+  }
+  100% {
+    border-radius: 60% 40% 40% 60% / 70% 30% 50% 50%;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 /* --- Glassmorphism card --- */
@@ -1936,7 +1952,9 @@ footer span {
   box-shadow:
     0 4px 24px rgba(4, 173, 191, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .glass-card:hover {
@@ -2152,7 +2170,7 @@ footer span {
 }
 
 .servicios-tech-category-title::before {
-  content: "";
+  content: '';
   display: inline-block;
   width: 6px;
   height: 6px;
