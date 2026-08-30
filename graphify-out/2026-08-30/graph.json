@@ -5122,6 +5122,18 @@
       "weight": 1.0
     },
     {
+      "source": "src_interfaces_posts_ipost",
+      "target": "src_interfaces_label_ilabel",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "field",
+      "source_file": "src/interfaces/Posts.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "src_app_vida_vidaengine_vidaengine",
       "target": "src_app_utils_vidaapi_vidacategoria",
       "relation": "references",
@@ -6020,6 +6032,18 @@
       "context": "import",
       "source_file": "src/app/post/[slug]/page.tsx",
       "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app_post_slug_page",
+      "target": "src_app_components_readingprogressbar_readingprogressbar",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "src/app/post/[slug]/page.tsx",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -10407,5 +10431,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c14720ab7a995fa7b8e709de69a6c1a65696e1e9"
+  "built_at_commit": "4ad627e8fa6a6814b8fcf2ceca2623ae8590c6f7"
 }
