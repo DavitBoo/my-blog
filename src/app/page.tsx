@@ -28,10 +28,12 @@ export const metadata: Metadata = {
   },
 };
 
+// ISR: si la API no estaba disponible durante el build, la página se regenera sola
+export const revalidate = 60;
+
 const Home = async () => {
   // Fetch posts directly
-  const posts: IPost[] = await fetchPosts();
-  console.log(posts[0]);
+  const posts: IPost[] = (await fetchPosts()) ?? [];
   return (
     <div className="archive">
       <HomeHero />
@@ -41,6 +43,7 @@ const Home = async () => {
           <div className="grid">
             {posts.map((post) => (
               <Post
+                key={post.id}
                 id={post.id}
                 title={post.title}
                 content={post.content}

@@ -19,7 +19,7 @@ const Blog: React.FC = () => {
 
   useEffect(() => {
     const loadPosts = async () => {
-      const fetchedPosts: IPost[] = await fetchPosts();
+      const fetchedPosts: IPost[] = (await fetchPosts()) ?? [];
       setPosts(fetchedPosts);
       const uniqueLabels = Array.from(
         new Set(fetchedPosts.flatMap((post) => post.labels.map((label) => label.name))),

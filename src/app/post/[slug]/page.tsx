@@ -25,7 +25,9 @@ type PostProps = {
   params: Promise<{ slug: string }>;
 };
 
-const getRandomPosts = (posts: any[], count: number, excludeId: number) => {
+const PLACEHOLDER_IMAGE = '/placeholder.jpg';
+
+const getRandomPosts = (posts: IPost[], count: number, excludeId: number) => {
   const filteredPosts = posts.filter((post) => post.id !== excludeId);
   const shuffled = filteredPosts.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
@@ -55,7 +57,7 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
   // Construir la URL canónica
   const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app'}/post/${post.slug}`;
 
-  const socialImage = post.coverUrl || '/placeholder.jpg';
+  const socialImage = post.coverUrl || PLACEHOLDER_IMAGE;
 
   return {
     title: metaTitle,
@@ -71,7 +73,7 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       siteName: 'Diogenes Brain',
       images: [
         {
-          url: post.coverUrl || '/placeholder.jpg',
+          url: post.coverUrl || PLACEHOLDER_IMAGE,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -88,7 +90,7 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       card: 'summary_large_image',
       title: metaTitle,
       description: metaDescription,
-      images: [post.coverUrl || '/placeholder.jpg'],
+      images: [post.coverUrl || PLACEHOLDER_IMAGE],
       // creator: '@tu_usuario', // Cambia por tu usuario de Twitter
     },
 
@@ -202,7 +204,7 @@ const PostPage = async (props: PostProps) => {
   // Obtener la categoría principal del post actual (suponiendo que tiene al menos una)
   const mainCategory = post.labels.length > 0 ? slugify(post.labels[0].name) : null;
 
-  let relatedPosts: IPost[] = allPosts.filter(
+  const relatedPosts: IPost[] = allPosts.filter(
     (p: IPost) =>
       p.id !== postId && // No incluir el post actual
       p.labels.some((label: ILabel) => slugify(label.name) === mainCategory), // Coincide con la categoría principal
@@ -247,7 +249,7 @@ const PostPage = async (props: PostProps) => {
             </div>
           </div>
           <Image
-            src={post.coverUrl ? post.coverUrl : '/placeholder.jpg'}
+            src={post.coverUrl ? post.coverUrl : PLACEHOLDER_IMAGE}
             alt="Placeholder"
             width={200}
             height={150}

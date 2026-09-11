@@ -19,7 +19,7 @@ const BlogCategory: React.FC = () => {
 
   useEffect(() => {
     const loadPosts = async () => {
-      const fetchedPosts: IPost[] = await fetchPosts();
+      const fetchedPosts: IPost[] = (await fetchPosts()) ?? [];
 
       const filteredPosts = fetchedPosts.filter((post) =>
         post.labels.some((label) => slugify(label.name) === slugify(decodedCategory)),
@@ -29,7 +29,7 @@ const BlogCategory: React.FC = () => {
     };
 
     loadPosts();
-  }, [category]);
+  }, [decodedCategory]);
 
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
   const paginatedPosts = posts.slice(

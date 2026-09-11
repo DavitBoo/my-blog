@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
@@ -36,9 +36,9 @@ export default function Carousel({ images }: CarouselProps) {
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-  };
+  }, [images.length]);
 
   // Auto-advance slides
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Carousel({ images }: CarouselProps) {
       const interval = setInterval(goToNext, 5000);
       return () => clearInterval(interval);
     }
-  }, [isHovered, currentIndex]);
+  }, [isHovered, currentIndex, goToNext]);
 
   // Calcular qué imágenes mostrar
   const getVisibleImages = () => {

@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import styles from './sobre-mi.module.css'; // reutiliza tus clases existentes
 import TimelineThreeScene from './TimelineThreeScene';
 
@@ -605,9 +606,9 @@ export default function Page() {
               ))}
             </div>
             <div style={{ marginTop: 12 }}>
-              <a href="/blog" className="btn btn-primary">
+              <Link href="/blog" className="btn btn-primary">
                 Ver archivo completo
-              </a>
+              </Link>
             </div>
           </Section>
 
@@ -660,9 +661,9 @@ export default function Page() {
                 <a href="mailto:yo@tudominio.com" className="btn btn-primary">
                   <span>Enviar correo</span>
                 </a>
-                <a href="/blog" className="btn">
+                <Link href="/blog" className="btn">
                   <span>Ir al blog</span>
-                </a>
+                </Link>
               </div>
             </div>
             <p className="mb-1" style={{ color: 'var(--color-font-secondary)', marginTop: 16 }}>

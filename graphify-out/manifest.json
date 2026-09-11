@@ -18,10 +18,10 @@
     "semantic_hash": "f547ba31a1ad16e1e739f226d89b19b3"
   },
   "package.json": {
-    "mtime": 1787692700.0477915,
-    "seen": 1788089956.2660654,
-    "ast_hash": "66f78015a771a41d04df2e8fba52ae27",
-    "semantic_hash": "66f78015a771a41d04df2e8fba52ae27"
+    "mtime": 1789142933.4447467,
+    "seen": 1789143777.613191,
+    "ast_hash": "cd5528238b0c0bb8ed925da538198019",
+    "semantic_hash": ""
   },
   "src/app/blog/[category]/page.tsx": {
     "mtime": 1787692700.1703508,

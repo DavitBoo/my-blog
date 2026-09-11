@@ -6,6 +6,50 @@ import * as THREE from 'three';
 
 import styles from './sobre-mi.module.css';
 
+const createParticles = (): THREE.Points => {
+  const particleCount = 200;
+  const positions = new Float32Array(particleCount * 3);
+
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 20;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const material = new THREE.PointsMaterial({
+    color: 0x04bfbf,
+    size: 0.03,
+    transparent: true,
+    opacity: 0.8,
+  });
+
+  return new THREE.Points(geometry, material);
+};
+
+const updateSections = (scrollTop: number) => {
+  const sections = document.querySelectorAll<HTMLElement>('[data-section]');
+  const dots = document.querySelectorAll<HTMLElement>('[data-dot]');
+  const windowHeight = window.innerHeight;
+
+  sections.forEach((section, index) => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+    const inView =
+      scrollTop >= sectionTop - windowHeight * 0.7 && scrollTop < sectionTop + sectionHeight * 0.3;
+
+    if (inView) {
+      section.classList.add(styles.active);
+      dots[index]?.classList.add(styles.active);
+    } else {
+      section.classList.remove(styles.active);
+      dots[index]?.classList.remove(styles.active);
+    }
+  });
+};
+
 const TimelineThreeScene = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -18,6 +62,92 @@ const TimelineThreeScene = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    let frameId = 0;
+
+    const onWindowResize = () => {
+      const camera = cameraRef.current;
+      const renderer = rendererRef.current;
+      if (!camera || !renderer) return;
+
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    const onScroll = () => {
+      console.log('holaaa');
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollProgress = scrollTop / docHeight;
+      scrollProgressRef.current = scrollProgress;
+
+      const camera = cameraRef.current;
+      const line = lineRef.current;
+      if (!camera || !line) return;
+
+      camera.position.y = -scrollProgress * 15 + 5;
+      camera.position.x = Math.sin(scrollProgress * Math.PI * 2) * 2;
+      camera.position.z = 5 + Math.cos(scrollProgress * Math.PI) * 2;
+
+      line.rotation.z = scrollProgress * Math.PI * 2;
+      line.rotation.x = scrollProgress * Math.PI;
+
+      particlesRef.current.forEach((particle, index) => {
+        particle.rotation.y = scrollProgress * Math.PI * 2 + index;
+        particle.position.y = Math.sin(scrollProgress * Math.PI * 4) * 2;
+      });
+
+      updateSections(scrollTop);
+    };
+
+    const animate = () => {
+      frameId = requestAnimationFrame(animate);
+
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
+      const camera = cameraRef.current;
+      const line = lineRef.current;
+
+      if (!renderer || !scene || !camera || !line) return;
+
+      particlesRef.current.forEach((particle) => {
+        particle.rotation.x += 0.001;
+        particle.rotation.y += 0.002;
+      });
+
+      const lineMaterial = line.material as THREE.LineBasicMaterial;
+      const time = Date.now() * 0.001;
+      lineMaterial.opacity = 0.7 + Math.sin(time * 2) * 0.3;
+
+      // Color transition
+      const phase = (Math.sin(scrollProgressRef.current * Math.PI * 2) + 1) / 2;
+      const r1 = 0.02,
+        g1 = 0.68,
+        b1 = 0.75;
+      const r2 = 0.02,
+        g2 = 0.53,
+        b2 = 0.65;
+      const r3 = 0.85,
+        g3 = 0.8,
+        b3 = 0.02;
+
+      let r, g, b;
+      if (phase < 0.5) {
+        const t = phase * 2;
+        r = r1 + (r2 - r1) * t;
+        g = g1 + (g2 - g1) * t;
+        b = b1 + (b2 - b1) * t;
+      } else {
+        const t = (phase - 0.5) * 2;
+        r = r2 + (r3 - r2) * t;
+        g = g2 + (g3 - g2) * t;
+        b = b2 + (b3 - b2) * t;
+      }
+
+      lineMaterial.color.setRGB(r, g, b);
+      renderer.render(scene, camera);
+    };
 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
@@ -61,7 +191,9 @@ const TimelineThreeScene = () => {
     scene.add(line);
     lineRef.current = line;
 
-    createParticles(scene);
+    const particles = createParticles();
+    scene.add(particles);
+    particlesRef.current.push(particles);
 
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('scroll', onScroll);
@@ -69,141 +201,11 @@ const TimelineThreeScene = () => {
     animate();
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener('scroll', onScroll);
     };
   }, []);
-
-  const createParticles = (scene: THREE.Scene) => {
-    const particleCount = 200;
-    const positions = new Float32Array(particleCount * 3);
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-    const material = new THREE.PointsMaterial({
-      color: 0x04bfbf,
-      size: 0.03,
-      transparent: true,
-      opacity: 0.8,
-    });
-
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-    particlesRef.current.push(particles);
-  };
-
-  const onWindowResize = () => {
-    const camera = cameraRef.current;
-    const renderer = rendererRef.current;
-    if (!camera || !renderer) return;
-
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  };
-
-  const onScroll = () => {
-    console.log('holaaa');
-    const scrollTop = window.pageYOffset;
-    const docHeight = document.body.scrollHeight - window.innerHeight;
-    const scrollProgress = scrollTop / docHeight;
-    scrollProgressRef.current = scrollProgress;
-
-    const camera = cameraRef.current;
-    const line = lineRef.current;
-    if (!camera || !line) return;
-
-    camera.position.y = -scrollProgress * 15 + 5;
-    camera.position.x = Math.sin(scrollProgress * Math.PI * 2) * 2;
-    camera.position.z = 5 + Math.cos(scrollProgress * Math.PI) * 2;
-
-    line.rotation.z = scrollProgress * Math.PI * 2;
-    line.rotation.x = scrollProgress * Math.PI;
-
-    particlesRef.current.forEach((particle, index) => {
-      particle.rotation.y = scrollProgress * Math.PI * 2 + index;
-      particle.position.y = Math.sin(scrollProgress * Math.PI * 4) * 2;
-    });
-
-    updateSections(scrollTop);
-  };
-
-  const updateSections = (scrollTop: number) => {
-    const sections = document.querySelectorAll<HTMLElement>('[data-section]');
-    const dots = document.querySelectorAll<HTMLElement>('[data-dot]');
-    const windowHeight = window.innerHeight;
-
-    sections.forEach((section, index) => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      const inView =
-        scrollTop >= sectionTop - windowHeight * 0.7 &&
-        scrollTop < sectionTop + sectionHeight * 0.3;
-
-      if (inView) {
-        section.classList.add(styles.active);
-        dots[index]?.classList.add(styles.active);
-      } else {
-        section.classList.remove(styles.active);
-        dots[index]?.classList.remove(styles.active);
-      }
-    });
-  };
-
-  const animate = () => {
-    requestAnimationFrame(animate);
-
-    const renderer = rendererRef.current;
-    const scene = sceneRef.current;
-    const camera = cameraRef.current;
-    const line = lineRef.current;
-
-    if (!renderer || !scene || !camera || !line) return;
-
-    particlesRef.current.forEach((particle) => {
-      particle.rotation.x += 0.001;
-      particle.rotation.y += 0.002;
-    });
-
-    const lineMaterial = line.material as THREE.LineBasicMaterial;
-    const time = Date.now() * 0.001;
-    lineMaterial.opacity = 0.7 + Math.sin(time * 2) * 0.3;
-
-    // Color transition
-    const phase = (Math.sin(scrollProgressRef.current * Math.PI * 2) + 1) / 2;
-    const r1 = 0.02,
-      g1 = 0.68,
-      b1 = 0.75;
-    const r2 = 0.02,
-      g2 = 0.53,
-      b2 = 0.65;
-    const r3 = 0.85,
-      g3 = 0.8,
-      b3 = 0.02;
-
-    let r, g, b;
-    if (phase < 0.5) {
-      const t = phase * 2;
-      r = r1 + (r2 - r1) * t;
-      g = g1 + (g2 - g1) * t;
-      b = b1 + (b2 - b1) * t;
-    } else {
-      const t = (phase - 0.5) * 2;
-      r = r2 + (r3 - r2) * t;
-      g = g2 + (g3 - g2) * t;
-      b = b2 + (b3 - b2) * t;
-    }
-
-    lineMaterial.color.setRGB(r, g, b);
-    renderer.render(scene, camera);
-  };
 
   useEffect(() => {
     // Smooth scroll for dots

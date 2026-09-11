@@ -1,14 +1,20 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// Devuelve null si la API no responde, para no romper el build/prerender
 export const fetchPosts = async () => {
-  const response = await fetch(`${API_URL}/posts`, {
-    next: { revalidate: 60 },
-  });
+  try {
+    const response = await fetch(`${API_URL}/posts`, {
+      next: { revalidate: 60 },
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch posts', error);
     return null;
   }
-  return response.json();
 };
 
 export const fetchPostById = async (id: number) => {
@@ -72,17 +78,22 @@ export async function fetchTech() {
     // ! me sigue devolviendo una promesa :(
     console.log(data);
     return data;
-  } catch (error) {
+  } catch {
     throw new Error('Failed to fetch tech data');
   }
 }
 
 export const fetchProjects = async () => {
-  const response = await fetch(`${API_URL}/projects`, {
-    next: { revalidate: 60 },
-  });
-  if (!response.ok) return null;
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/projects`, {
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch projects', error);
+    return null;
+  }
 };
 
 export const fetchProjectById = async (id: number) => {

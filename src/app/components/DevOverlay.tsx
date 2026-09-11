@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchTech } from '../utils/api';
 
 type Tech = {

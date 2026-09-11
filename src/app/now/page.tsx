@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import styles from './now.module.css';
 import { FaRegCalendarAlt } from 'react-icons/fa';
@@ -24,12 +23,12 @@ const now = () => {
         <section>
           <div className={styles.whatIsNow}>
             <div>
-              <h2 className="mb-4">¿Qué es una "Now Page"?</h2>
+              <h2 className="mb-4">¿Qué es una &ldquo;Now Page&rdquo;?</h2>
               <p>
-                Una "Now Page" es una página que muestra en qué estoy enfocado actualmente en mi
-                vida. No es un listado exhaustivo de todo lo que hago, sino más bien un resumen de
-                las cosas más importantes en las que estoy trabajando y pensando en este momento.
-                Concepto popularizado por{' '}
+                Una &ldquo;Now Page&rdquo; es una página que muestra en qué estoy enfocado
+                actualmente en mi vida. No es un listado exhaustivo de todo lo que hago, sino más
+                bien un resumen de las cosas más importantes en las que estoy trabajando y pensando
+                en este momento. Concepto popularizado por{' '}
                 <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">
                   Derek Sivers
                 </a>

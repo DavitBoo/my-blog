@@ -170,7 +170,7 @@ export class VidaEngine {
 
   setTema(t: Tema) {
     this.tema = t;
-    this.aplicarTema(t);
+    this.aplicarTema();
   }
 
   reiniciarNiebla = () => {
@@ -618,7 +618,7 @@ export class VidaEngine {
     });
   }
 
-  private aplicarTema(t: Tema) {
+  private aplicarTema() {
     if (!this.scene) return;
     const T = THREE;
     const p = this.paleta();
@@ -757,10 +757,9 @@ export class VidaEngine {
     this.on(cv, 'wheel', onWheel as EventListener, { passive: false });
     this.on(window, 'resize', () => this.medir());
 
-    const mini_ = this.miniCanvas;
-    if (mini_) {
+    if (mini) {
       const onMini = (e: MouseEvent | TouchEvent) => {
-        const R = mini_.getBoundingClientRect();
+        const R = mini.getBoundingClientRect();
         const t = 'touches' in e && e.touches.length ? e.touches[0] : (e as MouseEvent);
         const fx = (t.clientX - R.left) / R.width;
         const fy = (t.clientY - R.top) / R.height;
@@ -772,8 +771,8 @@ export class VidaEngine {
         this.camObj.tx = wx;
         this.camObj.tz = wz;
       };
-      this.on(mini_, 'mousedown', onMini as EventListener);
-      this.on(mini_, 'touchstart', onMini as EventListener, { passive: true });
+      this.on(mini, 'mousedown', onMini as EventListener);
+      this.on(mini, 'touchstart', onMini as EventListener, { passive: true });
     }
   }
 
