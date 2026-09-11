@@ -294,10 +294,10 @@
     "semantic_hash": "16d9547cb221b848d31d07f2d1b4081f"
   },
   "src/app/vida/vidaEngine.ts": {
-    "mtime": 1787692701.3222713,
-    "seen": 1788089956.2661178,
-    "ast_hash": "71da7d9d478a23d3f3065ff9f2a7b01b",
-    "semantic_hash": "71da7d9d478a23d3f3065ff9f2a7b01b"
+    "mtime": 1788106580.473977,
+    "seen": 1788107119.610785,
+    "ast_hash": "555ce7a9d9873f09ad1f94d48b9defaf",
+    "semantic_hash": ""
   },
   "src/app/vida/vidaFormat.ts": {
     "mtime": 1787692701.3463235,

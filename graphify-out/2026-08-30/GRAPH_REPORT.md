@@ -1,15 +1,16 @@
 # Graph Report - my-blog  (2026-08-30)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 56 files · ~22,914 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 330 nodes · 569 edges · 18 communities (17 shown, 1 thin omitted)
+- 330 nodes · 567 edges · 18 communities (17 shown, 1 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4ad627e8`
+- Built from commit: `c14720ab`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,24 +36,24 @@
 2. `compilerOptions` - 16 edges
 3. `fetchPosts()` - 13 edges
 4. `VidaItem` - 12 edges
-5. `IPost` - 9 edges
-6. `VidaScene()` - 9 edges
-7. `VidaCategoria` - 7 edges
-8. `Tema` - 7 edges
-9. `PostPage()` - 7 edges
-10. `processPostContent()` - 7 edges
+5. `VidaScene()` - 9 edges
+6. `IPost` - 8 edges
+7. `scripts` - 7 edges
+8. `PostPage()` - 7 edges
+9. `processPostContent()` - 7 edges
+10. `VidaCategoria` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `VidaEngineCallbacks` --references--> `VidaItem`  [EXTRACTED]
-  src/app/vida/vidaEngine.ts → src/app/utils/vidaApi.ts
 - `Blog()` --calls--> `fetchPosts()`  [EXTRACTED]
   src/app/blog/page.tsx → src/app/utils/api.ts
-- `VidaEngine` --references--> `VidaCategoria`  [EXTRACTED]
+- `VidaEngineCallbacks` --references--> `VidaItem`  [EXTRACTED]
   src/app/vida/vidaEngine.ts → src/app/utils/vidaApi.ts
-- `VidaScene()` --calls--> `VidaEngine`  [EXTRACTED]
-  src/app/vida/VidaScene.tsx → src/app/vida/vidaEngine.ts
 - `Home()` --calls--> `fetchPosts()`  [EXTRACTED]
   src/app/page.tsx → src/app/utils/api.ts
+- `Image()` --calls--> `fetchPostBySlug()`  [EXTRACTED]
+  src/app/post/[slug]/opengraph-image.tsx → src/app/utils/api.ts
+- `generateMetadata()` --calls--> `fetchPostBySlug()`  [EXTRACTED]
+  src/app/post/[slug]/page.tsx → src/app/utils/api.ts
 
 ## Import Cycles
 - None detected.
@@ -65,7 +66,7 @@ Nodes (41): agrupar(), Grupo, LibroConMeta, LibrosPage(), RESUMEN_VACIO, fetchVi
 
 ### Community 1 - "post/[slug]/page.tsx"
 Cohesion: 0.09
-Nodes (30): BlogCategory(), Comment, CommentSection(), HomeHero(), formatRelativeDate(), Post(), readingTime(), ReadingProgressBar() (+22 more)
+Nodes (29): BlogCategory(), Comment, CommentSection(), HomeHero(), formatRelativeDate(), Post(), readingTime(), TableOfContents() (+21 more)
 
 ### Community 2 - "VidaEngine"
 Cohesion: 0.12
@@ -116,7 +117,7 @@ Cohesion: 0.50
 Nodes (3): compat, __dirname, __filename
 
 ## Knowledge Gaps
-- **99 isolated node(s):** `Grupo`, `VidaLibrosCatalogo`, `Props`, `VidaDetalleRelacionado`, `Edificio` (+94 more)
+- **99 isolated node(s):** `singleQuote`, `semi`, `trailingComma`, `printWidth`, `tabWidth` (+94 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -129,11 +130,11 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.091) - this node is a cross-community bridge._
 - **Why does `VidaItem` connect `VidaEngine` to `VidaScene.tsx`?**
   _High betweenness centrality (0.044) - this node is a cross-community bridge._
-- **What connects `Grupo`, `VidaLibrosCatalogo`, `Props` to the rest of the system?**
+- **What connects `singleQuote`, `semi`, `trailingComma` to the rest of the system?**
   _99 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `VidaScene.tsx` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `post/[slug]/page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.09343200740055504 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09158186864014801 - nodes in this community are weakly interconnected._
 - **Should `VidaEngine` be split into smaller, more focused modules?**
   _Cohesion score 0.1241565452091768 - nodes in this community are weakly interconnected._

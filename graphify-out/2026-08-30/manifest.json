@@ -328,5 +328,53 @@
     "seen": 1788089956.2661233,
     "ast_hash": "0cf97a81150d3b8904f285780896980d",
     "semantic_hash": "0cf97a81150d3b8904f285780896980d"
+  },
+  "README.md": {
+    "mtime": 1736178875.6025202,
+    "seen": 1788105833.564089,
+    "ast_hash": "f15aaa42d5d299d091b1171097ea56ad",
+    "semantic_hash": ""
+  },
+  "public/file.svg": {
+    "mtime": 1736178875.6493843,
+    "seen": 1788105833.5640914,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": ""
+  },
+  "public/globe.svg": {
+    "mtime": 1736178875.6650054,
+    "seen": 1788105833.5640929,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": ""
+  },
+  "public/next.svg": {
+    "mtime": 1736178875.6650054,
+    "seen": 1788105833.5640943,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": ""
+  },
+  "public/placeholder.jpg": {
+    "mtime": 1741455078.3365903,
+    "seen": 1788105833.5640955,
+    "ast_hash": "45657a6c5b63c13642d526832986e7ec",
+    "semantic_hash": ""
+  },
+  "public/vercel.svg": {
+    "mtime": 1736178875.6806264,
+    "seen": 1788105833.5640965,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": ""
+  },
+  "public/window.svg": {
+    "mtime": 1736178875.6806264,
+    "seen": 1788105833.564098,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": ""
+  },
+  "src/assets/icons/github.svg": {
+    "mtime": 1737056365.3517995,
+    "seen": 1788105833.5640988,
+    "ast_hash": "9405d6a203c74a1892aa57e86b0d7fc0",
+    "semantic_hash": ""
   }
 }

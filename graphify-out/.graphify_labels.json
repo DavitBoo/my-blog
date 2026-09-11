@@ -6,15 +6,14 @@
   "4": "compilerOptions",
   "5": "devDependencies",
   "6": "sobre-mi/page.tsx",
-  "7": "blog/page.tsx",
+  "7": "proyectos/page.tsx",
   "8": "proyectos/[slug]/page.tsx",
   "9": "layout.tsx",
-  "10": "HomeHero.tsx",
+  "10": "ThreeBackground.tsx",
   "11": "clientProjects.ts",
   "12": ".prettierrc.json",
   "13": "eslint.config.mjs",
   "14": "next.config.ts",
   "15": "not-found.tsx",
-  "16": "now/page.tsx",
-  "17": "photoswipe"
+  "16": "now/page.tsx"
 }
