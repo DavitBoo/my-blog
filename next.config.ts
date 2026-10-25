@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // ← esto desactiva la optimización de imágenes
   },
+  // Temporal: noindex en todas las respuestas (también rss.xml, imágenes, etc.)
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
