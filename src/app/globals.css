@@ -617,6 +617,53 @@ li {
   line-height: 1.4;
 }
 
+/* Elementos generados por el editor del dashboard */
+.article-content mark {
+  padding: 0 0.1em;
+  border-radius: 2px;
+  color: inherit;
+}
+
+.article-content hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 2px solid var(--color-primary);
+}
+
+.article-content ul[data-type='taskList'] {
+  list-style: none;
+  padding-left: 0.25rem;
+}
+
+.article-content ul[data-type='taskList'] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.article-content ul[data-type='taskList'] li > label {
+  margin-top: 0.25rem;
+}
+
+.article-content ul[data-type='taskList'] li > div {
+  flex: 1;
+}
+
+.article-content div[data-youtube-video] {
+  margin: 1.5rem 0;
+}
+
+.article-content div[data-youtube-video] iframe {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 8px;
+}
+
 /* slider/carousel */
 /* Carousel Container */
 .carousel-container {
