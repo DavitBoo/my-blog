@@ -275,7 +275,7 @@ const PostPage = async (props: PostProps) => {
           {/* Sección de Posts Relacionados */}
           {selectedRelatedPosts.length > 0 && (
             <div className="interesting-posts">
-              <h3>También te puede interesar:</h3>
+              <h3>También te puede interesar o a lo mejor no:</h3>
               <div className="d-flex gap-2">
                 {selectedRelatedPosts.map((relatedPost) => (
                   <div key={relatedPost.id} className="related-post customCard">
