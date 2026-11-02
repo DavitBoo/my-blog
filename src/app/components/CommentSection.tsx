@@ -6,7 +6,6 @@ import { fetchCommentsByPostId, createComment } from '../utils/api';
 type Comment = {
   id: number;
   content: string;
-  email: string;
   createdAt: string;
 };
 
@@ -43,7 +42,7 @@ const CommentSection = ({ postId }: { postId: number }) => {
         <form action="" onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="Tu email"
+            placeholder="Tu email (no se publicará)"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -62,9 +61,7 @@ const CommentSection = ({ postId }: { postId: number }) => {
           {comments.map((comment) => (
             <div key={comment.id} className="comment">
               <div className="commentInfo">
-                <span>
-                  {comment.email} - {new Date(comment.createdAt).toLocaleDateString()}
-                </span>
+                <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
               </div>
               <div className="commentContent">
                 <p>{comment.content}</p>
