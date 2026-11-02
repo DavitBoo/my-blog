@@ -1,5 +1,6 @@
 'use client';
 
+import { RefObject } from 'react';
 import Link from 'next/link';
 import styles from './vida.module.css';
 import { VidaLibrosPreview } from '../utils/vidaApi';
@@ -7,10 +8,15 @@ import { VidaLibrosPreview } from '../utils/vidaApi';
 interface Props {
   lecturas: VidaLibrosPreview;
   onClose: () => void;
+  closeRef: RefObject<HTMLButtonElement | null>;
 }
 
-const VidaLecturasPanel = ({ lecturas, onClose }: Props) => (
-  <div className={`${styles.panel} ${styles.panelLecturas}`}>
+const VidaLecturasPanel = ({ lecturas, onClose, closeRef }: Props) => (
+  <div
+    className={`${styles.panel} ${styles.panelLecturas}`}
+    role="dialog"
+    aria-label="La biblioteca"
+  >
     <div className={`${styles.panelHeader} ${styles.panelHeaderLecturas}`}>
       <div className={styles.panelHeaderText}>
         <span className={styles.panelEyebrowGold}>Isla de las lecturas</span>
@@ -20,6 +26,7 @@ const VidaLecturasPanel = ({ lecturas, onClose }: Props) => (
         </div>
       </div>
       <button
+        ref={closeRef}
         onClick={onClose}
         className={`${styles.closeBtn} ${styles.closeBtnGold}`}
         aria-label="Cerrar"
@@ -28,7 +35,7 @@ const VidaLecturasPanel = ({ lecturas, onClose }: Props) => (
       </button>
     </div>
 
-    <div className={styles.panelBody}>
+    <div className={styles.panelBody} tabIndex={0}>
       <div className={styles.statsRow}>
         <div className={styles.statCard}>
           <span className={styles.statNumber}>{lecturas.total}</span>

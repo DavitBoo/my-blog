@@ -6,6 +6,7 @@
 import * as THREE from 'three';
 import { VidaCategoria, VidaItem, VidaLibroDestacado } from '../utils/vidaApi';
 import { PAL, COL, Tema } from './vidaFormat';
+import { REDUCED_MOTION_QUERY } from '../hooks/usePrefersReducedMotion';
 
 const MAPA = { x0: -270, x1: 270, z0: -200, z1: 260 };
 const N = 52;
@@ -20,6 +21,7 @@ export interface VidaHoverInfo {
 
 export interface VidaEngineCallbacks {
   onHover: (info: VidaHoverInfo | null) => void;
+  onFocusChange: (info: VidaHoverInfo | null) => void;
   onCursorMove: (x: number, y: number) => void;
   onSelectItem: (item: VidaItem | null) => void;
   onSelectPortal: () => void;
@@ -109,6 +111,10 @@ export class VidaEngine {
   private miniEnlazado: HTMLCanvasElement | null = null;
   private listeners: Array<() => void> = [];
 
+  private movimiento = window.matchMedia(REDUCED_MOTION_QUERY);
+  private marQuieto = false;
+  private foco: Edificio | null = null;
+
   constructor(
     canvas: HTMLCanvasElement,
     miniCanvas: HTMLCanvasElement | null,
@@ -176,6 +182,8 @@ export class VidaEngine {
   reiniciarNiebla = () => {
     this.fog.fill(0);
     this.desc = {};
+    this.foco = null;
+    this.cb.onFocusChange(null);
     this.miniFogDirty = true;
     this.islas.forEach((isla) => {
       isla.visto = false;
@@ -199,10 +207,6 @@ export class VidaEngine {
       this.cb.onSelectItem(null);
       this.resaltar(null);
       this.limpiarConex();
-      if (this.marca) {
-        this.marca.parent?.remove(this.marca);
-        this.marca = null;
-      }
       return;
     }
     const item = this.itemMap[slugOrNull];
@@ -716,15 +720,7 @@ export class VidaEngine {
         moved += Math.abs(dx) + Math.abs(dy);
         px = q.x;
         py = q.y;
-        const k = this.camObj.dist * 0.0026;
-        const cy = Math.cos(this.yaw),
-          sy = Math.sin(this.yaw);
-        // Base de paneo en el plano del suelo para la cámara orbital fija (yaw, pitch):
-        // "derecha" en pantalla = (cy, -sy), "arriba" en pantalla proyectado al suelo = (-sy, -cy).
-        this.camObj.tx -= (dx * cy + dy * sy) * k;
-        this.camObj.tz -= (dy * cy - dx * sy) * k;
-        this.camObj.tx = Math.max(-320, Math.min(320, this.camObj.tx));
-        this.camObj.tz = Math.max(-260, Math.min(310, this.camObj.tz));
+        this.panear(dx, dy);
       } else if (!('touches' in e)) {
         this.puntero = q;
         this.pedirHover = true;
@@ -742,10 +738,7 @@ export class VidaEngine {
     };
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      this.camObj.dist = Math.max(
-        80,
-        Math.min(430, this.camObj.dist * (1 + Math.sign(e.deltaY) * 0.09)),
-      );
+      this.acercar(1 + Math.sign(e.deltaY) * 0.09);
     };
 
     this.on(cv, 'mousedown', onDown as EventListener);
@@ -755,6 +748,7 @@ export class VidaEngine {
     this.on(window, 'mouseup', onUp as EventListener);
     this.on(cv, 'touchend', onUp as EventListener);
     this.on(cv, 'wheel', onWheel as EventListener, { passive: false });
+    this.on(cv, 'keydown', this.onTecla as EventListener);
     this.on(window, 'resize', () => this.medir());
 
     if (mini) {
@@ -774,6 +768,123 @@ export class VidaEngine {
       this.on(mini, 'mousedown', onMini as EventListener);
       this.on(mini, 'touchstart', onMini as EventListener, { passive: true });
     }
+  }
+
+  private panear(dx: number, dy: number) {
+    const k = this.camObj.dist * 0.0026;
+    const cy = Math.cos(this.yaw),
+      sy = Math.sin(this.yaw);
+    // Base de paneo en el plano del suelo para la cámara orbital fija (yaw, pitch):
+    // "derecha" en pantalla = (cy, -sy), "arriba" en pantalla proyectado al suelo = (-sy, -cy).
+    this.camObj.tx -= (dx * cy + dy * sy) * k;
+    this.camObj.tz -= (dy * cy - dx * sy) * k;
+    this.camObj.tx = Math.max(-320, Math.min(320, this.camObj.tx));
+    this.camObj.tz = Math.max(-260, Math.min(310, this.camObj.tz));
+  }
+
+  private acercar(factor: number) {
+    this.camObj.dist = Math.max(80, Math.min(430, this.camObj.dist * factor));
+  }
+
+  // ---------- teclado ----------
+
+  private onTecla = (e: KeyboardEvent) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const paso = 40;
+    switch (e.key) {
+      case 'ArrowLeft':
+        this.panear(paso, 0);
+        break;
+      case 'ArrowRight':
+        this.panear(-paso, 0);
+        break;
+      case 'ArrowUp':
+        this.panear(0, paso);
+        break;
+      case 'ArrowDown':
+        this.panear(0, -paso);
+        break;
+      case '+':
+      case '=':
+        this.acercar(0.91);
+        break;
+      case '-':
+        this.acercar(1.09);
+        break;
+      case 'n':
+      case 'N':
+        this.moverFoco(1);
+        break;
+      case 'p':
+      case 'P':
+        this.moverFoco(-1);
+        break;
+      case 'Enter':
+      case ' ':
+        this.activarFoco();
+        break;
+      default:
+        return; // Tab y el resto de teclas siguen funcionando con normalidad
+    }
+    e.preventDefault();
+  };
+
+  // Lo mismo que se puede pulsar con el ratón: ítems de islas ya descubiertas y la biblioteca
+  private estructurasVisibles() {
+    return this.islas
+      .filter((isla) => isla.visto)
+      .flatMap((isla) =>
+        isla.edificios.filter(
+          (e) => !e.esFaro && (!e.item.slug.startsWith('__') || e.item.slug === '__lecturas'),
+        ),
+      );
+  }
+
+  private moverFoco(delta: number) {
+    const lista = this.estructurasVisibles();
+    if (!lista.length) return;
+    const actual = this.foco ? lista.indexOf(this.foco) : -1;
+    if (actual < 0) this.foco = lista[delta > 0 ? 0 : lista.length - 1];
+    else this.foco = lista[(actual + delta + lista.length) % lista.length];
+
+    const { mesh } = this.foco;
+    const isla = mesh.userData.isla as Isla;
+    this.camObj.tx = isla.group.position.x + mesh.position.x;
+    this.camObj.tz = isla.group.position.z + mesh.position.z;
+    this.camObj.dist = Math.min(this.camObj.dist, 220);
+    this.quitarMarca();
+    this.ponerMarca(mesh, isla);
+    this.cb.onFocusChange(this.infoEstructura(this.foco));
+  }
+
+  private activarFoco() {
+    if (!this.foco) return;
+    if (this.foco.item.slug === '__lecturas') {
+      this.cb.onSelectPortal();
+      this.limpiarConex();
+      this.resaltar(null);
+      return;
+    }
+    this.abrir(this.foco.item as VidaItem);
+  }
+
+  private infoEstructura(e: Edificio): VidaHoverInfo {
+    if (e.item.slug === '__lecturas') return this.infoLecturas();
+    const item = e.item as VidaItem;
+    return {
+      titulo: item.titulo,
+      resumen: item.resumen,
+      categoria: this.catMap[item.categoria]?.nombre || '',
+    };
+  }
+
+  private infoLecturas(): VidaHoverInfo {
+    const c = this.catMap['lecturas'];
+    return {
+      titulo: c?.nombre || 'Lecturas',
+      resumen: c?.descripcion || '',
+      categoria: 'Isla portal',
+    };
   }
 
   private medir() {
@@ -846,24 +957,32 @@ export class VidaEngine {
           m.emissiveIntensity = on ? 0.75 : 0.02;
       }),
     );
+    this.quitarMarca();
+    if (item) {
+      const found = this.buscarMesh(item.slug);
+      if (found) this.ponerMarca(found.mesh, found.isla);
+    } else if (this.foco) {
+      this.ponerMarca(this.foco.mesh, this.foco.mesh.userData.isla as Isla);
+    }
+  }
+
+  private quitarMarca() {
     if (this.marca) {
       this.marca.parent?.remove(this.marca);
       this.marca = null;
     }
-    if (item) {
-      const found = this.buscarMesh(item.slug);
-      if (found) {
-        const T = THREE;
-        const anillo = new T.Mesh(
-          new T.TorusGeometry(4.6, 0.42, 8, 26),
-          stdMat({ color: 0xd9cb04, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.2 }),
-        );
-        anillo.rotation.x = -Math.PI / 2;
-        anillo.position.set(found.mesh.position.x, found.isla.topY + 1.4, found.mesh.position.z);
-        found.isla.group.add(anillo);
-        this.marca = anillo;
-      }
-    }
+  }
+
+  private ponerMarca(mesh: THREE.Mesh, isla: Isla) {
+    const T = THREE;
+    const anillo = new T.Mesh(
+      new T.TorusGeometry(4.6, 0.42, 8, 26),
+      stdMat({ color: 0xd9cb04, emissive: new T.Color(0xd9cb04), emissiveIntensity: 1.2 }),
+    );
+    anillo.rotation.x = -Math.PI / 2;
+    anillo.position.set(mesh.position.x, isla.topY + 1.4, mesh.position.z);
+    isla.group.add(anillo);
+    this.marca = anillo;
   }
 
   private buscarMesh(slug: string): { mesh: THREE.Mesh; isla: Isla } | null {
@@ -1034,7 +1153,8 @@ export class VidaEngine {
     this.raf = requestAnimationFrame(this.bucle);
     const t = this.reloj.getElapsedTime();
 
-    const l = 0.08;
+    const quieto = this.movimiento.matches;
+    const l = quieto ? 1 : 0.08;
     this.cam.tx += (this.camObj.tx - this.cam.tx) * l;
     this.cam.tz += (this.camObj.tz - this.cam.tz) * l;
     this.cam.dist += (this.camObj.dist - this.cam.dist) * l;
@@ -1047,50 +1167,28 @@ export class VidaEngine {
     );
     this.camera.lookAt(this.cam.tx, 0, this.cam.tz);
 
-    const pos = this.marGeo.attributes.position,
-      b = this.marBase;
-    for (let i = 0; i < pos.count; i++) {
-      const x = b[i * 3],
-        z = b[i * 3 + 2];
-      pos.array[i * 3 + 1] =
-        Math.sin(x * 0.035 + t * 0.9) * 1.5 +
-        Math.sin(z * 0.052 - t * 1.15) * 1.1 +
-        Math.sin((x + z) * 0.017 + t * 0.5) * 1.6;
-    }
-    pos.needsUpdate = true;
+    this.animarMar(t, quieto);
     this.tick++;
     // Sin recomputeVertexNormals(): el material del mar usa flatShading, que three.js
     // resuelve en el fragment shader a partir de derivadas de pantalla (dFdx/dFdy) y
     // nunca lee el atributo de normales de la CPU. Recalcularlas aquí no cambiaba nada
     // en pantalla y era, con diferencia, el gasto más caro del bucle de animación.
 
-    this.nubes.children.forEach((g) => {
-      g.position.x += (g.userData.vel as number) * 0.06;
-      if (g.position.x > 380) g.position.x = -380;
-    });
+    if (!quieto) {
+      this.nubes.children.forEach((g) => {
+        g.position.x += (g.userData.vel as number) * 0.06;
+        if (g.position.x > 380) g.position.x = -380;
+      });
+    }
 
-    this.islas.forEach((isla) => {
-      if (isla.disipando != null) {
-        isla.disipando += 0.012;
-        const k = Math.min(1, isla.disipando);
-        isla.nieblaMat.opacity = 0.94 * (1 - k);
-        isla.niebla.scale.setScalar(1 + k * 0.9);
-        isla.niebla.rotation.y += 0.004;
-        if (k >= 1) {
-          isla.niebla.visible = false;
-          isla.disipando = null;
-        }
-      } else if (isla.niebla.visible) {
-        isla.niebla.rotation.y += 0.0012;
-      }
-      if (isla.faroLuz) isla.faroLuz.rotation.y += 0.02;
-    });
+    this.animarIslas(quieto);
 
     this.conex.children.forEach((c, i) => {
-      ((c as THREE.Mesh).material as THREE.MeshStandardMaterial).opacity =
-        0.55 + Math.sin(t * 2.2 + i) * 0.3;
+      ((c as THREE.Mesh).material as THREE.MeshStandardMaterial).opacity = quieto
+        ? 0.85
+        : 0.55 + Math.sin(t * 2.2 + i) * 0.3;
     });
-    if (this.marca) {
+    if (this.marca && !quieto) {
       this.marca.rotation.z += 0.02;
       this.marca.scale.setScalar(1 + Math.sin(t * 3) * 0.06);
     }
@@ -1105,6 +1203,42 @@ export class VidaEngine {
 
     this.renderer.render(this.scene, this.camera);
   };
+
+  // Con movimiento reducido las olas se calculan una vez y el mar se queda como una foto
+  private animarMar(t: number, quieto: boolean) {
+    if (quieto && this.marQuieto) return;
+    this.marQuieto = quieto;
+    const pos = this.marGeo.attributes.position,
+      b = this.marBase;
+    for (let i = 0; i < pos.count; i++) {
+      const x = b[i * 3],
+        z = b[i * 3 + 2];
+      pos.array[i * 3 + 1] =
+        Math.sin(x * 0.035 + t * 0.9) * 1.5 +
+        Math.sin(z * 0.052 - t * 1.15) * 1.1 +
+        Math.sin((x + z) * 0.017 + t * 0.5) * 1.6;
+    }
+    pos.needsUpdate = true;
+  }
+
+  private animarIslas(quieto: boolean) {
+    this.islas.forEach((isla) => {
+      if (isla.disipando != null) {
+        isla.disipando = quieto ? 1 : isla.disipando + 0.012;
+        const k = Math.min(1, isla.disipando);
+        isla.nieblaMat.opacity = 0.94 * (1 - k);
+        isla.niebla.scale.setScalar(1 + k * 0.9);
+        isla.niebla.rotation.y += 0.004;
+        if (k >= 1) {
+          isla.niebla.visible = false;
+          isla.disipando = null;
+        }
+      } else if (isla.niebla.visible && !quieto) {
+        isla.niebla.rotation.y += 0.0012;
+      }
+      if (isla.faroLuz && !quieto) isla.faroLuz.rotation.y += 0.02;
+    });
+  }
 
   private hover() {
     const o = this.rayo();
@@ -1122,12 +1256,7 @@ export class VidaEngine {
         categoria: this.catMap[item.categoria]?.nombre || '',
       });
     } else if (portal) {
-      const c = this.catMap['lecturas'];
-      this.cb.onHover({
-        titulo: c?.nombre || 'Lecturas',
-        resumen: c?.descripcion || '',
-        categoria: 'Isla portal',
-      });
+      this.cb.onHover(this.infoLecturas());
     } else {
       this.cb.onHover(null);
     }

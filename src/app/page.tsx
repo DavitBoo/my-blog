@@ -2,7 +2,7 @@ import HomeHero from './components/HomeHero';
 import Post from './components/Post';
 import { fetchPosts } from './utils/api';
 
-import { IPost } from '../interfaces/Posts';
+import { IPostSummary } from '../interfaces/Posts';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -18,14 +18,6 @@ export const metadata: Metadata = {
     description: 'Mis últimos artículos sobre ....',
     url: 'https://my-blog-omega-pearl.vercel.app/',
     siteName: 'Diogenes Brain',
-    images: [
-      {
-        url: 'https://tusitio.com/og-image.jpg', // reemplaza con tu imagen real
-        width: 1200,
-        height: 630,
-        alt: 'Imagen de portada del blog',
-      },
-    ],
     locale: 'es_ES',
     type: 'website',
   },
@@ -36,7 +28,7 @@ export const revalidate = 60;
 
 const Home = async () => {
   // Fetch posts directly
-  const posts: IPost[] = (await fetchPosts(LATEST_POSTS_COUNT)) ?? [];
+  const posts: IPostSummary[] = (await fetchPosts(LATEST_POSTS_COUNT)) ?? [];
   return (
     <div className="archive">
       <HomeHero />
@@ -49,7 +41,8 @@ const Home = async () => {
                 key={post.id}
                 id={post.id}
                 title={post.title}
-                content={post.content}
+                excerpt={post.excerpt}
+                readingTime={post.readingTime}
                 slug={post.slug}
                 createdAt={post.createdAt}
                 labels={post.labels}

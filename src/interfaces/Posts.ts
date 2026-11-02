@@ -12,3 +12,9 @@ export interface IPost {
   metaTitle?: string;
   metaDescription?: string;
 }
+
+// Lo que devuelven los listados: el contenido completo solo llega al abrir un artículo
+export interface IPostSummary extends Omit<IPost, 'content'> {
+  excerpt: string;
+  readingTime: number;
+}

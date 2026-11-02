@@ -47,7 +47,7 @@ const Project = ({ id, title, content, slug, createdAt, category, views, coverUr
       <div>
         <Image
           src={coverUrl ? coverUrl : '/placeholder.jpg'}
-          alt="Placeholder"
+          alt=""
           width={300}
           height={200}
           className="postImage"

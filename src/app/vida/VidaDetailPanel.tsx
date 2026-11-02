@@ -1,5 +1,6 @@
 'use client';
 
+import { RefObject } from 'react';
 import styles from './vida.module.css';
 import { VidaEnlace, VidaMediaItem } from '../utils/vidaApi';
 
@@ -39,10 +40,11 @@ interface Props {
   sel: VidaDetalle;
   onClose: () => void;
   onIrA: (slug: string) => void;
+  closeRef: RefObject<HTMLButtonElement | null>;
 }
 
-const VidaDetailPanel = ({ sel, onClose, onIrA }: Props) => (
-  <div className={styles.panel}>
+const VidaDetailPanel = ({ sel, onClose, onIrA, closeRef }: Props) => (
+  <div className={styles.panel} role="dialog" aria-label={sel.titulo}>
     <div className={styles.panelHeader}>
       <div className={styles.panelHeaderText}>
         <div className={styles.panelBadges}>
@@ -52,12 +54,12 @@ const VidaDetailPanel = ({ sel, onClose, onIrA }: Props) => (
         <div className={styles.panelTitle}>{sel.titulo}</div>
         {sel.subtitulo && <div className={styles.panelSubtitle}>{sel.subtitulo}</div>}
       </div>
-      <button onClick={onClose} className={styles.closeBtn} aria-label="Cerrar">
+      <button ref={closeRef} onClick={onClose} className={styles.closeBtn} aria-label="Cerrar">
         ×
       </button>
     </div>
 
-    <div className={styles.panelBody}>
+    <div className={styles.panelBody} tabIndex={0}>
       <div className={styles.metaRow}>
         <span className={styles.metaRowItem}>
           <span className={styles.metaRowIcon}>◷</span>

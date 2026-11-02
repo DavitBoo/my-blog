@@ -22,6 +22,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 16px;
+  align-items: start;
 }
 .card {
   border: 1px solid var(--color-border);
@@ -30,11 +31,15 @@
   background: var(--color-background-lighter);
 }
 .cardTitle {
+  display: inline;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin: 0;
   color: var(--color-font-primary);
 }
 .cardResumen {
+  display: block;
+  margin-top: 6px;
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--color-font-secondary);
@@ -42,4 +47,63 @@
 .empty {
   color: var(--color-font-secondary);
   font-size: 14px;
+}
+.cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.titulo {
+  margin: 0;
+  color: var(--color-font-primary);
+}
+.titulo:focus {
+  outline: none;
+}
+.cardSummary {
+  cursor: pointer;
+}
+.cardSubtitulo {
+  font-weight: 600;
+  color: var(--color-font-primary);
+}
+.cardDato {
+  font-size: 13px;
+  color: var(--color-font-tertiary);
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-font-secondary);
+}
+.cardBody p {
+  margin: 0;
+}
+.cardImagen {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.cardMeta {
+  margin: 0;
+  font-size: 13px;
+}
+.cardMeta div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cardMeta dt {
+  font-weight: 600;
+}
+.cardMeta dd {
+  margin: 0;
+  text-align: right;
 }

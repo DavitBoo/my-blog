@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { fetchPosts } from '../utils/api';
+import { fetchRandomPostSlug } from '../utils/api';
 
 // components
 import { ThreeBackground } from './ThreeBackground';
@@ -11,15 +11,7 @@ const HomeHero = () => {
   const [randomPostSlug, setRandomPostSlug] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadRandomPost = async () => {
-      const fetchedPosts = await fetchPosts();
-      if (fetchedPosts && fetchedPosts.length > 0) {
-        const randomIndex = Math.floor(Math.random() * fetchedPosts.length);
-        const randomPost = fetchedPosts[randomIndex];
-        setRandomPostSlug(randomPost.slug); // 👈 Usamos el slug
-      }
-    };
-    loadRandomPost();
+    fetchRandomPostSlug().then(setRandomPostSlug);
   }, []);
 
   return (

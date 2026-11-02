@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import 'photoswipe/style.css';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 interface CarouselProps {
   images: string[];
@@ -14,6 +15,7 @@ export default function Carousel({ images }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const galleryRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
   const visibleSlides = 3;
 
   // Asegurarnos de que siempre haya suficientes imágenes
@@ -45,11 +47,11 @@ export default function Carousel({ images }: CarouselProps) {
 
   // Auto-advance slides
   useEffect(() => {
-    if (!isHovered) {
+    if (!isHovered && !reducedMotion) {
       const interval = setInterval(goToNext, 5000);
       return () => clearInterval(interval);
     }
-  }, [isHovered, currentIndex, goToNext]);
+  }, [isHovered, reducedMotion, currentIndex, goToNext]);
 
   // Calcular qué imágenes mostrar
   const getVisibleImages = () => {

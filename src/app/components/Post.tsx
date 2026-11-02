@@ -3,15 +3,7 @@ import Image from 'next/image';
 
 import { FaCalendar, FaEye, FaGlasses } from 'react-icons/fa';
 
-import { IPost } from '../../interfaces/Posts';
-
-const readingTime = (content: string): number => {
-  const words = content
-    .replace(/<[^>]*>/g, '')
-    .trim()
-    .split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
-};
+import { IPostSummary } from '../../interfaces/Posts';
 
 const formatRelativeDate = (dateString: string): string => {
   const now = new Date();
@@ -35,13 +27,24 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: IPost) => {
+const Post = ({
+  id,
+  title,
+  // Valores por defecto: una respuesta aún en caché o un backend sin actualizar no traen estos campos
+  excerpt = '',
+  readingTime = 1,
+  slug,
+  createdAt,
+  labels,
+  views,
+  coverUrl,
+}: IPostSummary) => {
   return (
     <div key={id} className="customCard">
       <div>
         <Image
           src={coverUrl ? coverUrl : '/placeholder.jpg'}
-          alt="Placeholder"
+          alt=""
           width={300}
           height={200}
           className="postImage"
@@ -58,12 +61,13 @@ const Post = ({ id, title, content, slug, createdAt, labels, views, coverUrl }: 
         <h3 className="mb-4">
           <a href={`/post/${slug}`}>{title}</a>
         </h3>
-        <p>{content.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
-        <small>
+        <p>{excerpt.substring(0, 150)}...</p>
+        {/* En /blog se hidrata desde una página cacheada: la fecha relativa puede diferir unos segundos */}
+        <small suppressHydrationWarning>
           <FaCalendar /> {formatRelativeDate(createdAt)}
         </small>
         <small>
-          <FaGlasses /> {readingTime(content)} min
+          <FaGlasses /> {readingTime} min
         </small>
         <small>
           <div className="views-count d-flex align-items-center gap-1">

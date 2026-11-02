@@ -61,7 +61,14 @@ const buildDetalle = (
   };
 };
 
-const VidaScene = () => {
+interface VidaSceneProps {
+  onVerLista: () => void;
+  enfocarAlMontar?: boolean;
+}
+
+const VidaScene = ({ onVerLista, enfocarAlMontar = false }: VidaSceneProps) => {
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+  const panelEstabaAbierto = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const miniRef = useRef<HTMLCanvasElement | null>(null);
   const tipRef = useRef<HTMLDivElement | null>(null);
@@ -77,6 +84,7 @@ const VidaScene = () => {
   const [sel, setSel] = useState<VidaItem | null>(null);
   const [showLecturas, setShowLecturas] = useState(false);
   const [hover, setHover] = useState<VidaHoverInfo | null>(null);
+  const [foco, setFoco] = useState<VidaHoverInfo | null>(null);
   const [nDesc, setNDesc] = useState(0);
   const [totalIslas, setTotalIslas] = useState(0);
   const [ancho, setAncho] = useState(typeof window === 'undefined' ? 1200 : window.innerWidth);
@@ -136,6 +144,7 @@ const VidaScene = () => {
       true,
       {
         onHover: setHover,
+        onFocusChange: setFoco,
         onCursorMove: (x, y) => {
           if (tipRef.current)
             tipRef.current.style.transform = `translate(${x + 16}px, ${y + 14}px)`;
@@ -157,6 +166,7 @@ const VidaScene = () => {
     engineRef.current = engine;
     engine.start();
     setCargando(false);
+    if (enfocarAlMontar) canvasRef.current.focus();
 
     return () => {
       engine.destroy();
@@ -169,11 +179,31 @@ const VidaScene = () => {
     engineRef.current?.setTema(tema);
   }, [tema]);
 
+  const panelAbierto = Boolean(sel || showLecturas);
+
+  // El foco entra en la ficha al abrirla y vuelve al mar al cerrarla, para seguir con el teclado
+  useEffect(() => {
+    if (panelAbierto) closeRef.current?.focus({ preventScroll: true });
+    else if (panelEstabaAbierto.current) canvasRef.current?.focus({ preventScroll: true });
+    panelEstabaAbierto.current = panelAbierto;
+  }, [panelAbierto, sel?.slug]);
+
+  useEffect(() => {
+    if (!panelAbierto) return;
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setShowLecturas(false);
+      engineRef.current?.seleccionarItem(null);
+    };
+    window.addEventListener('keydown', onEscape);
+    return () => window.removeEventListener('keydown', onEscape);
+  }, [panelAbierto]);
+
   const cerrarDetalle = () => engineRef.current?.seleccionarItem(null);
   const irA = (slug: string) => engineRef.current?.seleccionarItem(slug);
   const reiniciarNiebla = () => engineRef.current?.reiniciarNiebla();
 
-  const verMini = !((sel || showLecturas) && ancho < 980);
+  const verMini = !(panelAbierto && ancho < 980);
   const detalle = sel ? buildDetalle(sel, itemMap, catMap) : null;
 
   if (dataError) {
@@ -190,7 +220,22 @@ const VidaScene = () => {
 
   return (
     <div className={styles.root}>
-      <canvas ref={canvasRef} className={styles.canvas} />
+      <div className={styles.topActions}>
+        <button onClick={onVerLista} className={styles.backLink}>
+          Ver como lista
+        </button>
+        <Link href="/" className={styles.backLink}>
+          ← Inicio
+        </Link>
+      </div>
+
+      <canvas
+        ref={canvasRef}
+        className={styles.canvas}
+        tabIndex={0}
+        role="application"
+        aria-label="Archipiélago de siete islas. Flechas para navegar, más y menos para acercar, N y P para cambiar de estructura, Enter para abrirla. También puedes verlo como lista."
+      />
 
       <div className={styles.overlay}>
         <div className={styles.intro}>
@@ -202,12 +247,11 @@ const VidaScene = () => {
           <div className={styles.hints}>
             <div>Arrastra el mar para navegar · rueda o pinza para acercar</div>
             <div>Haz clic en una estructura para abrir su ficha</div>
+            <div className={styles.hintTeclado}>
+              Con teclado: flechas, + y −, N y P para cambiar de estructura, Enter para abrir
+            </div>
           </div>
         </div>
-
-        <Link href="/" className={styles.backLink}>
-          ← Inicio
-        </Link>
 
         {verMini && (
           <div className={styles.minimapWrap}>
@@ -232,9 +276,26 @@ const VidaScene = () => {
 
         <VidaTooltip tipRef={tipRef} hover={hover} />
 
-        {detalle && <VidaDetailPanel sel={detalle} onClose={cerrarDetalle} onIrA={irA} />}
+        <div role="status" className={foco && !panelAbierto ? styles.focoEstado : styles.srOnly}>
+          {foco && !panelAbierto && (
+            <>
+              <span className={styles.tooltipEyebrow}>{foco.categoria}</span>
+              <span className={styles.tooltipTitle}>{foco.titulo}</span>
+              <span className={styles.tooltipResumen}>{foco.resumen}</span>
+              <span className={styles.focoAyuda}>Enter para abrir</span>
+            </>
+          )}
+        </div>
+
+        {detalle && (
+          <VidaDetailPanel sel={detalle} onClose={cerrarDetalle} onIrA={irA} closeRef={closeRef} />
+        )}
         {showLecturas && librosPreview && (
-          <VidaLecturasPanel lecturas={librosPreview} onClose={() => setShowLecturas(false)} />
+          <VidaLecturasPanel
+            lecturas={librosPreview}
+            onClose={() => setShowLecturas(false)}
+            closeRef={closeRef}
+          />
         )}
 
         {cargando && (

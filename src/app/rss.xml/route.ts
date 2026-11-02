@@ -1,5 +1,5 @@
 import { fetchPosts } from '@/app/utils/api';
-import { IPost } from '@/interfaces/Posts';
+import { IPostSummary } from '@/interfaces/Posts';
 import { ILabel } from '@/interfaces/Label';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app';
@@ -17,15 +17,12 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const posts: IPost[] | null = await fetchPosts(RSS_ITEMS_COUNT);
+  const posts: IPostSummary[] | null = await fetchPosts(RSS_ITEMS_COUNT);
 
   const items = (posts ?? [])
     .map((post) => {
       const url = `${SITE_URL}/post/${post.slug}`;
-      const description = post.content
-        .replace(/<[^>]*>/g, '')
-        .substring(0, 280)
-        .trim();
+      const description = (post.excerpt ?? '').substring(0, 280).trim();
       const categories = post.labels
         .map((l: ILabel) => `<category>${escapeXml(l.name)}</category>`)
         .join('');

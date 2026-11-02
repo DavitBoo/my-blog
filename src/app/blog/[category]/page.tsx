@@ -6,7 +6,7 @@ import Post from '../../components/Post';
 import { fetchPosts } from '../../utils/api';
 import { slugify } from '@/app/utils/slugify';
 
-import { IPost } from '../../../interfaces/Posts';
+import { IPostSummary } from '../../../interfaces/Posts';
 
 const POSTS_PER_PAGE = 3;
 
@@ -14,12 +14,12 @@ const BlogCategory: React.FC = () => {
   const { category } = useParams();
   const decodedCategory = category ? decodeURIComponent(category.toString()) : '';
 
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPostSummary[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const loadPosts = async () => {
-      const fetchedPosts: IPost[] = (await fetchPosts()) ?? [];
+      const fetchedPosts: IPostSummary[] = (await fetchPosts()) ?? [];
 
       const filteredPosts = fetchedPosts.filter((post) =>
         post.labels.some((label) => slugify(label.name) === slugify(decodedCategory)),
@@ -51,7 +51,8 @@ const BlogCategory: React.FC = () => {
                   key={post.id}
                   id={post.id}
                   title={post.title}
-                  content={post.content}
+                  excerpt={post.excerpt}
+                  readingTime={post.readingTime}
                   slug={post.slug}
                   createdAt={post.createdAt}
                   labels={post.labels}

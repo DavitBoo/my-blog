@@ -48,6 +48,7 @@
 .overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -91,11 +92,68 @@
   letter-spacing: 0.03em;
 }
 
+/* La cabecera del sitio es fija: al enfocar con Tab, la página no debe esconder nada debajo */
+.canvas,
 .backLink {
+  scroll-margin-top: 96px;
+}
+
+@media (pointer: coarse) {
+  .hintTeclado {
+    display: none;
+  }
+}
+
+.root :focus-visible {
+  outline: 2px solid var(--acc2);
+  outline-offset: 2px;
+}
+.canvas:focus-visible {
+  outline-offset: -4px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.focoEstado {
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: min(360px, 90vw);
+  padding: 12px 14px;
+  background: var(--panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+.focoAyuda {
+  font-size: 11px;
+  color: var(--acc2);
+}
+
+.topActions {
   position: absolute;
   top: 22px;
   right: 24px;
-  pointer-events: auto;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.backLink {
+  cursor: pointer;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 600;

@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+import { REDUCED_MOTION_QUERY, prefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import styles from './sobre-mi.module.css';
 
 const createParticles = (): THREE.Points => {
@@ -64,6 +65,7 @@ const TimelineThreeScene = () => {
     if (!canvas) return;
 
     let frameId = 0;
+    const motionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
     const onWindowResize = () => {
       const camera = cameraRef.current;
@@ -73,6 +75,7 @@ const TimelineThreeScene = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      if (motionQuery.matches) animate();
     };
 
     const onScroll = () => {
@@ -82,9 +85,11 @@ const TimelineThreeScene = () => {
       const scrollProgress = scrollTop / docHeight;
       scrollProgressRef.current = scrollProgress;
 
+      updateSections(scrollTop);
+
       const camera = cameraRef.current;
       const line = lineRef.current;
-      if (!camera || !line) return;
+      if (!camera || !line || motionQuery.matches) return;
 
       camera.position.y = -scrollProgress * 15 + 5;
       camera.position.x = Math.sin(scrollProgress * Math.PI * 2) * 2;
@@ -97,12 +102,11 @@ const TimelineThreeScene = () => {
         particle.rotation.y = scrollProgress * Math.PI * 2 + index;
         particle.position.y = Math.sin(scrollProgress * Math.PI * 4) * 2;
       });
-
-      updateSections(scrollTop);
     };
 
     const animate = () => {
-      frameId = requestAnimationFrame(animate);
+      const still = motionQuery.matches;
+      if (!still) frameId = requestAnimationFrame(animate);
 
       const renderer = rendererRef.current;
       const scene = sceneRef.current;
@@ -111,14 +115,17 @@ const TimelineThreeScene = () => {
 
       if (!renderer || !scene || !camera || !line) return;
 
-      particlesRef.current.forEach((particle) => {
-        particle.rotation.x += 0.001;
-        particle.rotation.y += 0.002;
-      });
-
       const lineMaterial = line.material as THREE.LineBasicMaterial;
-      const time = Date.now() * 0.001;
-      lineMaterial.opacity = 0.7 + Math.sin(time * 2) * 0.3;
+
+      if (!still) {
+        particlesRef.current.forEach((particle) => {
+          particle.rotation.x += 0.001;
+          particle.rotation.y += 0.002;
+        });
+
+        const time = Date.now() * 0.001;
+        lineMaterial.opacity = 0.7 + Math.sin(time * 2) * 0.3;
+      }
 
       // Color transition
       const phase = (Math.sin(scrollProgressRef.current * Math.PI * 2) + 1) / 2;
@@ -198,12 +205,18 @@ const TimelineThreeScene = () => {
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('scroll', onScroll);
 
-    animate();
+    const startScene = () => {
+      cancelAnimationFrame(frameId);
+      animate();
+    };
+    motionQuery.addEventListener('change', startScene);
+    startScene();
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener('scroll', onScroll);
+      motionQuery.removeEventListener('change', startScene);
     };
   }, []);
 
@@ -218,7 +231,7 @@ const TimelineThreeScene = () => {
         if (section) {
           window.scrollTo({
             top: section.offsetTop,
-            behavior: 'smooth',
+            behavior: prefersReducedMotion() ? 'auto' : 'smooth',
           });
         }
       });

@@ -34,6 +34,18 @@ export const fetchPostBySlug = async (slug: string) => {
   return data.length > 0 ? data[0] : null;
 };
 
+export const fetchRandomPostSlug = async (): Promise<string | null> => {
+  try {
+    const response = await fetch(`${API_URL}/posts/random`, { cache: 'no-store' });
+    if (!response.ok) return null;
+    const { slug } = await response.json();
+    return slug;
+  } catch (error) {
+    console.error('Failed to fetch random post', error);
+    return null;
+  }
+};
+
 export const registerView = async (type: 'posts' | 'projects', slug: string) => {
   await fetch(`${API_URL}/${type}/bySlug/${encodeURIComponent(slug)}/view`, {
     method: 'POST',

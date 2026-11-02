@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './sobre-mi.module.css'; // reutiliza tus clases existentes
+import { prefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import TimelineThreeScene from './TimelineThreeScene';
 
 // ————————————————————————————————————————————————
@@ -547,7 +548,8 @@ export default function Page() {
   const handleDotClick = (idx: number) => {
     const id = sectionsIds[idx];
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el)
+      el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (

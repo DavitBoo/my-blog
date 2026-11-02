@@ -16,7 +16,7 @@ import { decode } from 'html-entities';
 import { es } from 'date-fns/locale';
 
 import { ILabel } from '../../../interfaces/Label';
-import { IPost } from '../../../interfaces/Posts';
+import { IPostSummary } from '../../../interfaces/Posts';
 
 import { FaGlasses, FaEye } from 'react-icons/fa';
 
@@ -29,7 +29,7 @@ type PostProps = {
 
 const PLACEHOLDER_IMAGE = '/placeholder.jpg';
 
-const getRandomPosts = (posts: IPost[], count: number, excludeId: number) => {
+const getRandomPosts = (posts: IPostSummary[], count: number, excludeId: number) => {
   const filteredPosts = posts.filter((post) => post.id !== excludeId);
   const shuffled = filteredPosts.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
@@ -59,8 +59,6 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
   // Construir la URL canónica
   const canonicalUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app'}/post/${post.slug}`;
 
-  const socialImage = post.coverUrl || PLACEHOLDER_IMAGE;
-
   return {
     title: metaTitle,
     description: metaDescription,
@@ -73,17 +71,16 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       description: metaDescription,
       url: canonicalUrl,
       siteName: 'Diogenes Brain',
-      images: [
-        {
-          url: post.coverUrl || PLACEHOLDER_IMAGE,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
+      // Sin portada propia se usa la imagen generada en opengraph-image.tsx
+      ...(post.coverUrl && {
+        images: [{ url: post.coverUrl, width: 1200, height: 630, alt: post.title }],
+      }),
       locale: 'es_ES',
       type: 'article',
       publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt || post.createdAt,
+      authors: ['david'],
+      section: post.labels?.[0]?.name || 'Blog',
       tags: post.labels?.map((label: ILabel) => label.name),
     },
 
@@ -92,52 +89,10 @@ export async function generateMetadata(props: PostProps): Promise<Metadata> {
       card: 'summary_large_image',
       title: metaTitle,
       description: metaDescription,
-      images: [post.coverUrl || PLACEHOLDER_IMAGE],
+      ...(post.coverUrl && { images: [post.coverUrl] }),
       // creator: '@tu_usuario', // Cambia por tu usuario de Twitter
     },
 
-    other: {
-      // WhatsApp específico
-      'whatsapp:title': metaTitle,
-      'whatsapp:description': metaDescription,
-      'whatsapp:image': socialImage,
-
-      // LinkedIn específico
-      'linkedin:owner': 'tu-perfil-linkedin', // Cambia por tu perfil
-      'linkedin:title': metaTitle,
-      'linkedin:description': metaDescription,
-      'linkedin:image': socialImage,
-
-      // Instagram (usa principalmente Open Graph)
-      'instagram:title': metaTitle,
-      'instagram:description': metaDescription,
-      'instagram:image': socialImage,
-
-      // Metadatos adicionales para mejor indexación
-      'article:author': 'david',
-      'article:section': post.labels?.[0]?.name || 'Blog',
-      'article:published_time': post.createdAt,
-      'article:modified_time': post.updatedAt || post.createdAt,
-      'article:tag': post.labels?.map((label: ILabel) => label.name).join(','),
-
-      // Información del sitio
-      'theme-color': '#04adbf', // Cambia por el color principal de tu sitio
-      'msapplication-TileColor': '#04adbf',
-      'application-name': 'Diogenes Brain',
-
-      // Para mejor rendimiento en redes sociales
-      'og:rich_attachment': 'true',
-      'og:image:secure_url': socialImage,
-      'og:image:width': '1200',
-      'og:image:height': '630',
-      'og:image:alt': post.title,
-
-      // Metadatos para lectores de feeds
-      'syndication-source': canonicalUrl,
-      'original-source': canonicalUrl,
-    },
-
-    // Datos estructurados básicos
     alternates: {
       canonical: canonicalUrl,
     },
@@ -176,13 +131,13 @@ const PostPage = async (props: PostProps) => {
   const postId = post.id;
 
   const labels = await fetchLabels();
-  const allPosts: IPost[] = (await fetchPosts()) ?? [];
+  const allPosts: IPostSummary[] = (await fetchPosts()) ?? [];
 
   // Obtener la categoría principal del post actual (suponiendo que tiene al menos una)
   const mainCategory = post.labels.length > 0 ? slugify(post.labels[0].name) : null;
 
-  const relatedPosts: IPost[] = allPosts.filter(
-    (p: IPost) =>
+  const relatedPosts: IPostSummary[] = allPosts.filter(
+    (p: IPostSummary) =>
       p.id !== postId && // No incluir el post actual
       p.labels.some((label: ILabel) => slugify(label.name) === mainCategory), // Coincide con la categoría principal
   );
@@ -232,7 +187,7 @@ const PostPage = async (props: PostProps) => {
           </div>
           <Image
             src={post.coverUrl ? post.coverUrl : PLACEHOLDER_IMAGE}
-            alt="Placeholder"
+            alt={post.title}
             width={200}
             height={150}
             className="featured-image"

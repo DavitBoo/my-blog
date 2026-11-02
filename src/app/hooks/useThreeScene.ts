@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { createFloatingGeometries } from '../utils/threeHelpers';
+import { REDUCED_MOTION_QUERY } from './usePrefersReducedMotion';
 
 export const useThreeScene = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -38,6 +39,12 @@ export const useThreeScene = () => {
     const geometries = createFloatingGeometries(scene);
     geometriesRef.current = geometries;
     camera.position.z = 8;
+
+    const motionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+
+    const renderStill = () => {
+      if (motionQuery.matches) renderer.render(scene, camera);
+    };
 
     const handleMouseMove = (event: MouseEvent) => {
       mouseRef.current.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -77,6 +84,7 @@ export const useThreeScene = () => {
           clickedMesh.userData.clicked = false;
           clickedMesh.material = clickedMesh.userData.originalMaterial;
         }
+        renderStill();
       }
     };
 
@@ -85,6 +93,7 @@ export const useThreeScene = () => {
       cameraRef.current.aspect = window.innerWidth / window.innerHeight;
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
+      renderStill();
     };
 
     let frameId = 0;
@@ -114,14 +123,23 @@ export const useThreeScene = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('click', handleClick);
+    // Con movimiento reducido la escena se dibuja una vez y solo cambia si el visitante la toca
+    const startScene = () => {
+      cancelAnimationFrame(frameId);
+      if (motionQuery.matches) renderer.render(scene, camera);
+      else animate();
+    };
+
     window.addEventListener('resize', handleResize);
-    animate();
+    motionQuery.addEventListener('change', startScene);
+    startScene();
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);
+      motionQuery.removeEventListener('change', startScene);
 
       if (rendererRef.current) {
         rendererRef.current.dispose();
