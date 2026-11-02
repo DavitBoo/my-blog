@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Carousel from './Carousel';
 import { ProcessedCarousel } from '@/app/utils/processPostContent';
 
@@ -11,6 +12,27 @@ interface ProcessedContentProps {
 
 export default function ProcessedContent({ html, carousels = [] }: ProcessedContentProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [placedCarousels, setPlacedCarousels] = useState<
+    { carousel: ProcessedCarousel; target: Element }[]
+  >([]);
+
+  // React 19 reescribe innerHTML si recibe un objeto nuevo aunque el texto sea el mismo, y eso
+  // borraría los carruseles y los botones de copiar en cada render
+  const contentHtml = useMemo(() => ({ __html: html }), [html]);
+
+  // El HTML del artículo no pasa por React: cada carrusel se monta dentro de su marcador con un
+  // portal para que aparezca en su sitio, aunque el marcador esté anidado en otro elemento
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    setPlacedCarousels(
+      carousels.flatMap((carousel) => {
+        const target = content.querySelector(`[data-carousel-id="${carousel.id}"]`);
+        return target ? [{ carousel, target }] : [];
+      }),
+    );
+  }, [html, carousels]);
 
   useEffect(() => {
     if (!contentRef.current) return;
@@ -46,10 +68,10 @@ export default function ProcessedContent({ html, carousels = [] }: ProcessedCont
 
   return (
     <div className="article-content">
-      <div ref={contentRef} dangerouslySetInnerHTML={{ __html: html }} />
-      {carousels.map((carousel) => (
-        <Carousel key={carousel.id} images={carousel.images} />
-      ))}
+      <div ref={contentRef} dangerouslySetInnerHTML={contentHtml} />
+      {placedCarousels.map(({ carousel, target }) =>
+        createPortal(<Carousel images={carousel.images} />, target, carousel.id),
+      )}
     </div>
   );
 }

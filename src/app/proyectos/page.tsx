@@ -29,6 +29,16 @@ const Proyectos: React.FC = () => {
     loadProjects();
   }, []);
 
+  const selectCategory = (category: string | null) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+  };
+
+  const changeSearchTerm = (term: string) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
   const filteredProjects = projects.filter((project) => {
     const matchesCategory = selectedCategory ? project.category?.name === selectedCategory : true;
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -51,7 +61,7 @@ const Proyectos: React.FC = () => {
         <div className="nav-tabs">
           <button
             className={`btn btn-tab ${selectedCategory === null ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(null)}
+            onClick={() => selectCategory(null)}
           >
             <span>Todos</span>
           </button>
@@ -59,7 +69,7 @@ const Proyectos: React.FC = () => {
             <button
               key={cat}
               className={`btn btn-tab ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => selectCategory(cat)}
             >
               <span>{cat}</span>
             </button>
@@ -68,7 +78,7 @@ const Proyectos: React.FC = () => {
 
         <div className="last-posts mb-8">
           <h2 className="mb-4">Mis Proyectos</h2>
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
+          <SearchInput value={searchTerm} onChange={changeSearchTerm} />
           <div className="grid">
             {paginatedProjects.map((project) => (
               <Project

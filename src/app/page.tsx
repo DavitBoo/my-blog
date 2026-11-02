@@ -4,6 +4,9 @@ import { fetchPosts } from './utils/api';
 
 import { IPost } from '../interfaces/Posts';
 import { Metadata } from 'next';
+import Link from 'next/link';
+
+const LATEST_POSTS_COUNT = 6;
 
 export const metadata: Metadata = {
   title: 'Blog de David Boo | Inicio',
@@ -33,7 +36,7 @@ export const revalidate = 60;
 
 const Home = async () => {
   // Fetch posts directly
-  const posts: IPost[] = (await fetchPosts()) ?? [];
+  const posts: IPost[] = (await fetchPosts(LATEST_POSTS_COUNT)) ?? [];
   return (
     <div className="archive">
       <HomeHero />
@@ -56,9 +59,9 @@ const Home = async () => {
             ))}
           </div>
         </div>
-        <a href="" className="btn btn-primary">
+        <Link href="/blog" className="btn btn-primary">
           <span>Ver todos los artículos</span>
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { ILabel } from '@/interfaces/Label';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://my-blog-omega-pearl.vercel.app';
 const SITE_TITLE = 'Diogenes Brain';
 const SITE_DESCRIPTION = 'Blog personal de David';
+const RSS_ITEMS_COUNT = 20;
 
 function escapeXml(text: string): string {
   return text
@@ -16,7 +17,7 @@ function escapeXml(text: string): string {
 }
 
 export async function GET() {
-  const posts: IPost[] | null = await fetchPosts();
+  const posts: IPost[] | null = await fetchPosts(RSS_ITEMS_COUNT);
 
   const items = (posts ?? [])
     .map((post) => {

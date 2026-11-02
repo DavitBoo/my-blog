@@ -87,6 +87,8 @@ export const useThreeScene = () => {
       rendererRef.current.setSize(window.innerWidth, window.innerHeight);
     };
 
+    let frameId = 0;
+
     const animate = () => {
       if (!sceneRef.current || !rendererRef.current || !cameraRef.current) return;
 
@@ -108,7 +110,7 @@ export const useThreeScene = () => {
       cameraRef.current.lookAt(0, 0, 0);
 
       rendererRef.current.render(sceneRef.current, cameraRef.current);
-      requestAnimationFrame(animate);
+      frameId = requestAnimationFrame(animate);
     };
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('click', handleClick);
@@ -116,6 +118,7 @@ export const useThreeScene = () => {
     animate();
 
     return () => {
+      cancelAnimationFrame(frameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('click', handleClick);
       window.removeEventListener('resize', handleResize);

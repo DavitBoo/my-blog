@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
@@ -13,15 +13,18 @@ interface CarouselProps {
 export default function Carousel({ images }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const galleryRef = useRef<HTMLDivElement>(null);
   const visibleSlides = 3;
 
   // Asegurarnos de que siempre haya suficientes imágenes
   const extendedImages = [...images, ...images.slice(0, visibleSlides - 1)];
 
   useEffect(() => {
+    if (!galleryRef.current) return;
+
     // Inicializar PhotoSwipe Lightbox
     const lightbox = new PhotoSwipeLightbox({
-      gallery: '#carousel-gallery',
+      gallery: galleryRef.current,
       children: 'a',
       pswpModule: () => import('photoswipe'),
     });
@@ -64,7 +67,7 @@ export default function Carousel({ images }: CarouselProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="carousel-track" id="carousel-gallery">
+      <div className="carousel-track" ref={galleryRef}>
         {getVisibleImages().map((src, index) => (
           <a
             key={`${currentIndex}-${index}`}

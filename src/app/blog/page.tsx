@@ -30,6 +30,16 @@ const Blog: React.FC = () => {
     loadPosts();
   }, []);
 
+  const selectLabel = (label: string | null) => {
+    setSelectedLabel(label);
+    setCurrentPage(1);
+  };
+
+  const changeSearchTerm = (term: string) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
+  };
+
   const filteredPosts = posts.filter((post) => {
     const matchesLabel = selectedLabel
       ? post.labels.some((label) => label.name === selectedLabel)
@@ -54,7 +64,7 @@ const Blog: React.FC = () => {
         <div className="nav-tabs">
           <button
             className={`btn btn-tab ${selectedLabel === null ? 'active' : ''}`}
-            onClick={() => setSelectedLabel(null)}
+            onClick={() => selectLabel(null)}
           >
             <span>Todos</span>
           </button>
@@ -62,7 +72,7 @@ const Blog: React.FC = () => {
             <button
               key={label}
               className={`btn btn-tab ${selectedLabel === label ? 'active' : ''}`}
-              onClick={() => setSelectedLabel(label)}
+              onClick={() => selectLabel(label)}
             >
               <span>{label}</span>
             </button>
@@ -71,7 +81,7 @@ const Blog: React.FC = () => {
 
         <div className="last-posts mb-8">
           <h2 className="mb-4">Todos mis artículos</h2>
-          <SearchInput value={searchTerm} onChange={setSearchTerm} />
+          <SearchInput value={searchTerm} onChange={changeSearchTerm} />
           <div className="grid">
             {paginatedPosts.map((post) => (
               <Post

@@ -3,9 +3,11 @@ import BackButton from '../../components/BackButton';
 import CommentSection from '../../components/CommentSection';
 import ProcessedContent from '@/app/components/ProcessedContent';
 import ReadingProgressBar from '@/app/components/ReadingProgressBar';
-import TableOfContents, { TocHeading } from '@/app/components/TableOfContents';
+import TableOfContents from '@/app/components/TableOfContents';
+import ViewTracker from '@/app/components/ViewTracker';
 import { processPostContent } from '@/app/utils/processPostContent';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { slugify } from '../../utils/slugify';
 
@@ -159,13 +161,7 @@ const PostPage = async (props: PostProps) => {
   const { slug } = await props.params;
   const post = await fetchPostBySlug(slug);
 
-  if (!post) {
-    return (
-      <div className="no-article" aria-live="assertive">
-        No se ha encontrado este artículo
-      </div>
-    );
-  }
+  if (!post) notFound();
 
   const decodedString = decode(post?.content);
 
@@ -175,31 +171,12 @@ const PostPage = async (props: PostProps) => {
     return Math.ceil(words / wpm);
   };
 
-  const slugifyHeading = (text: string) =>
-    text
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .trim();
-
-  const headings: TocHeading[] = [];
-  const headingRegex = /<(h[23])[^>]*>([\s\S]*?)<\/h[23]>/gi;
-  let hMatch: RegExpExecArray | null;
-  while ((hMatch = headingRegex.exec(decodedString)) !== null) {
-    const text = hMatch[2].replace(/<[^>]*>/g, '').trim();
-    if (text) headings.push({ level: hMatch[1].toLowerCase(), text, id: slugifyHeading(text) });
-  }
-
-  const { html: processedHtml, carousels } = processPostContent(
-    decodedString,
-    headings.map((h) => h.id),
-  );
+  const { html: processedHtml, carousels, headings } = processPostContent(decodedString);
 
   const postId = post.id;
 
   const labels = await fetchLabels();
-  const allPosts = await fetchPosts();
+  const allPosts: IPost[] = (await fetchPosts()) ?? [];
 
   // Obtener la categoría principal del post actual (suponiendo que tiene al menos una)
   const mainCategory = post.labels.length > 0 ? slugify(post.labels[0].name) : null;
@@ -216,13 +193,18 @@ const PostPage = async (props: PostProps) => {
   // Si no hay suficientes, completar con otros aleatorios del total
   if (selectedRelatedPosts.length < 3) {
     const needed = 3 - selectedRelatedPosts.length;
-    const additionalPosts = getRandomPosts(allPosts, needed, postId);
-    selectedRelatedPosts = [...selectedRelatedPosts, ...additionalPosts].slice(0, 3);
+    const selectedIds = new Set(selectedRelatedPosts.map((p) => p.id));
+    const remainingPosts = allPosts.filter((p) => !selectedIds.has(p.id));
+    selectedRelatedPosts = [
+      ...selectedRelatedPosts,
+      ...getRandomPosts(remainingPosts, needed, postId),
+    ];
   }
 
   return (
     <main className="article-page">
       <ReadingProgressBar />
+      <ViewTracker type="posts" slug={post.slug} />
       <div className="article-page-layout">
         <div className="container">
           <ul className="label-list">

@@ -1,8 +1,10 @@
 import { fetchProjectBySlug } from '../../utils/api';
 import BackButton from '../../components/BackButton';
 import ProcessedContent from '@/app/components/ProcessedContent';
+import ViewTracker from '@/app/components/ViewTracker';
 import { processPostContent } from '@/app/utils/processPostContent';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { format } from 'date-fns';
 import { decode } from 'html-entities';
@@ -71,13 +73,7 @@ const ProjectPage = async (props: ProjectProps) => {
   const { slug } = await props.params;
   const project = await fetchProjectBySlug(slug);
 
-  if (!project) {
-    return (
-      <div className="no-article" aria-live="assertive">
-        No se ha encontrado este proyecto
-      </div>
-    );
-  }
+  if (!project) notFound();
 
   const decodedString = decode(project?.content);
   const { html: processedHtml, carousels } = processPostContent(decodedString);
@@ -90,6 +86,7 @@ const ProjectPage = async (props: ProjectProps) => {
 
   return (
     <main className="article-page">
+      <ViewTracker type="projects" slug={project.slug} />
       <div className="container">
         {project.category && (
           <ul className="label-list">

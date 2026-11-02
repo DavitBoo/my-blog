@@ -1,9 +1,9 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Devuelve null si la API no responde, para no romper el build/prerender
-export const fetchPosts = async () => {
+export const fetchPosts = async (limit?: number) => {
   try {
-    const response = await fetch(`${API_URL}/posts`, {
+    const response = await fetch(`${API_URL}/posts${limit ? `?limit=${limit}` : ''}`, {
       next: { revalidate: 60 },
     });
 
@@ -27,8 +27,18 @@ export const fetchPostById = async (id: number) => {
 
 export const fetchPostBySlug = async (slug: string) => {
   const res = await fetch(`${API_URL}/posts/bySlug/${slug}`);
+  // Solo un 404 significa "no existe": un fallo de la API no debe mostrarse como artículo inexistente
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Failed to fetch post: ${res.status}`);
   const data = await res.json();
   return data.length > 0 ? data[0] : null;
+};
+
+export const registerView = async (type: 'posts' | 'projects', slug: string) => {
+  await fetch(`${API_URL}/${type}/bySlug/${encodeURIComponent(slug)}/view`, {
+    method: 'POST',
+    keepalive: true,
+  });
 };
 
 export const fetchCommentsByPostId = async (postId: number) => {
@@ -105,6 +115,8 @@ export const fetchProjectById = async (id: number) => {
 
 export const fetchProjectBySlug = async (slug: string) => {
   const res = await fetch(`${API_URL}/projects/bySlug/${slug}`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Failed to fetch project: ${res.status}`);
   const data = await res.json();
   return data.length > 0 ? data[0] : null;
 };
