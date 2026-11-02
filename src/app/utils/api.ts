@@ -47,7 +47,8 @@ export const createComment = async (postId: number, content: string, email: stri
   });
 
   if (!response.ok) {
-    throw new Error('Failed to create comment');
+    const body = await response.json().catch(() => null);
+    throw new Error(body?.error || 'Failed to create comment');
   }
 
   return response.json();
