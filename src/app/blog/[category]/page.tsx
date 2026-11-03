@@ -1,99 +1,48 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
-import Post from '../../components/Post';
+import { Metadata } from 'next';
+import CategoryPosts from './CategoryPosts';
 import { fetchPosts } from '../../utils/api';
-import { slugify } from '@/app/utils/slugify';
-
+import { slugify } from '../../utils/slugify';
 import { IPostSummary } from '../../../interfaces/Posts';
 
-const POSTS_PER_PAGE = 3;
+type CategoryProps = {
+  params: Promise<{ category: string }>;
+};
 
-const BlogCategory: React.FC = () => {
-  const { category } = useParams();
-  const decodedCategory = category ? decodeURIComponent(category.toString()) : '';
+// Los enlaces a categorías llevan el nombre en forma de slug: se recupera el original de las
+// etiquetas para mostrarlo con sus mayúsculas y acentos
+const loadCategory = async (params: CategoryProps['params']) => {
+  const { category } = await params;
+  const decodedCategory = decodeURIComponent(category);
+  const categorySlug = slugify(decodedCategory);
 
-  const [posts, setPosts] = useState<IPostSummary[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  useEffect(() => {
-    const loadPosts = async () => {
-      const fetchedPosts: IPostSummary[] = (await fetchPosts()) ?? [];
-
-      const filteredPosts = fetchedPosts.filter((post) =>
-        post.labels.some((label) => slugify(label.name) === slugify(decodedCategory)),
-      );
-
-      setPosts(filteredPosts);
-    };
-
-    loadPosts();
-  }, [decodedCategory]);
-
-  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
-  const paginatedPosts = posts.slice(
-    (currentPage - 1) * POSTS_PER_PAGE,
-    currentPage * POSTS_PER_PAGE,
+  const allPosts: IPostSummary[] = (await fetchPosts()) ?? [];
+  const posts = allPosts.filter((post) =>
+    post.labels.some((label) => slugify(label.name) === categorySlug),
   );
+  const labelName = posts[0]?.labels.find((label) => slugify(label.name) === categorySlug)?.name;
+
+  return { posts, name: labelName ?? decodedCategory.replace(/-/g, ' ') };
+};
+
+export async function generateMetadata({ params }: CategoryProps): Promise<Metadata> {
+  const { name } = await loadCategory(params);
+  return {
+    title: `Posts sobre ${name}`,
+    description: `Todo lo que he escrito sobre ${name}.`,
+  };
+}
+
+// ISR: la página de cada categoría se genera al visitarla y se regenera sola
+export const revalidate = 60;
+
+const BlogCategory = async ({ params }: CategoryProps) => {
+  const { posts, name } = await loadCategory(params);
 
   return (
     <div className="archive">
       <div className="container">
-        <h2>Posts en la categoría: {decodedCategory.replace('-', ' ')}</h2>
-
-        <div className="last-posts mb-8">
-          <h2 className="mb-4">Mis últimos posts</h2>
-          <div className="grid">
-            {paginatedPosts.length > 0 ? (
-              paginatedPosts.map((post) => (
-                <Post
-                  key={post.id}
-                  id={post.id}
-                  title={post.title}
-                  excerpt={post.excerpt}
-                  readingTime={post.readingTime}
-                  slug={post.slug}
-                  createdAt={post.createdAt}
-                  labels={post.labels}
-                  views={post.views}
-                  coverUrl={post.coverUrl}
-                />
-              ))
-            ) : (
-              <p>No hay posts en esta categoría.</p>
-            )}
-          </div>
-        </div>
-
-        {/* Paginación */}
-        {totalPages > 1 && (
-          <div className="pagination d-flex">
-            <button
-              className="btn btn-tab prev"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              <span>Anterior</span>
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                className={`btn btn-tab ${currentPage === index + 1 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(index + 1)}
-              >
-                <span>{index + 1}</span>
-              </button>
-            ))}
-            <button
-              className="btn btn-tab next"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              <span>Siguiente</span>
-            </button>
-          </div>
-        )}
+        <h1 className="page-heading">Posts en la categoría: {name}</h1>
+        <CategoryPosts posts={posts} />
       </div>
     </div>
   );

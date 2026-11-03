@@ -11,7 +11,7 @@ export interface IProjectCategory {
 export interface IProject {
   id: number;
   title: string;
-  content: string;
+  excerpt: string;
   slug: string;
   coverUrl: string | null;
   createdAt: string;
@@ -41,7 +41,17 @@ const formatRelativeDate = (dateString: string): string => {
   }
 };
 
-const Project = ({ id, title, content, slug, createdAt, category, views, coverUrl }: IProject) => {
+const Project = ({
+  id,
+  title,
+  // Valor por defecto: una respuesta aún en caché o un backend sin actualizar no traen el extracto
+  excerpt = '',
+  slug,
+  createdAt,
+  category,
+  views,
+  coverUrl,
+}: IProject) => {
   return (
     <div key={id} className="customCard">
       <div>
@@ -58,8 +68,9 @@ const Project = ({ id, title, content, slug, createdAt, category, views, coverUr
         <h3 className="mb-4">
           <a href={`/proyectos/${slug}`}>{title}</a>
         </h3>
-        <p>{content.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
-        <small>
+        <p>{excerpt.substring(0, 150)}...</p>
+        {/* Se hidrata desde una página cacheada: la fecha relativa puede diferir unos segundos */}
+        <small suppressHydrationWarning>
           <FaCalendar /> {formatRelativeDate(createdAt)}
         </small>
         <small>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import Pagination from '../components/Pagination';
 import Post from '../components/Post';
 import SearchInput from '../components/SearchInput';
 import { IPostSummary } from '../../interfaces/Posts';
@@ -63,7 +64,7 @@ const BlogExplorer = ({ posts }: { posts: IPostSummary[] }) => {
         </div>
 
         <div className="last-posts mb-8">
-          <h2 className="mb-4">Todos mis artículos</h2>
+          <h1 className="page-heading mb-4">Todos mis artículos</h1>
           <SearchInput value={searchTerm} onChange={changeSearchTerm} />
           <div className="grid">
             {paginatedPosts.map((post) => (
@@ -83,34 +84,7 @@ const BlogExplorer = ({ posts }: { posts: IPostSummary[] }) => {
           </div>
         </div>
 
-        {/* Paginación con botones numerados */}
-        {totalPages > 1 && (
-          <div className="pagination d-flex">
-            <button
-              className="btn btn-tab prev"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              <span>Anterior</span>
-            </button>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                className={`btn btn-tab ${currentPage === index + 1 ? 'active' : ''}`}
-                onClick={() => setCurrentPage(index + 1)}
-              >
-                <span>{index + 1}</span>
-              </button>
-            ))}
-            <button
-              className="btn btn-tab next"
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              <span>Siguiente</span>
-            </button>
-          </div>
-        )}
+        <Pagination currentPage={currentPage} totalPages={totalPages} onChange={setCurrentPage} />
       </div>
     </div>
   );

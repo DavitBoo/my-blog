@@ -126,9 +126,9 @@ const Header = () => {
       <header className={`main-header ${isMenuOpen ? 'menu-expanded' : ''}`}>
         <div className="container headerContainer">
           <div className="logoContainer">
-            <h1>
+            <Link href="/" className="site-logo">
               davi<span className="highlight">db</span>oo
-            </h1>
+            </Link>
           </div>
           <nav className="d-flex gap-4 align-items-center">
             <ul className="desktop align-items-center">

@@ -240,7 +240,7 @@ const VidaScene = ({ onVerLista, enfocarAlMontar = false }: VidaSceneProps) => {
       <div className={styles.overlay}>
         <div className={styles.intro}>
           <div className={styles.eyebrow}>Vida</div>
-          <div className={styles.title}>Un archipiélago de siete islas</div>
+          <h1 className={styles.title}>Un archipiélago de siete islas</h1>
           <div className={styles.subtitle}>
             Cada isla es una categoría, no un año. Arrastra el mar para descubrirlas.
           </div>

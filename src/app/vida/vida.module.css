@@ -70,6 +70,7 @@
   color: var(--acc);
 }
 .title {
+  margin: 0;
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 26px;
