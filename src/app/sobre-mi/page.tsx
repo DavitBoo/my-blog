@@ -589,7 +589,7 @@ export default function Page() {
           </div>
 
           {/* NOW / AHORA */}
-          <Section id="now" title=" " kicker="/now">
+          <Section id="now" title=" " kicker="Ahora">
             <div className={styles.timelineCard}>
               <p style={{ margin: 0 }}>{nowText}</p>
             </div>
